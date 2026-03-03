@@ -16,14 +16,11 @@
       --fnt: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
 
-      --seg-a: #5b21b6;
-      /* Púrpura */
-      --seg-b: #3b82f6;
-      /* Azul */
-      --seg-c: #ea580c;
-      /* Naranja oscuro */
-      --seg-d: #10b981;
-      /* Verde esmeralda */
+      /* Colores de segmentos extraídos de tu imagen */
+      --seg-a: #682c47;
+      --seg-b: #537fbb;
+      --seg-c: #d77840;
+      --seg-d: #5ab096;
     }
 
     /* MODO CLARO (Default) - Minimalista */
@@ -39,7 +36,6 @@
 
       --accent: #0f172a;
       --accent2: #475569;
-      --accent3: rgba(15, 23, 42, 0.05);
 
       --text: #0f172a;
       --muted: #64748b;
@@ -56,34 +52,33 @@
       --sh-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
     }
 
-    /* MODO OSCURO - Minimalista y elegante */
+    /* MODO OSCURO - Gris Elegante Minimalista (Sin tonos azules) */
     [data-theme="dark"] {
-      --bg: #0f172a;
-      --bg2: #1e293b;
-      --border: rgba(255, 255, 255, 0.1);
-      --border2: rgba(255, 255, 255, 0.05);
+      --bg: #0d0d0f;
+      --bg2: #141417;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.04);
 
-      --surface: #1e293b;
-      --card: #1e293b;
-      --card2: #0f172a;
+      --surface: #121214;
+      --card: #18181c;
+      --card2: #202024;
 
-      --accent: #f8fafc;
-      --accent2: #94a3b8;
-      --accent3: rgba(255, 255, 255, 0.05);
+      --accent: #e2e2e4;
+      --accent2: #8b8b99;
 
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --muted2: #64748b;
+      --text: #f0f0f2;
+      --muted: #8b8b99;
+      --muted2: #52525e;
 
       --success: #34d399;
       --danger: #ef4444;
       --warn: #fbbf24;
 
-      --inp: rgba(15, 23, 42, 0.50);
-      --locked: rgba(15, 23, 42, 0.30);
+      --inp: rgba(10, 10, 12, 0.50);
+      --locked: rgba(10, 10, 12, 0.30);
 
-      --sh: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
-      --sh-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --sh: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      --sh-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     /* ═══ GLOBAL ═══ */
@@ -121,6 +116,25 @@
     textarea:focus {
       outline: none;
       border-color: var(--accent);
+    }
+
+    /* ═══ SCROLLBAR ═══ */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted2);
     }
 
     /* ═══ HEADER ═══ */
@@ -247,14 +261,14 @@
     }
 
     .btn-save {
-      background: var(--accent);
+      background: var(--text);
       color: var(--bg);
-      border-color: var(--accent);
+      border-color: var(--text);
     }
 
     .btn-save:hover {
       opacity: 0.9;
-      background: var(--accent);
+      background: var(--text);
       color: var(--bg);
     }
 
@@ -669,18 +683,12 @@
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
       height: 36px;
+      outline: none;
     }
 
     .sp-num[type=number]::-webkit-inner-spin-button,
     .sp-num[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
-    }
-
-    .sp-total {
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      color: var(--text);
-      font-weight: 600;
     }
 
     /* ═══ SEGMENTS ═══ */
@@ -780,33 +788,96 @@
 
     /* ═══ BREAKDOWN ═══ */
     .breakdown {
-      padding: 1rem;
+      padding: 1.2rem;
       border-radius: 8px;
       background: var(--card2);
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.8rem;
     }
 
     .bk-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .bk-label {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .bk-sub .bk-label {
+      padding-left: 1.2rem;
       color: var(--muted);
     }
 
-    .bk-sub {
-      font-size: 0.7rem;
-      padding-left: 1rem;
-      opacity: 0.8;
+    .bk-inp-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      width: 65px;
+      overflow: hidden;
+      margin-right: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .bk-inp-wrap:focus-within {
+      border-color: var(--muted2);
+    }
+
+    .bk-inp-wrap input {
+      width: 100%;
+      text-align: right;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text);
+      padding: 0.3rem 0;
+      outline: none;
+    }
+
+    .bk-inp-wrap input[type=number]::-webkit-inner-spin-button,
+    .bk-inp-wrap input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .bk-inp-wrap span {
+      padding: 0 0.4rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-family: var(--mono);
     }
 
     .bk-val {
+      width: 75px;
+      text-align: right;
       font-family: var(--mono);
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text);
+    }
+
+    .bk-fixed-pct {
+      width: 65px;
+      text-align: right;
+      padding-right: 0.8rem;
+      margin-right: 1.5rem;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .bk-total-row {
+      padding-top: 0.8rem;
+      margin-top: 0.2rem;
+      border-top: 1px solid var(--border);
+      font-weight: 600;
     }
 
     /* ═══ NET PRICE CHIPS ═══ */
@@ -1712,6 +1783,19 @@
         width: 100%;
         margin-bottom: 0.5rem;
       }
+
+      .bk-row {
+        flex-wrap: wrap;
+      }
+
+      .bk-label {
+        width: 100%;
+        margin-bottom: 0.4rem;
+      }
+
+      .bk-sub .bk-label {
+        padding-left: 0;
+      }
     }
   </style>
 </head>
@@ -1837,13 +1921,13 @@
         <div class="g2">
           <div class="card">
             <div class="card-head">
-              <div class="card-title">Fuerza de Ventas &amp; Segmentos</div>
+              <div class="card-title">Presupuesto de Ventas</div>
             </div>
             <div class="card-body">
 
               <div class="sp-widget">
                 <div class="sp-info">
-                  <div class="sp-lbl">Vendedores</div>
+                  <div class="sp-lbl">Fuerza de ventas</div>
                   <div class="sp-detail" id="spDetail">11 × $50,000</div>
                 </div>
                 <div class="sp-right">
@@ -1855,6 +1939,52 @@
                   <span class="sp-total" id="spTotal">$550,000</span>
                 </div>
               </div>
+
+              <div class="breakdown">
+
+                <div class="bk-row">
+                  <span class="bk-label">Gasto en clientes pequeños</span>
+                  <div class="bk-inp-wrap">
+                    <input type="number" id="pctSmall" value="30" min="0" max="100" oninput="calcSales()"><span>%</span>
+                  </div>
+                  <span class="bk-val" id="bkSmall">$165,000</span>
+                </div>
+
+                <div class="bk-row">
+                  <span class="bk-label">Gasto en grandes clientes</span>
+                  <div class="bk-fixed-pct" id="pctLargeLbl">70%</div>
+                  <span class="bk-val" id="bkLarge">$385,000</span>
+                </div>
+
+                <div class="bk-row bk-sub">
+                  <span class="bk-label">Gasto para retener a grandes clientes</span>
+                  <div class="bk-inp-wrap">
+                    <input type="number" id="pctRetain" value="70" min="0" max="100"
+                      oninput="calcSales()"><span>%</span>
+                  </div>
+                  <span class="bk-val" id="bkRetain">$269,500</span>
+                </div>
+
+                <div class="bk-row bk-sub">
+                  <span class="bk-label">Gasto para adquirir grandes clientes</span>
+                  <div class="bk-fixed-pct" id="pctAcquireLbl">30%</div>
+                  <span class="bk-val" id="bkAcquire">$115,500</span>
+                </div>
+
+                <div class="bk-row bk-total-row">
+                  <span class="bk-label">Presupuesto total de ventas</span>
+                  <span class="bk-val" id="sumSalesBreakdown">$550,000</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Asignación por Segmento</div>
+            </div>
+            <div class="card-body">
 
               <div class="seg-wrap">
                 <div class="seg-item">
@@ -1892,23 +2022,15 @@
               </div>
 
               <div class="seg-total-row">
-                <span class="seg-total-lbl">Asignación Total</span>
+                <span class="seg-total-lbl">Total Distribuido</span>
                 <span class="seg-total-val" id="segTotalVal">100%</span>
               </div>
 
-              <div class="breakdown">
-                <div class="bk-row"><span>Grandes clientes (70%)</span><span class="bk-val" id="bkLarge">$385,000</span>
-                </div>
-                <div class="bk-row bk-sub"><span>↳ Retención (70%)</span><span class="bk-val"
-                    id="bkRetain">$269,500</span></div>
-                <div class="bk-row bk-sub"><span>↳ Adquisición (30%)</span><span class="bk-val"
-                    id="bkAcquire">$115,500</span></div>
-                <div class="bk-row" style="margin-top:0.5rem"><span>Pequeños clientes (30%)</span><span class="bk-val"
-                    id="bkSmall">$165,000</span></div>
-              </div>
             </div>
           </div>
+        </div>
 
+        <div class="g2">
           <div class="card">
             <div class="card-head">
               <div class="card-title">Precios — Grandes Clientes</div>
@@ -1949,9 +2071,7 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="g2">
           <div class="card">
             <div class="card-head">
               <div class="card-title">Precios — Pequeños Clientes</div>
@@ -1982,7 +2102,9 @@
               </div>
             </div>
           </div>
+        </div>
 
+        <div class="g2">
           <div class="card">
             <div class="card-head">
               <div class="card-title">Presupuesto de Marketing</div>
@@ -2008,9 +2130,7 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="g2">
           <div class="card">
             <div class="card-head">
               <div class="card-title">Desarrollo de Producto</div>
@@ -2036,14 +2156,15 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">Estrategia & Notas</div>
-            </div>
-            <div class="card-body" style="height:calc(100% - 55px); padding:0;">
-              <textarea class="notes-ta" id="notes" style="padding:1.5rem;"
-                placeholder="Escribe aquí la justificación, supuestos y objetivos del trimestre..."></textarea>
-            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div class="card-head">
+            <div class="card-title">Estrategia & Notas</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <textarea class="notes-ta" id="notes" style="padding:1.5rem;"
+              placeholder="Escribe aquí la justificación, supuestos y objetivos del trimestre..."></textarea>
           </div>
         </div>
 
@@ -2214,7 +2335,7 @@
     const DIST_MARGIN = 0.10;
     const DIST_PASS = 0.05;
 
-    // Colores unificados de segmentos de acuerdo a la imagen provista
+    // Colores de los segmentos extraídos de la imagen
     const SEGS = [
       { id: "A", name: "Segmento A", color: "var(--seg-a)" },
       { id: "B", name: "Segmento B", color: "var(--seg-b)" },
@@ -2228,7 +2349,7 @@
     // STATE
     // ═══════════════════════════
     let decisions = [];
-    try { decisions = JSON.parse(localStorage.getItem("mktSim_v8") || "[]"); } catch (e) { }
+    try { decisions = JSON.parse(localStorage.getItem("mktSim_v9") || "[]"); } catch (e) { }
 
     let msLarge = { A: { pct: 0, delta: 0 }, B: { pct: 0, delta: 0 }, C: { pct: 0, delta: 0 }, D: { pct: 0, delta: 0 } };
     let msSmall = { pct: 0, delta: 0 };
@@ -2240,7 +2361,7 @@
     let selectedRound = 0;
 
     try {
-      const a = JSON.parse(localStorage.getItem("mktSim_analysis_v8") || "{}");
+      const a = JSON.parse(localStorage.getItem("mktSim_analysis_v9") || "{}");
       if (a.msLarge) msLarge = a.msLarge;
       if (a.msSmall) msSmall = a.msSmall;
       if (a.revLargeVal !== undefined) revLargeVal = a.revLargeVal;
@@ -2250,7 +2371,7 @@
       if (a.sqVals) sqVals = a.sqVals;
     } catch (e) { }
     try {
-      const r = JSON.parse(localStorage.getItem("mktSim_rounds_v8") || "[]");
+      const r = JSON.parse(localStorage.getItem("mktSim_rounds_v9") || "[]");
       if (r.length) rounds = r;
     } catch (e) { }
 
@@ -2263,11 +2384,11 @@
     const FMT2 = (n, d = 2) => "$" + n.toFixed(d);
 
     function saveAnalysis() {
-      localStorage.setItem("mktSim_analysis_v8",
+      localStorage.setItem("mktSim_analysis_v9",
         JSON.stringify({ msLarge, msSmall, revLargeVal, revSmallVal, satLarge, satSmall, sqVals }));
     }
     function saveRoundsLS() {
-      localStorage.setItem("mktSim_rounds_v8", JSON.stringify(rounds));
+      localStorage.setItem("mktSim_rounds_v9", JSON.stringify(rounds));
     }
 
     // ═══════════════════════════
@@ -2308,13 +2429,32 @@
       $("spTotal").textContent = FMT(total);
       $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
 
-      const large = total * 0.70;
-      const small = total * 0.30;
-      $("bkLarge").textContent = FMT(large);
-      $("bkRetain").textContent = FMT(large * 0.70);
-      $("bkAcquire").textContent = FMT(large * 0.30);
-      $("bkSmall").textContent = FMT(small);
+      // Clientes pequeños
+      let pSmall = parseFloat($("pctSmall").value) || 0;
+      if (pSmall > 100) { pSmall = 100; $("pctSmall").value = 100; }
+      const pLarge = 100 - pSmall;
+      $("pctLargeLbl").textContent = pLarge + "%";
+
+      const smallAmt = total * (pSmall / 100);
+      const largeAmt = total * (pLarge / 100);
+
+      // Retención
+      let pRetain = parseFloat($("pctRetain").value) || 0;
+      if (pRetain > 100) { pRetain = 100; $("pctRetain").value = 100; }
+      const pAcquire = 100 - pRetain;
+      $("pctAcquireLbl").textContent = pAcquire + "%";
+
+      const retainAmt = largeAmt * (pRetain / 100);
+      const acquireAmt = largeAmt * (pAcquire / 100);
+
+      // Renderizar valores
+      $("bkSmall").textContent = FMT(smallAmt);
+      $("bkLarge").textContent = FMT(largeAmt);
+      $("bkRetain").textContent = FMT(retainAmt);
+      $("bkAcquire").textContent = FMT(acquireAmt);
       $("sumSales").textContent = FMT(total);
+      $("sumSalesBreakdown").textContent = FMT(total);
+
       updateStrip();
     }
 
@@ -2343,7 +2483,7 @@
 
       if (total > 100) { tv.style.color = "var(--danger)"; }
       else if (Math.abs(total - 100) < 0.01) { tv.style.color = "var(--success)"; }
-      else { tv.style.color = "var(--warn)"; }
+      else { tv.style.color = "var(--text)"; }
     }
 
     // ═══════════════════════════
@@ -2436,6 +2576,7 @@
         name: $("decisionName").value.trim() || "—",
         savedAt: new Date().toLocaleString("es-CO"),
         numSP: sp, sales,
+        pctSmall: N("pctSmall"), pctRetain: N("pctRetain"),
         segA: N("segA"), segB: N("segB"), segC: N("segC"), segD: N("segD"),
         listPrice: N("listPrice"),
         discA: N("discA"), discB: N("discB"), discC: N("discC"), discD: N("discD"),
@@ -2449,7 +2590,7 @@
 
     function saveDecision() {
       decisions.push(gatherData());
-      localStorage.setItem("mktSim_v8", JSON.stringify(decisions));
+      localStorage.setItem("mktSim_v9", JSON.stringify(decisions));
       renderHistory();
       showToast("Decision guardada", "ok");
     }
@@ -2461,7 +2602,8 @@
       $("selQ").value = d.period.split(" ")[1] || "Q1";
       $("decisionName").value = d.name !== "—" ? d.name : "";
       $("numSP").value = d.numSP;
-      ["segA", "segB", "segC", "segD", "listPrice", "discA", "discB", "discC", "discD",
+
+      ["pctSmall", "pctRetain", "segA", "segB", "segC", "segD", "listPrice", "discA", "discB", "discC", "discD",
         "distDisc", "imc", "research", "social", "directComm", "battery", "mfgEff",
         "sensorSize", "latency", "totalBudget"].forEach(k => {
           if (d[k] !== undefined) $(k).value = d[k];
@@ -2473,7 +2615,7 @@
 
     function deleteDecision(id) {
       decisions = decisions.filter(d => d.id !== id);
-      localStorage.setItem("mktSim_v8", JSON.stringify(decisions));
+      localStorage.setItem("mktSim_v9", JSON.stringify(decisions));
       renderHistory();
     }
 
@@ -2522,7 +2664,7 @@
 
       $("ms-small-body").innerHTML = `
     <div class="ms-row">
-      <span class="ms-seg-lbl" style="color:var(--muted)">Pequeños</span>
+      <span class="ms-seg-lbl" style="color:var(--text)">Pequeños</span>
       <div class="ms-pct-iw">
         <input type="number" id="msSS" value="${msSmall.pct}" min="0" max="100" step="0.01" placeholder="0"
           oninput="msSmall.pct=parseFloat(this.value)||0;saveAnalysis();">
@@ -2577,7 +2719,7 @@
       const ss = satSmall;
       $("sat-small-body").innerHTML = `
     <div class="sat-row">
-      <div class="sat-name" style="color:var(--muted)">Pequeños Clientes</div>
+      <div class="sat-name" style="color:var(--text)">Pequeños Clientes</div>
       <div class="stars" id="starsSALL">${buildStars("S", "ALL", ss.stars || 0)}</div>
       <div class="sat-rating-lbl" id="satLblSALL">
         ${ss.stars ? SAT_NAMES[(ss.stars || 1) - 1] : "Sin calificar"}
