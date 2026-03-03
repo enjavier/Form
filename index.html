@@ -6,78 +6,87 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Simulación de Marketing</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
     rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     /* ═══ TOKENS ═══ */
     :root {
-      --fnt: 'Plus Jakarta Sans', sans-serif;
+      --fnt: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
+
+      --seg-a: #5b21b6;
+      /* Púrpura */
+      --seg-b: #3b82f6;
+      /* Azul */
+      --seg-c: #ea580c;
+      /* Naranja oscuro */
+      --seg-d: #10b981;
+      /* Verde esmeralda */
     }
 
+    /* MODO CLARO (Default) - Minimalista */
     [data-theme="light"] {
-      --bg: #f0f4ff;
-      --bg2: #e8eef8;
-      --glass: rgba(255, 255, 255, 0.72);
-      --glass2: rgba(255, 255, 255, 0.50);
-      --blur: blur(18px);
-      --border: rgba(26, 79, 160, 0.13);
-      --border2: rgba(26, 79, 160, 0.08);
-      --surface: rgba(255, 255, 255, 0.88);
-      --card: rgba(255, 255, 255, 0.80);
-      --card2: rgba(240, 246, 255, 0.70);
-      --accent: #1a4fa0;
-      --accent2: #2563c7;
-      --accent3: rgba(228, 236, 250, 0.90);
-      --text: #0f1c35;
-      --muted: #5c6e92;
-      --muted2: #9aabcc;
-      --success: #0d6640;
-      --danger: #b52828;
-      --warn: #8a4800;
-      --inp: rgba(255, 255, 255, 0.75);
-      --locked: rgba(230, 237, 252, 0.60);
-      --seg-a: #c05000;
-      --seg-b: #1a4fa0;
-      --seg-c: #0d6640;
-      --seg-d: #7319a0;
-      --sh: 0 8px 32px rgba(26, 79, 160, 0.10), 0 1px 4px rgba(26, 79, 160, 0.07);
-      --sh-sm: 0 2px 12px rgba(26, 79, 160, 0.08);
+      --bg: #f8fafc;
+      --bg2: #ffffff;
+      --border: #e2e8f0;
+      --border2: #f1f5f9;
+
+      --surface: #ffffff;
+      --card: #ffffff;
+      --card2: #f8fafc;
+
+      --accent: #0f172a;
+      --accent2: #475569;
+      --accent3: rgba(15, 23, 42, 0.05);
+
+      --text: #0f172a;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+
+      --success: #10b981;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+
+      --inp: #ffffff;
+      --locked: #f1f5f9;
+
+      --sh: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --sh-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
     }
 
+    /* MODO OSCURO - Minimalista y elegante */
     [data-theme="dark"] {
-      --bg: #080d18;
-      --bg2: #0b1020;
-      --glass: rgba(18, 26, 50, 0.80);
-      --glass2: rgba(18, 26, 50, 0.55);
-      --blur: blur(18px);
-      --border: rgba(100, 140, 220, 0.15);
-      --border2: rgba(100, 140, 220, 0.08);
-      --surface: rgba(20, 30, 56, 0.90);
-      --card: rgba(22, 34, 62, 0.85);
-      --card2: rgba(16, 24, 48, 0.70);
-      --accent: #4d8ef0;
-      --accent2: #6aaaff;
-      --accent3: rgba(24, 36, 64, 0.90);
-      --text: #d8e4f8;
-      --muted: #7888aa;
-      --muted2: #445068;
-      --success: #30b870;
-      --danger: #e05050;
-      --warn: #e09830;
-      --inp: rgba(12, 18, 36, 0.75);
-      --locked: rgba(14, 22, 44, 0.60);
-      --seg-a: #f0a040;
-      --seg-b: #5aa0f0;
-      --seg-c: #30c878;
-      --seg-d: #b060e8;
-      --sh: 0 8px 32px rgba(0, 0, 0, 0.45);
-      --sh-sm: 0 2px 12px rgba(0, 0, 0, 0.30);
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --border: rgba(255, 255, 255, 0.1);
+      --border2: rgba(255, 255, 255, 0.05);
+
+      --surface: #1e293b;
+      --card: #1e293b;
+      --card2: #0f172a;
+
+      --accent: #f8fafc;
+      --accent2: #94a3b8;
+      --accent3: rgba(255, 255, 255, 0.05);
+
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --muted2: #64748b;
+
+      --success: #34d399;
+      --danger: #ef4444;
+      --warn: #fbbf24;
+
+      --inp: rgba(15, 23, 42, 0.50);
+      --locked: rgba(15, 23, 42, 0.30);
+
+      --sh: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+      --sh-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     }
 
-    /* ═══ BACKGROUND MESH ═══ */
+    /* ═══ GLOBAL ═══ */
     *,
     *::before,
     *::after {
@@ -97,27 +106,7 @@
       font-size: 14px;
       line-height: 1.6;
       min-height: 100vh;
-      transition: background .4s, color .3s;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(99, 155, 255, 0.18) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(140, 80, 230, 0.10) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(26, 79, 160, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    [data-theme="dark"] body::before {
-      background:
-        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(30, 80, 200, 0.22) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(100, 40, 180, 0.14) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(77, 142, 240, 0.10) 0%, transparent 60%);
+      transition: background 0.3s, color 0.3s;
     }
 
     textarea,
@@ -125,239 +114,190 @@
     select,
     button {
       font-family: var(--fnt);
+      color: var(--text);
     }
 
-    #root-wrap {
-      position: relative;
-      z-index: 1;
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     /* ═══ HEADER ═══ */
     header {
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0 1.6rem;
+      padding: 1rem 1.6rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 58px;
       position: sticky;
       top: 0;
       z-index: 200;
+      box-shadow: var(--sh-sm);
     }
 
     .logo-wrap {
       display: flex;
       align-items: center;
-      gap: .7rem;
+      gap: 1rem;
     }
 
     .logo-badge {
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-      border-radius: 10px;
+      width: 44px;
+      height: 44px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-weight: 800;
-      font-size: .78rem;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1rem;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(26, 79, 160, 0.30);
     }
 
     .logo-title {
       font-weight: 700;
-      font-size: .9rem;
-      letter-spacing: -.01em;
+      font-size: 1.1rem;
+      color: var(--text);
     }
 
     .logo-sub {
-      font-size: .62rem;
+      font-size: 0.75rem;
       color: var(--muted);
-      font-weight: 400;
-      margin-top: -.1rem;
+      margin-top: 0.2rem;
     }
 
     .hdr-right {
       display: flex;
       align-items: center;
-      gap: .5rem;
-    }
-
-    .hdr-right .btn-label {
-      display: inline;
+      gap: 0.8rem;
     }
 
     /* Theme toggle */
     .t-toggle {
       display: flex;
       align-items: center;
-      gap: .4rem;
+      gap: 0.4rem;
       background: var(--card2);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: .18rem .6rem;
+      padding: 0.2rem 0.6rem;
       cursor: pointer;
-      transition: all .2s;
+      transition: all 0.2s;
       user-select: none;
     }
 
-    .t-toggle:hover {
-      border-color: var(--accent2);
-    }
-
     .t-track {
-      width: 30px;
-      height: 17px;
-      background: var(--muted2);
+      width: 32px;
+      height: 18px;
+      background: var(--border);
       border-radius: 10px;
       position: relative;
-      transition: background .3s;
-      flex-shrink: 0;
+      transition: background 0.3s;
     }
 
     [data-theme="dark"] .t-track {
-      background: var(--accent);
+      background: var(--muted);
     }
 
     .t-knob {
       position: absolute;
       left: 2px;
-      top: 1.5px;
+      top: 2px;
       width: 14px;
       height: 14px;
-      background: #fff;
+      background: var(--surface);
       border-radius: 50%;
-      transition: transform .3s;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     [data-theme="dark"] .t-knob {
-      transform: translateX(13px);
+      transform: translateX(14px);
     }
 
     .t-lbl {
-      font-size: .65rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      font-weight: 600;
-      min-width: 65px;
+      font-weight: 500;
     }
 
     /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: .3rem;
-      padding: .38rem .9rem;
-      border-radius: 10px;
-      font-size: .71rem;
-      font-weight: 700;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all .18s;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all 0.2s;
       white-space: nowrap;
-      letter-spacing: .01em;
     }
 
-    .btn-ghost {
-      background: var(--glass2);
-      backdrop-filter: var(--blur);
-      border-color: var(--border);
-      color: var(--muted);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--accent2);
-      color: var(--accent2);
-      background: var(--accent3);
+    .btn:hover {
+      background: var(--card2);
+      border-color: var(--muted2);
     }
 
     .btn-save {
-      background: linear-gradient(135deg, #0d6640, #148050);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(13, 102, 64, 0.28);
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
     }
 
     .btn-save:hover {
-      opacity: .88;
-      transform: translateY(-1px);
-    }
-
-    .btn-excel {
-      background: var(--accent3);
-      color: var(--accent2);
-      border-color: var(--border);
-    }
-
-    .btn-excel:hover {
-      background: var(--accent2);
-      color: #fff;
-      border-color: var(--accent2);
-    }
-
-    .btn-pdf {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(26, 79, 160, 0.28);
-    }
-
-    .btn-pdf:hover {
-      opacity: .88;
-      transform: translateY(-1px);
+      opacity: 0.9;
+      background: var(--accent);
+      color: var(--bg);
     }
 
     /* ═══ TAB NAV ═══ */
     .tab-nav {
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: .6rem 1.6rem 0;
+      padding: 0 1.6rem;
       display: flex;
-      gap: .2rem;
+      gap: 1.5rem;
       position: sticky;
-      top: 58px;
+      top: 77px;
       z-index: 190;
     }
 
     .tab-btn {
-      display: flex;
-      align-items: center;
-      gap: .38rem;
-      padding: .55rem 1.1rem;
+      padding: 1rem 0;
       border: none;
       background: transparent;
       color: var(--muted);
-      font-weight: 600;
-      font-size: .75rem;
+      font-weight: 500;
+      font-size: 0.85rem;
       cursor: pointer;
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
-      transition: all .18s;
-      white-space: nowrap;
-      border-radius: 8px 8px 0 0;
+      transition: all 0.2s;
     }
 
     .tab-btn:hover {
-      color: var(--accent2);
-      background: var(--accent3);
+      color: var(--text);
     }
 
     .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-      background: var(--accent3);
+      color: var(--text);
+      border-bottom-color: var(--text);
+      font-weight: 600;
     }
 
     /* ═══ LAYOUT ═══ */
     .container {
-      max-width: 1180px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 1.4rem 1.4rem 5rem;
+      padding: 2rem 1.4rem 5rem;
     }
 
     .tab-pane {
@@ -366,160 +306,123 @@
 
     .tab-pane.active {
       display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .g2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.1rem;
-      margin-bottom: 1.1rem;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    /* ═══ GLASS CARD ═══ */
+    /* ═══ CARDS ═══ */
     .card {
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 12px;
       overflow: hidden;
       box-shadow: var(--sh);
-      transition: background .3s, border-color .3s, box-shadow .3s;
-    }
-
-    .card:hover {
-      box-shadow: 0 12px 40px rgba(26, 79, 160, 0.13), 0 1px 4px rgba(26, 79, 160, 0.07);
     }
 
     .card-head {
-      display: flex;
-      align-items: center;
-      gap: .55rem;
-      padding: .7rem 1.1rem;
-      background: var(--card2);
+      padding: 1rem 1.2rem;
       border-bottom: 1px solid var(--border2);
-    }
-
-    .card-ico {
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .72rem;
-      flex-shrink: 0;
-      background: var(--accent3);
+      background: var(--card2);
     }
 
     .card-title {
-      font-weight: 700;
-      font-size: .69rem;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
     }
 
     .card-body {
-      padding: .95rem 1.1rem;
+      padding: 1.2rem;
     }
 
     /* ═══ SURFACE BAR (period + budget) ═══ */
     .surface-bar {
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: .85rem 1.2rem;
-      margin-bottom: 1.1rem;
-      box-shadow: var(--sh-sm);
+      margin-bottom: 1.5rem;
     }
 
     .period-bar {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: .6rem 1rem;
+      gap: 1rem;
     }
 
     .pgrp {
       display: flex;
-      align-items: center;
-      gap: .4rem;
+      flex-direction: column;
+      gap: 0.3rem;
     }
 
     .pgrp label {
-      font-size: .62rem;
-      font-weight: 700;
+      font-size: 0.7rem;
+      font-weight: 500;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      white-space: nowrap;
     }
 
     .pgrp select,
     .pgrp input[type="text"] {
       background: var(--inp);
       border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 9px;
-      padding: .34rem .65rem;
-      font-size: .78rem;
-      font-weight: 600;
-      transition: border-color .15s;
-      outline: none;
-      backdrop-filter: var(--blur);
-    }
-
-    .pgrp select:focus,
-    .pgrp input:focus {
-      border-color: var(--accent);
-    }
-
-    .pgrp input[type="text"] {
-      width: 200px;
+      border-radius: 6px;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
     }
 
     /* Budget strip */
     .bstrip {
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: .8rem 1.2rem;
-      margin-bottom: 1.1rem;
-      box-shadow: var(--sh-sm);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--sh);
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 2rem;
       flex-wrap: wrap;
     }
 
     .bsi {
       display: flex;
       flex-direction: column;
-      gap: .1rem;
+      gap: 0.2rem;
       flex-shrink: 0;
     }
 
     .bsi-label {
-      font-size: .6rem;
-      font-weight: 700;
+      font-size: 0.7rem;
+      font-weight: 500;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: .08em;
+      letter-spacing: 0.05em;
     }
 
     .bsi-val {
       font-family: var(--mono);
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     .bsi-val.ok {
-      color: var(--success);
+      color: var(--text);
     }
 
     .bsi-val.warn {
@@ -535,19 +438,14 @@
       align-items: stretch;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 6px;
       overflow: hidden;
-      transition: border-color .15s;
-    }
-
-    .bew:focus-within {
-      border-color: var(--accent);
     }
 
     .bew-pfx {
-      padding: 0 .5rem;
+      padding: 0 0.6rem;
       font-family: var(--mono);
-      font-size: .75rem;
+      font-size: 0.85rem;
       color: var(--muted);
       background: var(--card2);
       border-right: 1px solid var(--border);
@@ -558,13 +456,11 @@
     .bew input {
       background: transparent;
       border: none;
-      color: var(--text);
       font-family: var(--mono);
-      font-size: .9rem;
-      font-weight: 700;
-      padding: .32rem .5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
       width: 120px;
-      outline: none;
     }
 
     .bew input[type=number]::-webkit-inner-spin-button,
@@ -572,42 +468,40 @@
       -webkit-appearance: none;
     }
 
-    .bew input[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .bstrip-bar-wrap {
       flex: 1;
-      min-width: 120px;
+      min-width: 200px;
     }
 
     .bs-bar {
       background: var(--border2);
-      border-radius: 6px;
-      height: 7px;
+      border-radius: 4px;
+      height: 8px;
       overflow: hidden;
+      width: 100%;
     }
 
     .bs-bar-fill {
       height: 100%;
-      border-radius: 6px;
-      transition: width .45s, background .45s;
+      border-radius: 4px;
+      transition: width 0.4s ease, background 0.4s;
     }
 
     .bs-bar-labels {
       display: flex;
       justify-content: space-between;
-      margin-top: .25rem;
+      margin-top: 0.5rem;
     }
 
     .bs-bar-labels span {
-      font-size: .58rem;
-      color: var(--muted2);
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
     }
 
     /* ═══ FIELD / INPUT ═══ */
     .field {
-      margin-bottom: .72rem;
+      margin-bottom: 1rem;
     }
 
     .field:last-child {
@@ -616,12 +510,10 @@
 
     .field>label {
       display: block;
-      font-size: .62rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 500;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: .24rem;
+      margin-bottom: 0.4rem;
     }
 
     .iw {
@@ -629,25 +521,19 @@
       align-items: stretch;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 6px;
       overflow: hidden;
-      transition: border-color .15s;
-    }
-
-    .iw:focus-within {
-      border-color: var(--accent);
     }
 
     .iw-pre,
     .iw-suf {
-      padding: 0 .5rem;
+      padding: 0 0.8rem;
       background: var(--card2);
       color: var(--muted);
       font-family: var(--mono);
-      font-size: .72rem;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
-      white-space: nowrap;
     }
 
     .iw-pre {
@@ -662,13 +548,11 @@
       flex: 1;
       background: transparent;
       border: none;
-      color: var(--text);
       font-family: var(--mono);
-      font-size: .84rem;
-      font-weight: 600;
-      padding: .4rem .55rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 0.6rem;
       min-width: 0;
-      outline: none;
     }
 
     .iw input[type=number]::-webkit-inner-spin-button,
@@ -676,134 +560,115 @@
       -webkit-appearance: none;
     }
 
-    .iw input[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .iw-locked {
       display: flex;
       align-items: stretch;
       background: var(--locked);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
       overflow: hidden;
-      opacity: .8;
     }
 
     .iw-locked .iw-pre {
-      background: var(--border2);
-      border-color: var(--border2);
-      color: var(--muted2);
+      background: transparent;
+      border-color: var(--border);
+      color: var(--muted);
     }
 
     .lock-val {
       flex: 1;
-      padding: .4rem .55rem;
+      padding: 0.5rem 0.6rem;
       font-family: var(--mono);
-      font-size: .84rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 500;
       color: var(--muted);
       display: flex;
       align-items: center;
-      gap: .35rem;
+      justify-content: space-between;
     }
 
     .lock-icon {
-      font-size: .58rem;
-      color: var(--muted2);
+      font-size: 0.7rem;
+      opacity: 0.6;
     }
 
     /* ═══ SALESPEOPLE ═══ */
     .sp-widget {
-      background: linear-gradient(135deg, var(--accent3) 0%, rgba(228, 236, 250, 0.4) 100%);
-      border: 1px solid rgba(26, 79, 160, 0.18);
-      border-radius: 14px;
-      padding: .75rem 1rem;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
       display: flex;
       align-items: center;
-      gap: .8rem;
-      margin-bottom: .8rem;
-    }
-
-    [data-theme="dark"] .sp-widget {
-      background: linear-gradient(135deg, rgba(24, 36, 64, 0.90) 0%, rgba(15, 24, 52, 0.60) 100%);
-    }
-
-    .sp-ico {
-      font-size: 1.3rem;
-      flex-shrink: 0;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .sp-info {
-      flex: 1;
-      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
     }
 
     .sp-lbl {
-      font-size: .61rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: .08em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
     }
 
     .sp-detail {
-      font-size: .66rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      margin-top: .04rem;
     }
 
     .sp-right {
       display: flex;
       align-items: center;
-      gap: .5rem;
-      flex-shrink: 0;
+      gap: 1rem;
     }
 
     .sp-counter {
       display: flex;
       align-items: center;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 6px;
       overflow: hidden;
-      background: var(--inp);
-      backdrop-filter: var(--blur);
+      background: var(--surface);
     }
 
     .sp-btn {
-      width: 28px;
-      height: 30px;
-      background: var(--card2);
+      width: 36px;
+      height: 36px;
+      background: transparent;
       border: none;
       cursor: pointer;
-      font-size: 1rem;
-      color: var(--accent2);
+      font-size: 1.2rem;
+      color: var(--muted);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background .15s;
-      flex-shrink: 0;
-      font-weight: 700;
+      transition: background 0.2s;
     }
 
     .sp-btn:hover {
-      background: var(--accent2);
-      color: #fff;
+      background: var(--card2);
+      color: var(--text);
     }
 
     .sp-num {
-      width: 38px;
+      width: 50px;
       text-align: center;
       background: transparent;
       border: none;
       font-family: var(--mono);
-      font-size: .92rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
-      height: 30px;
-      outline: none;
+      height: 36px;
     }
 
     .sp-num[type=number]::-webkit-inner-spin-button,
@@ -811,260 +676,213 @@
       -webkit-appearance: none;
     }
 
-    .sp-num[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .sp-total {
       font-family: var(--mono);
-      font-size: .78rem;
-      color: var(--accent2);
-      font-weight: 700;
-      white-space: nowrap;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 600;
     }
 
     /* ═══ SEGMENTS ═══ */
-    .seg-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .55rem;
+    .seg-wrap {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .seg-card {
-      background: var(--card2);
-      border: 1px solid var(--border2);
-      border-radius: 12px;
-      padding: .65rem .8rem;
-      transition: border-color .18s;
-    }
-
-    .seg-card:focus-within {
-      border-color: var(--accent);
-    }
-
-    .seg-hdr {
+    .seg-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: .3rem;
+      gap: 1rem;
     }
 
-    .seg-hdr-left {
-      display: flex;
-      align-items: center;
-      gap: .35rem;
-    }
-
-    .seg-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .seg-name {
-      font-size: .61rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--muted);
-    }
-
-    .seg-pct-display {
-      font-family: var(--mono);
-      font-size: .62rem;
-      font-weight: 700;
-      color: var(--muted2);
-    }
-
-    .seg-inp-row {
-      display: flex;
-      align-items: center;
-      gap: .3rem;
-      margin-bottom: .35rem;
-    }
-
-    .seg-inp {
-      background: transparent;
-      border: none;
-      font-family: var(--mono);
-      font-size: 1.22rem;
-      font-weight: 700;
+    .seg-label {
+      width: 80px;
+      font-size: 0.8rem;
+      font-weight: 500;
       color: var(--text);
-      width: 54px;
-      min-width: 0;
-      outline: none;
     }
 
-    .seg-inp[type=number]::-webkit-inner-spin-button,
-    .seg-inp[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
-    .seg-inp[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    .seg-unit {
-      font-family: var(--mono);
-      font-size: .82rem;
-      color: var(--muted);
-    }
-
-    .seg-bar {
-      height: 4px;
+    .seg-bar-track {
+      flex: 1;
+      height: 8px;
       background: var(--border2);
-      border-radius: 3px;
+      border-radius: 4px;
+      position: relative;
       overflow: hidden;
     }
 
     .seg-bar-fill {
       height: 100%;
-      border-radius: 3px;
-      transition: width .35s;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .seg-inp-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      width: 70px;
+    }
+
+    .seg-inp-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: right;
+      padding: 0.3rem 0;
+      outline: none;
+    }
+
+    .seg-inp-wrap span {
+      padding: 0 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .seg-inp-wrap input[type=number]::-webkit-inner-spin-button,
+    .seg-inp-wrap input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
     }
 
     .seg-total-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: .65rem;
-      padding: .42rem .7rem;
-      background: var(--card2);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      font-size: .68rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
     }
 
     .seg-total-lbl {
+      font-size: 0.75rem;
       color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
+      font-weight: 500;
     }
 
     .seg-total-val {
       font-family: var(--mono);
-      font-weight: 700;
-      font-size: .85rem;
+      font-weight: 600;
+      font-size: 0.9rem;
     }
 
     /* ═══ BREAKDOWN ═══ */
     .breakdown {
-      margin-top: .7rem;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border2);
+      padding: 1rem;
+      border-radius: 8px;
       background: var(--card2);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .bk-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: .38rem .72rem;
-      border-bottom: 1px solid var(--border2);
-      font-size: .73rem;
-    }
-
-    .bk-row:last-child {
-      border-bottom: none;
+      font-size: 0.75rem;
+      color: var(--muted);
     }
 
     .bk-sub {
-      color: var(--muted);
-      font-size: .67rem;
-      padding-left: 1.2rem;
+      font-size: 0.7rem;
+      padding-left: 1rem;
+      opacity: 0.8;
     }
 
     .bk-val {
       font-family: var(--mono);
-      font-weight: 600;
+      font-weight: 500;
+      color: var(--text);
     }
 
     /* ═══ NET PRICE CHIPS ═══ */
     .net-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: .38rem;
-      margin-top: .65rem;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
     }
 
     .net-chip {
       background: var(--card2);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      padding: .4rem .6rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .net-chip-lbl {
-      font-size: .61rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .05em;
+      font-weight: 500;
     }
 
     .net-chip-val {
       font-family: var(--mono);
-      font-size: .8rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
     }
 
     /* ═══ DIST CHAIN ═══ */
     .dist-chain {
-      margin-top: .65rem;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border2);
-      background: var(--card2);
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
     }
 
     .dc-note {
-      font-size: .61rem;
+      font-size: 0.7rem;
       color: var(--muted);
-      padding: .28rem .72rem;
-      background: var(--border2);
-      display: flex;
-      align-items: center;
-      gap: .3rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .dc-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: .38rem .72rem;
-      border-bottom: 1px solid var(--border2);
-      font-size: .73rem;
-    }
-
-    .dc-row:last-child {
-      border-bottom: none;
-    }
-
-    .dc-lbl {
+      font-size: 0.8rem;
       color: var(--muted);
     }
 
     .dc-val {
       font-family: var(--mono);
-      font-weight: 700;
-      color: var(--accent);
-      font-size: .76rem;
+      font-weight: 500;
+      color: var(--text);
     }
 
     .dc-hl {
-      background: var(--accent3);
+      padding-top: 0.8rem;
+      margin-top: 0.2rem;
+      border-top: 1px solid var(--border);
     }
 
     .dc-hl .dc-lbl {
-      color: var(--accent2);
-      font-weight: 700;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .dc-hl .dc-val {
+      font-weight: 600;
+      font-size: 0.95rem;
     }
 
     /* ═══ TOTAL ROW ═══ */
@@ -1072,28 +890,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: .5rem 0;
+      padding-top: 1rem;
       border-top: 1px solid var(--border);
-      margin-top: .5rem;
-      font-weight: 700;
-      font-size: .78rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
     }
 
     .total-val {
       font-family: var(--mono);
-      font-size: .92rem;
-      color: var(--accent);
+      font-size: 1rem;
+      color: var(--text);
     }
 
     /* ═══ SUMMARY ═══ */
     .summary-card {
-      backdrop-filter: var(--blur);
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 12px;
       overflow: hidden;
       box-shadow: var(--sh);
-      margin-bottom: 1.1rem;
+      margin-bottom: 2rem;
     }
 
     .sum-grid {
@@ -1102,9 +920,8 @@
     }
 
     .sum-cell {
-      padding: .9rem 1.1rem;
-      border-right: 1px solid var(--border2);
-      position: relative;
+      padding: 1.5rem;
+      border-right: 1px solid var(--border);
     }
 
     .sum-cell:last-child {
@@ -1112,86 +929,82 @@
     }
 
     .sum-lbl {
-      font-size: .61rem;
-      font-weight: 700;
+      font-size: 0.7rem;
+      font-weight: 500;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: .22rem;
+      margin-bottom: 0.5rem;
     }
 
     .sum-val {
       font-family: var(--mono);
-      font-size: .96rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     .sum-footer {
+      background: var(--card2);
       border-top: 1px solid var(--border);
-      padding: .65rem 1.1rem;
+      padding: 1.2rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .sum-footer-lbl {
-      font-size: .7rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 500;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
     }
 
     .sum-footer-val {
       font-family: var(--mono);
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     /* ═══ HISTORY ═══ */
     .hist-panel {
       display: none;
-      backdrop-filter: var(--blur);
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 1.1rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
       overflow: hidden;
-      box-shadow: var(--sh-sm);
+      box-shadow: var(--sh);
     }
 
     .hist-panel.open {
       display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .hist-table-wrap {
+      overflow-x: auto;
     }
 
     .ht {
       width: 100%;
       border-collapse: collapse;
-      font-size: .69rem;
+      font-size: 0.8rem;
     }
 
     .ht th {
       text-align: left;
-      padding: .46rem .8rem;
+      padding: 1rem 1.2rem;
       background: var(--card2);
       color: var(--muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      font-size: .59rem;
+      font-weight: 500;
+      font-size: 0.75rem;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     .ht td {
-      padding: .44rem .8rem;
+      padding: 1rem 1.2rem;
       border-bottom: 1px solid var(--border2);
       font-family: var(--mono);
       white-space: nowrap;
-    }
-
-    .ht tbody tr:hover td {
-      background: var(--card2);
+      color: var(--text);
     }
 
     .ht tr:last-child td {
@@ -1203,8 +1016,8 @@
       border: none;
       color: var(--danger);
       cursor: pointer;
-      opacity: .4;
-      transition: opacity .15s;
+      opacity: 0.6;
+      font-size: 0.85rem;
     }
 
     .dbtn:hover {
@@ -1212,74 +1025,64 @@
     }
 
     .lbtn {
-      background: none;
-      border: 1px solid var(--accent2);
-      color: var(--accent2);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
       cursor: pointer;
-      font-size: .63rem;
-      border-radius: 6px;
-      padding: .16rem .42rem;
-      font-weight: 700;
-      transition: all .15s;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      font-weight: 500;
     }
 
     .lbtn:hover {
-      background: var(--accent2);
-      color: #fff;
+      background: var(--card2);
     }
 
     /* ═══ NOTES ═══ */
     .notes-ta {
       width: 100%;
-      min-height: 112px;
-      resize: vertical;
-      background: var(--inp);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      height: 100%;
+      min-height: 150px;
+      resize: none;
+      background: transparent;
+      border: none;
       color: var(--text);
-      padding: .65rem .8rem;
-      font-size: .82rem;
-      line-height: 1.55;
-      transition: border-color .15s;
+      font-size: 0.85rem;
+      line-height: 1.6;
       outline: none;
     }
 
-    .notes-ta:focus {
-      border-color: var(--accent);
+    .notes-ta::placeholder {
+      color: var(--muted2);
     }
 
-    /* ═══ ANALYSIS SECTION TITLE ═══ */
+    /* ═══ ANALYSIS SECTION ═══ */
     .analysis-sec-title {
-      font-weight: 700;
-      font-size: .78rem;
-      text-transform: uppercase;
-      letter-spacing: .09em;
-      color: var(--accent);
-      margin-bottom: .9rem;
-      padding-bottom: .5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: .5rem;
     }
 
     .analysis-sec {
-      margin-bottom: 1.6rem;
+      margin-bottom: 2.5rem;
     }
 
     .ms-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.1rem;
-      margin-bottom: .2rem;
+      gap: 1.5rem;
     }
 
     /* Market share row */
     .ms-row {
       display: flex;
       align-items: center;
-      gap: .6rem;
-      margin-bottom: .6rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
 
     .ms-row:last-child {
@@ -1287,20 +1090,10 @@
     }
 
     .ms-seg-lbl {
-      font-size: .69rem;
-      font-weight: 600;
-      color: var(--muted);
-      width: 88px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      gap: .35rem;
-    }
-
-    .ms-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+      width: 90px;
       flex-shrink: 0;
     }
 
@@ -1309,14 +1102,9 @@
       align-items: stretch;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 6px;
       overflow: hidden;
       flex: 1;
-      transition: border-color .15s;
-    }
-
-    .ms-pct-iw:focus-within {
-      border-color: var(--accent);
     }
 
     .ms-pct-iw input {
@@ -1325,28 +1113,18 @@
       border: none;
       color: var(--text);
       font-family: var(--mono);
-      font-size: .82rem;
-      font-weight: 600;
-      padding: .32rem .5rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.6rem;
       min-width: 0;
       outline: none;
     }
 
-    .ms-pct-iw input[type=number]::-webkit-inner-spin-button,
-    .ms-pct-iw input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
-    .ms-pct-iw input[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .ms-pct-suf {
-      padding: 0 .4rem;
+      padding: 0 0.6rem;
       background: var(--card2);
       color: var(--muted);
       font-family: var(--mono);
-      font-size: .7rem;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
       border-left: 1px solid var(--border);
@@ -1355,7 +1133,7 @@
     .ms-delta {
       display: flex;
       align-items: center;
-      gap: .22rem;
+      gap: 0.5rem;
       flex-shrink: 0;
     }
 
@@ -1364,14 +1142,9 @@
       align-items: stretch;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 6px;
       overflow: hidden;
-      width: 64px;
-      transition: border-color .15s;
-    }
-
-    .ms-delta-iw:focus-within {
-      border-color: var(--accent);
+      width: 75px;
     }
 
     .ms-delta-iw input {
@@ -1380,59 +1153,46 @@
       border: none;
       color: var(--text);
       font-family: var(--mono);
-      font-size: .77rem;
-      font-weight: 600;
-      padding: .32rem .4rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.6rem;
       min-width: 0;
       outline: none;
     }
 
-    .ms-delta-iw input[type=number]::-webkit-inner-spin-button,
-    .ms-delta-iw input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
-    .ms-delta-iw input[type=number] {
-      -moz-appearance: textfield;
-    }
-
     .ms-delta-lbl {
-      font-size: .58rem;
-      color: var(--muted2);
-      font-weight: 700;
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
       white-space: nowrap;
     }
 
     /* Rev bar */
     .rev-section {
-      margin-top: .95rem;
-      padding: .72rem .85rem;
-      background: var(--card2);
-      border: 1px solid var(--border2);
-      border-radius: 12px;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border2);
     }
 
     .rev-lbl {
-      font-size: .62rem;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: .45rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.8rem;
     }
 
     .rev-bar-outer {
-      height: 14px;
+      height: 8px;
       background: var(--border2);
-      border-radius: 6px;
+      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: .42rem;
+      margin-bottom: 1rem;
+      width: 100%;
     }
 
     .rev-bar-inner {
       height: 100%;
-      border-radius: 6px;
-      transition: width .5s;
+      border-radius: 4px;
+      transition: width 0.5s ease;
     }
 
     .rev-iw {
@@ -1440,21 +1200,16 @@
       align-items: stretch;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 6px;
       overflow: hidden;
-      transition: border-color .15s;
-    }
-
-    .rev-iw:focus-within {
-      border-color: var(--accent);
     }
 
     .rev-iw-pfx {
-      padding: 0 .45rem;
+      padding: 0 0.8rem;
       background: var(--card2);
       color: var(--muted);
       font-family: var(--mono);
-      font-size: .72rem;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
       border-right: 1px solid var(--border);
@@ -1466,158 +1221,102 @@
       border: none;
       color: var(--text);
       font-family: var(--mono);
-      font-size: .82rem;
-      font-weight: 600;
-      padding: .32rem .5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 0.6rem;
       min-width: 0;
       outline: none;
-    }
-
-    .rev-iw input[type=number]::-webkit-inner-spin-button,
-    .rev-iw input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-    }
-
-    .rev-iw input[type=number] {
-      -moz-appearance: textfield;
     }
 
     /* ═══ SATISFACTION ═══ */
     .sat-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.1rem;
-      margin-bottom: .2rem;
+      gap: 1.5rem;
     }
 
     .sat-row {
       display: flex;
-      align-items: flex-start;
-      gap: .8rem;
-      padding: .72rem 0;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 1.2rem 0;
       border-bottom: 1px solid var(--border2);
     }
 
     .sat-row:last-child {
       border-bottom: none;
-    }
-
-    .sat-ico-wrap {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: .8rem;
-    }
-
-    .sat-info {
-      flex: 1;
-      min-width: 0;
+      padding-bottom: 0;
     }
 
     .sat-name {
-      font-weight: 700;
-      font-size: .8rem;
-      margin-bottom: .28rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--text);
     }
 
     .stars {
       display: flex;
-      gap: .18rem;
-      margin-bottom: .26rem;
+      gap: 0.2rem;
     }
 
     .star {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      transition: transform .12s;
+      transition: transform 0.1s;
       line-height: 1;
       color: var(--border);
       user-select: none;
     }
 
     .star:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
 
     .star.on {
-      color: #f0a020;
-    }
-
-    .sat-rating-lbl {
-      font-size: .67rem;
-      font-weight: 700;
-      margin-bottom: .3rem;
-    }
-
-    .sat-rating-lbl.s5 {
-      color: var(--success);
-    }
-
-    .sat-rating-lbl.s4 {
-      color: #248040;
-    }
-
-    .sat-rating-lbl.s3 {
       color: var(--warn);
     }
 
-    .sat-rating-lbl.s2,
-    .sat-rating-lbl.s1 {
-      color: var(--danger);
+    .sat-rating-lbl {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
     }
 
     .sat-cmt {
       width: 100%;
       background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 6px;
       color: var(--text);
-      padding: .38rem .55rem;
-      font-size: .74rem;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
       line-height: 1.5;
       resize: vertical;
-      min-height: 50px;
+      min-height: 60px;
       outline: none;
-      transition: border-color .15s;
-    }
-
-    .sat-cmt:focus {
-      border-color: var(--accent);
     }
 
     /* ═══ SALES QUALITY ═══ */
     .sq-row {
       display: flex;
       align-items: center;
-      gap: .9rem;
-      padding: .72rem 0;
+      gap: 1.5rem;
+      padding: 1rem 0;
       border-bottom: 1px solid var(--border2);
     }
 
     .sq-row:last-child {
       border-bottom: none;
-    }
-
-    .sq-ico {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: .72rem;
+      padding-bottom: 0;
     }
 
     .sq-name {
-      font-weight: 700;
-      font-size: .78rem;
-      width: 95px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      width: 100px;
       flex-shrink: 0;
+      color: var(--text);
     }
 
     .sq-track-wrap {
@@ -1627,92 +1326,63 @@
     .sq-track-labels {
       display: flex;
       justify-content: space-between;
-      font-size: .56rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--muted2);
-      margin-bottom: .3rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
     }
 
     .sq-blocks {
       display: flex;
-      gap: 3px;
+      gap: 4px;
     }
 
     .sq-block {
       flex: 1;
-      height: 14px;
+      height: 8px;
       border-radius: 4px;
       cursor: pointer;
-      opacity: .25;
-      transition: opacity .18s, transform .18s;
+      background: var(--border);
+      transition: background 0.2s;
     }
 
     .sq-block:hover {
-      opacity: .6;
+      background: var(--muted2);
     }
 
     .sq-block.on {
-      opacity: 1;
-      transform: scaleY(1.3);
+      background: var(--text);
     }
 
     .sq-badge {
       font-family: var(--mono);
-      font-size: .69rem;
-      font-weight: 700;
-      padding: .12rem .52rem;
-      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
       white-space: nowrap;
       flex-shrink: 0;
-      min-width: 70px;
+      min-width: 90px;
       text-align: center;
-    }
-
-    .sq-badge.poor {
-      background: rgba(224, 80, 80, .12);
-      color: var(--danger);
-    }
-
-    .sq-badge.fair {
-      background: rgba(224, 152, 48, .12);
-      color: var(--warn);
-    }
-
-    .sq-badge.good {
-      background: rgba(32, 128, 192, .12);
-      color: #2080c0;
-    }
-
-    .sq-badge.excellent {
-      background: rgba(13, 102, 64, .12);
-      color: var(--success);
+      background: var(--card2);
+      border: 1px solid var(--border);
     }
 
     /* ═══ ROUNDS ═══ */
     .round-tracker {
-      backdrop-filter: var(--blur);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.3rem 1.5rem;
-      margin-bottom: 1.2rem;
-      box-shadow: var(--sh-sm);
+      margin-bottom: 2rem;
     }
 
     .round-tracker-title {
-      font-weight: 700;
-      font-size: .72rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      color: var(--muted);
-      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 1.2rem;
     }
 
     .rounds-row {
       display: flex;
-      gap: .65rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }
 
@@ -1720,52 +1390,47 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: .28rem;
-      width: 112px;
-      padding: .78rem .5rem;
+      gap: 0.5rem;
+      width: 120px;
+      padding: 1.2rem 0.8rem;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      background: var(--card2);
+      border-radius: 8px;
+      background: var(--card);
       cursor: pointer;
-      transition: all .22s;
-      backdrop-filter: var(--blur);
+      transition: all 0.2s;
     }
 
     .round-pill:hover {
-      border-color: var(--accent2);
-      background: var(--accent3);
-      transform: translateY(-2px);
-      box-shadow: var(--sh-sm);
+      border-color: var(--muted2);
     }
 
     .round-pill.selected {
-      border-color: var(--accent);
-      background: var(--accent3);
-      box-shadow: 0 0 0 3px rgba(26, 79, 160, .12), var(--sh-sm);
+      border-color: var(--text);
+      background: var(--card2);
     }
 
     .round-num {
       font-family: var(--mono);
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
       line-height: 1;
     }
 
     .round-period-lbl {
-      font-size: .59rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 400;
       color: var(--muted);
       text-align: center;
-      max-width: 90px;
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .round-status-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
     }
 
@@ -1775,20 +1440,11 @@
 
     .round-status-dot.current {
       background: var(--warn);
+      box-shadow: 0 0 8px var(--warn);
     }
 
     .round-status-dot.done {
       background: var(--success);
-    }
-
-    .round-detail-card {
-      backdrop-filter: var(--blur);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: var(--sh-sm);
-      margin-bottom: 1.1rem;
     }
 
     .round-detail-grid {
@@ -1797,7 +1453,7 @@
     }
 
     .rdc {
-      padding: .9rem 1.1rem;
+      padding: 1.5rem;
       border-right: 1px solid var(--border2);
     }
 
@@ -1810,12 +1466,10 @@
     }
 
     .rdc-label {
-      font-size: .62rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 500;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: .35rem;
+      margin-bottom: 0.8rem;
     }
 
     .rdc-input {
@@ -1823,95 +1477,88 @@
       background: var(--inp);
       border: 1px solid var(--border);
       color: var(--text);
-      border-radius: 9px;
-      padding: .38rem .6rem;
-      font-size: .82rem;
-      line-height: 1.5;
+      border-radius: 6px;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
       resize: vertical;
-      min-height: 72px;
+      min-height: 100px;
       outline: none;
-      transition: border-color .15s;
-    }
-
-    .rdc-input:focus {
-      border-color: var(--accent);
     }
 
     .rdc-input.single {
       min-height: unset;
-      height: 38px;
+      height: 45px;
       resize: none;
     }
 
     .status-btns {
       display: flex;
-      gap: .42rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
-      margin-top: .2rem;
     }
 
     .st-btn {
-      padding: .3rem .75rem;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      background: var(--glass2);
+      background: var(--surface);
       color: var(--muted);
-      font-size: .68rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: all .15s;
+      transition: all 0.2s;
     }
 
     .st-btn:hover {
-      border-color: var(--accent2);
-      color: var(--accent2);
+      background: var(--card2);
+      color: var(--text);
     }
 
     .st-btn.ap {
-      background: rgba(148, 160, 200, .15);
       border-color: var(--muted2);
-      color: var(--muted);
+      color: var(--text);
     }
 
     .st-btn.ac {
-      background: rgba(224, 152, 48, .12);
       border-color: var(--warn);
       color: var(--warn);
+      background: rgba(245, 158, 11, 0.1);
     }
 
     .st-btn.ad {
-      background: rgba(13, 102, 64, .12);
       border-color: var(--success);
       color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
     }
 
     /* ═══ TOAST ═══ */
     .toast {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      padding: .58rem 1.1rem;
-      border-radius: 12px;
-      font-size: .72rem;
-      font-weight: 700;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
       opacity: 0;
       transform: translateY(10px);
-      transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+      transition: all 0.3s ease;
       pointer-events: none;
       z-index: 999;
-      backdrop-filter: var(--blur);
+      border: 1px solid var(--border);
     }
 
     .toast.ok {
-      background: linear-gradient(135deg, rgba(13, 102, 64, .95), rgba(20, 128, 80, .95));
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(13, 102, 64, .3);
+      background: var(--text);
+      color: var(--bg);
+      box-shadow: var(--sh);
     }
 
     .toast.err {
-      background: linear-gradient(135deg, rgba(181, 40, 40, .95), rgba(200, 50, 50, .95));
+      background: var(--danger);
       color: #fff;
-      box-shadow: 0 8px 24px rgba(181, 40, 40, .3);
+      box-shadow: var(--sh);
     }
 
     .toast.show {
@@ -1920,7 +1567,7 @@
     }
 
     /* ═══ RESPONSIVE ═══ */
-    @media(max-width:900px) {
+    @media(max-width: 900px) {
       .sum-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -1930,78 +1577,96 @@
       }
 
       .sum-cell:nth-child(3) {
-        border-top: 1px solid var(--border2);
+        border-top: 1px solid var(--border);
       }
 
       .sum-cell:nth-child(4) {
-        border-top: 1px solid var(--border2);
+        border-top: 1px solid var(--border);
         border-right: none;
       }
     }
 
-    @media(max-width:700px) {
+    @media(max-width: 768px) {
       header {
-        padding: 0 1rem;
-        height: 52px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        position: relative;
       }
 
-      .hdr-right .btn-label {
-        display: none;
-      }
-
-      .hdr-right .btn {
-        padding: .36rem .55rem;
-      }
-
-      .t-lbl {
-        display: none;
+      .hdr-right {
+        width: 100%;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding-bottom: 0.2rem;
       }
 
       .tab-nav {
-        padding: .5rem .8rem 0;
+        top: 0;
+        padding: 0.5rem 1rem 0;
         overflow-x: auto;
-        gap: .1rem;
+        gap: 0.5rem;
       }
 
       .tab-btn {
-        font-size: .68rem;
-        padding: .45rem .7rem;
+        font-size: 0.8rem;
+        padding: 0.8rem 0.5rem;
       }
 
       .container {
-        padding: 1rem .9rem 4rem;
+        padding: 1.5rem 1rem 4rem;
       }
 
       .g2,
       .ms-grid,
       .sat-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
 
       .bstrip {
-        flex-wrap: wrap;
-        gap: .65rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
       }
 
       .bstrip-bar-wrap {
         width: 100%;
-        order: 5;
       }
 
-      .seg-grid {
-        grid-template-columns: 1fr 1fr;
+      .bsi {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .bew {
+        width: 100%;
+      }
+
+      .bew input {
+        width: 100%;
       }
 
       .sum-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+      }
+
+      .sum-cell {
+        border-right: none !important;
+        border-top: 1px solid var(--border);
+        padding: 1rem;
+      }
+
+      .sum-cell:first-child {
+        border-top: none;
       }
 
       .rounds-row {
-        gap: .45rem;
-      }
-
-      .round-pill {
-        width: 90px;
+        justify-content: flex-start;
       }
 
       .round-detail-grid {
@@ -2011,6 +1676,7 @@
       .rdc {
         border-right: none !important;
         border-top: 1px solid var(--border2);
+        padding: 1rem;
       }
 
       .rdc:first-child {
@@ -2019,48 +1685,32 @@
 
       .period-bar {
         flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+      }
+
+      .pgrp input[type="text"],
+      .pgrp select {
+        width: 100%;
+      }
+
+      .sq-row {
+        flex-direction: column;
         align-items: flex-start;
+        gap: 0.8rem;
       }
 
-      .pgrp input[type="text"] {
-        width: 100%;
+      .sq-badge {
+        align-self: flex-end;
       }
 
-      .sp-widget {
+      .ms-row {
         flex-wrap: wrap;
-        gap: .6rem;
       }
 
-      .sp-right {
+      .ms-seg-lbl {
         width: 100%;
-        justify-content: space-between;
-      }
-    }
-
-    @media(max-width:420px) {
-      .seg-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .net-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .round-pill {
-        width: 80px;
-      }
-
-      .sum-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .sum-cell {
-        border-right: none !important;
-        border-top: 1px solid var(--border2);
-      }
-
-      .sum-cell:first-child {
-        border-top: none;
+        margin-bottom: 0.5rem;
       }
     }
   </style>
@@ -2084,17 +1734,17 @@
           </div>
           <span class="t-lbl" id="tLbl">Modo oscuro</span>
         </div>
-        <button class="btn btn-ghost" onclick="toggleHistory()">📋 <span class="btn-label">Historial</span></button>
-        <button class="btn btn-save" onclick="saveDecision()">💾 <span class="btn-label">Guardar</span></button>
-        <button class="btn btn-excel" onclick="exportExcel()">📊 <span class="btn-label">Excel</span></button>
-        <button class="btn btn-pdf" onclick="exportPDF()">📄 <span class="btn-label">PDF</span></button>
+        <button class="btn btn-ghost" onclick="toggleHistory()">📋 Historial</button>
+        <button class="btn btn-save" onclick="saveDecision()">💾 Guardar</button>
+        <button class="btn btn-excel" onclick="exportExcel()">📊 Excel</button>
+        <button class="btn btn-pdf" onclick="exportPDF()">📄 PDF</button>
       </div>
     </header>
 
     <nav class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('decisions',this)"><span>📋</span> Decisiones</button>
-      <button class="tab-btn" onclick="switchTab('analysis',this)"><span>📊</span> Análisis</button>
-      <button class="tab-btn" onclick="switchTab('rounds',this)"><span>🎯</span> Rondas</button>
+      <button class="tab-btn active" onclick="switchTab('decisions',this)">Decisiones</button>
+      <button class="tab-btn" onclick="switchTab('analysis',this)">Análisis</button>
+      <button class="tab-btn" onclick="switchTab('rounds',this)">Rondas</button>
     </nav>
 
     <div class="container">
@@ -2122,18 +1772,15 @@
               </select>
             </div>
             <div class="pgrp" style="flex:1;">
-              <label>Nombre (opcional)</label>
-              <input type="text" id="decisionName" placeholder="Ej: Estrategia agresiva Seg A"
-                style="width:100%;min-width:140px;">
+              <label>Nombre de la decisión (opcional)</label>
+              <input type="text" id="decisionName" placeholder="Ej: Estrategia agresiva Seg A">
             </div>
-            <button class="btn btn-ghost" onclick="toggleHistory()" style="margin-left:auto;flex-shrink:0;">📋
-              Historial</button>
           </div>
         </div>
 
         <div class="bstrip">
           <div class="bsi">
-            <span class="bsi-label">Presupuesto Total</span>
+            <span class="bsi-label">Presupuesto</span>
             <div class="bew">
               <span class="bew-pfx">$</span>
               <input type="number" id="totalBudget" value="800000" min="0" oninput="calcAll()">
@@ -2152,12 +1799,11 @@
         </div>
 
         <div class="hist-panel" id="histPanel">
-          <div class="card-head">
-            <div class="card-ico">📋</div>
+          <div class="card-head" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="card-title">Historial de Decisiones Guardadas</div>
-            <span style="margin-left:auto;font-size:.63rem;color:var(--muted);" id="histCount"></span>
+            <span style="font-size:.75rem;color:var(--muted);" id="histCount"></span>
           </div>
-          <div style="overflow-x:auto;">
+          <div class="hist-table-wrap">
             <table class="ht">
               <thead>
                 <tr>
@@ -2168,7 +1814,7 @@
                   <th>SegB</th>
                   <th>SegC</th>
                   <th>SegD</th>
-                  <th>Vendedores</th>
+                  <th>Vend.</th>
                   <th>P.Lista</th>
                   <th>Ventas</th>
                   <th>Mkt</th>
@@ -2180,8 +1826,8 @@
               </thead>
               <tbody id="histBody">
                 <tr>
-                  <td colspan="15" style="text-align:center;color:var(--muted);padding:1.4rem;font-size:.71rem;">Sin
-                    decisiones guardadas.</td>
+                  <td colspan="15" style="text-align:center;color:var(--muted);padding:1.5rem;">Sin decisiones
+                    guardadas.</td>
                 </tr>
               </tbody>
             </table>
@@ -2191,16 +1837,14 @@
         <div class="g2">
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">⚡</div>
               <div class="card-title">Fuerza de Ventas &amp; Segmentos</div>
             </div>
             <div class="card-body">
 
               <div class="sp-widget">
-                <div class="sp-ico">👥</div>
                 <div class="sp-info">
                   <div class="sp-lbl">Vendedores</div>
-                  <div class="sp-detail" id="spDetail">11 vendedores × $50,000 = $550,000</div>
+                  <div class="sp-detail" id="spDetail">11 × $50,000</div>
                 </div>
                 <div class="sp-right">
                   <div class="sp-counter">
@@ -2212,64 +1856,46 @@
                 </div>
               </div>
 
-              <div class="seg-grid">
-                <div class="seg-card" id="segCard_A">
-                  <div class="seg-hdr">
-                    <div class="seg-hdr-left">
-                      <div class="seg-dot" style="background:var(--seg-a)"></div><span class="seg-name">Seg A</span>
-                    </div>
-                    <span class="seg-pct-display" id="segPctDisp_A">35%</span>
-                  </div>
-                  <div class="seg-inp-row"><input type="number" class="seg-inp" id="segA" value="35" min="0" max="100"
-                      oninput="calcSegments('A')"><span class="seg-unit">%</span></div>
-                  <div class="seg-bar">
+              <div class="seg-wrap">
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-a)">Segmento A</span>
+                  <div class="seg-bar-track">
                     <div class="seg-bar-fill" id="barA" style="background:var(--seg-a);width:35%"></div>
                   </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segA" value="35" min="0" max="100"
+                      oninput="calcSegments('A')"><span>%</span></div>
                 </div>
-                <div class="seg-card" id="segCard_B">
-                  <div class="seg-hdr">
-                    <div class="seg-hdr-left">
-                      <div class="seg-dot" style="background:var(--seg-b)"></div><span class="seg-name">Seg B</span>
-                    </div>
-                    <span class="seg-pct-display" id="segPctDisp_B">15%</span>
-                  </div>
-                  <div class="seg-inp-row"><input type="number" class="seg-inp" id="segB" value="15" min="0" max="100"
-                      oninput="calcSegments('B')"><span class="seg-unit">%</span></div>
-                  <div class="seg-bar">
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-b)">Segmento B</span>
+                  <div class="seg-bar-track">
                     <div class="seg-bar-fill" id="barB" style="background:var(--seg-b);width:15%"></div>
                   </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segB" value="15" min="0" max="100"
+                      oninput="calcSegments('B')"><span>%</span></div>
                 </div>
-                <div class="seg-card" id="segCard_C">
-                  <div class="seg-hdr">
-                    <div class="seg-hdr-left">
-                      <div class="seg-dot" style="background:var(--seg-c)"></div><span class="seg-name">Seg C</span>
-                    </div>
-                    <span class="seg-pct-display" id="segPctDisp_C">35%</span>
-                  </div>
-                  <div class="seg-inp-row"><input type="number" class="seg-inp" id="segC" value="35" min="0" max="100"
-                      oninput="calcSegments('C')"><span class="seg-unit">%</span></div>
-                  <div class="seg-bar">
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-c)">Segmento C</span>
+                  <div class="seg-bar-track">
                     <div class="seg-bar-fill" id="barC" style="background:var(--seg-c);width:35%"></div>
                   </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segC" value="35" min="0" max="100"
+                      oninput="calcSegments('C')"><span>%</span></div>
                 </div>
-                <div class="seg-card" id="segCard_D">
-                  <div class="seg-hdr">
-                    <div class="seg-hdr-left">
-                      <div class="seg-dot" style="background:var(--seg-d)"></div><span class="seg-name">Seg D</span>
-                    </div>
-                    <span class="seg-pct-display" id="segPctDisp_D">15%</span>
-                  </div>
-                  <div class="seg-inp-row"><input type="number" class="seg-inp" id="segD" value="15" min="0" max="100"
-                      oninput="calcSegments('D')"><span class="seg-unit">%</span></div>
-                  <div class="seg-bar">
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-d)">Segmento D</span>
+                  <div class="seg-bar-track">
                     <div class="seg-bar-fill" id="barD" style="background:var(--seg-d);width:15%"></div>
                   </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segD" value="15" min="0" max="100"
+                      oninput="calcSegments('D')"><span>%</span></div>
                 </div>
               </div>
+
               <div class="seg-total-row">
-                <span class="seg-total-lbl">Total asignado</span>
+                <span class="seg-total-lbl">Asignación Total</span>
                 <span class="seg-total-val" id="segTotalVal">100%</span>
               </div>
+
               <div class="breakdown">
                 <div class="bk-row"><span>Grandes clientes (70%)</span><span class="bk-val" id="bkLarge">$385,000</span>
                 </div>
@@ -2277,7 +1903,7 @@
                     id="bkRetain">$269,500</span></div>
                 <div class="bk-row bk-sub"><span>↳ Adquisición (30%)</span><span class="bk-val"
                     id="bkAcquire">$115,500</span></div>
-                <div class="bk-row"><span>Pequeños clientes (30%)</span><span class="bk-val"
+                <div class="bk-row" style="margin-top:0.5rem"><span>Pequeños clientes (30%)</span><span class="bk-val"
                     id="bkSmall">$165,000</span></div>
               </div>
             </div>
@@ -2285,7 +1911,6 @@
 
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">💰</div>
               <div class="card-title">Precios — Grandes Clientes</div>
             </div>
             <div class="card-body">
@@ -2294,7 +1919,7 @@
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="listPrice" value="142" min="0"
                     oninput="calcPrices()"></div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
                 <div class="field"><label>Desc. Seg A</label>
                   <div class="iw"><input type="number" id="discA" value="12" min="0" max="100"
                       oninput="calcPrices()"><span class="iw-suf">%</span></div>
@@ -2329,32 +1954,30 @@
         <div class="g2">
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">🏪</div>
               <div class="card-title">Precios — Pequeños Clientes</div>
             </div>
             <div class="card-body">
               <div class="field">
-                <label>Precio de Lista <small
-                    style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);">(espeja al de
+                <label>Precio de Lista <small style="font-weight:400;color:var(--muted2);">(espejo
                     grandes)</small></label>
                 <div class="iw-locked"><span class="iw-pre">$</span>
                   <div class="lock-val"><span id="smallListDisplay">142</span><span class="lock-icon">🔒</span></div>
                 </div>
               </div>
               <div class="field">
-                <label>Descuento a Distribuidores</label>
+                <label>Descuento Distribuidores</label>
                 <div class="iw"><input type="number" id="distDisc" value="15" min="0" max="100"
                     oninput="calcSmall()"><span class="iw-suf">%</span></div>
               </div>
               <div class="dist-chain">
-                <div class="dc-note">🔒 Auto-calculado — margen dist. 10%, paso a través 5%</div>
-                <div class="dc-row"><span class="dc-lbl">Precio al Distribuidor</span><span class="dc-val"
+                <div class="dc-note">🔒 Auto-calculado (Margen 10%, Paso 5%)</div>
+                <div class="dc-row"><span>Precio al Distribuidor</span><span class="dc-val"
                     id="distPrice">$120.70</span></div>
-                <div class="dc-row"><span class="dc-lbl">Margen Distribuidor (10%)</span><span class="dc-val"
-                    id="distMarginAmt">$12.07</span></div>
-                <div class="dc-row"><span class="dc-lbl">Paso a Través (5%)</span><span class="dc-val"
-                    id="distPassAmt">$6.04</span></div>
-                <div class="dc-row dc-hl"><span class="dc-lbl">💡 Precio Neto Final</span><span class="dc-val"
+                <div class="dc-row"><span>Margen Dist. (10%)</span><span class="dc-val" id="distMarginAmt">$12.07</span>
+                </div>
+                <div class="dc-row"><span>Paso a Través (5%)</span><span class="dc-val" id="distPassAmt">$6.04</span>
+                </div>
+                <div class="dc-row dc-hl"><span>Precio Neto Final</span><span class="dc-val"
                     id="smallNetPrice">$138.80</span></div>
               </div>
             </div>
@@ -2362,15 +1985,14 @@
 
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">📣</div>
               <div class="card-title">Presupuesto de Marketing</div>
             </div>
             <div class="card-body">
-              <div class="field"><label>Comunicación Integrada (IMC)</label>
+              <div class="field"><label>Comunicación Integrada</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" min="0"
                     oninput="calcMarketing()"></div>
               </div>
-              <div class="field"><label>Investigación de Mercados</label>
+              <div class="field"><label>Investigación Mercados</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" min="0"
                     oninput="calcMarketing()"></div>
               </div>
@@ -2391,23 +2013,22 @@
         <div class="g2">
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">🔬</div>
               <div class="card-title">Desarrollo de Producto</div>
             </div>
             <div class="card-body">
-              <div class="field"><label>Duración de Batería</label>
+              <div class="field"><label>Duración Batería</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" min="0"
                     oninput="calcProduct()"></div>
               </div>
-              <div class="field"><label>Eficiencia de Fabricación</label>
+              <div class="field"><label>Eficiencia Fabricación</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" min="0"
                     oninput="calcProduct()"></div>
               </div>
-              <div class="field"><label>Tamaño del Sensor</label>
+              <div class="field"><label>Tamaño Sensor</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" min="0"
                     oninput="calcProduct()"></div>
               </div>
-              <div class="field"><label>Reducción de Latencia</label>
+              <div class="field"><label>Reducción Latencia</label>
                 <div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" min="0"
                     oninput="calcProduct()"></div>
               </div>
@@ -2417,22 +2038,19 @@
           </div>
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">📝</div>
-              <div class="card-title">Notas / Justificación Estratégica</div>
+              <div class="card-title">Estrategia & Notas</div>
             </div>
-            <div class="card-body" style="height:calc(100% - 52px);"><textarea class="notes-ta" id="notes"
-                placeholder="Describe la lógica, supuestos clave, objetivos del trimestre..."></textarea></div>
+            <div class="card-body" style="height:calc(100% - 55px); padding:0;">
+              <textarea class="notes-ta" id="notes" style="padding:1.5rem;"
+                placeholder="Escribe aquí la justificación, supuestos y objetivos del trimestre..."></textarea>
+            </div>
           </div>
         </div>
 
         <div class="summary-card">
-          <div class="card-head">
-            <div class="card-ico">🏦</div>
-            <div class="card-title">Resumen de Presupuesto</div>
-          </div>
           <div class="sum-grid">
             <div class="sum-cell">
-              <div class="sum-lbl">Fuerza de Ventas</div>
+              <div class="sum-lbl">Fuerza Ventas</div>
               <div class="sum-val" id="sumSales">$550,000</div>
             </div>
             <div class="sum-cell">
@@ -2440,11 +2058,11 @@
               <div class="sum-val" id="sumMkt">$120,000</div>
             </div>
             <div class="sum-cell">
-              <div class="sum-lbl">Desarrollo Producto</div>
+              <div class="sum-lbl">Producto</div>
               <div class="sum-val" id="sumProd">$130,000</div>
             </div>
             <div class="sum-cell">
-              <div class="sum-lbl">Presupuesto Disponible</div>
+              <div class="sum-lbl">Presupuesto</div>
               <div class="sum-val" id="sumBudget">$800,000</div>
             </div>
           </div>
@@ -2458,20 +2076,18 @@
       <div class="tab-pane" id="tab-analysis">
 
         <div class="analysis-sec">
-          <div class="analysis-sec-title">📈 Cuota de Mercado</div>
+          <div class="analysis-sec-title">Cuota de Mercado & Ingresos</div>
           <div class="ms-grid">
             <div class="card">
               <div class="card-head">
-                <div class="card-ico">👥</div>
-                <div class="card-title">Grandes Clientes</div><span
-                  style="margin-left:auto;font-size:.59rem;color:var(--muted);">Cuota % + Δ variación</span>
+                <div class="card-title">Grandes Clientes</div>
               </div>
               <div class="card-body">
                 <div id="ms-large-body"></div>
                 <div class="rev-section">
                   <div class="rev-lbl">Ingresos Trimestrales</div>
                   <div class="rev-bar-outer">
-                    <div class="rev-bar-inner" id="rev-large-bar" style="background:#00bcd4;width:0%"></div>
+                    <div class="rev-bar-inner" id="rev-large-bar" style="background:var(--text);width:0%"></div>
                   </div>
                   <div class="rev-iw"><span class="rev-iw-pfx">$</span><input type="number" id="revLarge" value="0"
                       min="0" placeholder="Ingresos grandes clientes" oninput="updateRevBars()"></div>
@@ -2480,16 +2096,14 @@
             </div>
             <div class="card">
               <div class="card-head">
-                <div class="card-ico">🏪</div>
-                <div class="card-title">Pequeños Clientes</div><span
-                  style="margin-left:auto;font-size:.59rem;color:var(--muted);">Cuota % + Δ variación</span>
+                <div class="card-title">Pequeños Clientes</div>
               </div>
               <div class="card-body">
                 <div id="ms-small-body"></div>
                 <div class="rev-section">
                   <div class="rev-lbl">Ingresos Trimestrales</div>
                   <div class="rev-bar-outer">
-                    <div class="rev-bar-inner" id="rev-small-bar" style="background:#f5a623;width:0%"></div>
+                    <div class="rev-bar-inner" id="rev-small-bar" style="background:var(--muted);width:0%"></div>
                   </div>
                   <div class="rev-iw"><span class="rev-iw-pfx">$</span><input type="number" id="revSmall" value="0"
                       min="0" placeholder="Ingresos pequeños clientes" oninput="updateRevBars()"></div>
@@ -2500,18 +2114,16 @@
         </div>
 
         <div class="analysis-sec">
-          <div class="analysis-sec-title">⭐ Satisfacción del Cliente</div>
+          <div class="analysis-sec-title">Satisfacción del Cliente</div>
           <div class="sat-grid">
             <div class="card">
               <div class="card-head">
-                <div class="card-ico">👥</div>
-                <div class="card-title">Grandes Clientes — por Segmento</div>
+                <div class="card-title">Grandes Clientes</div>
               </div>
               <div class="card-body" id="sat-large-body"></div>
             </div>
             <div class="card">
               <div class="card-head">
-                <div class="card-ico">🏪</div>
                 <div class="card-title">Pequeños Clientes</div>
               </div>
               <div class="card-body" id="sat-small-body"></div>
@@ -2520,11 +2132,10 @@
         </div>
 
         <div class="analysis-sec">
-          <div class="analysis-sec-title">🤝 Calidad de Interacción del Representante de Ventas</div>
+          <div class="analysis-sec-title">Calidad de Ventas</div>
           <div class="card">
             <div class="card-head">
-              <div class="card-ico">🎯</div>
-              <div class="card-title">Evaluación por Segmento — Pobre · Justo · Bueno · Excelente</div>
+              <div class="card-title">Evaluación por Segmento</div>
             </div>
             <div class="card-body" id="sq-body"></div>
           </div>
@@ -2534,13 +2145,12 @@
       <div class="tab-pane" id="tab-rounds">
 
         <div class="round-tracker">
-          <div class="round-tracker-title">🎯 Progreso — 6 Rondas</div>
+          <div class="round-tracker-title">Progreso de Simulación</div>
           <div class="rounds-row" id="roundsRow"></div>
         </div>
 
-        <div class="round-detail-card">
+        <div class="card" style="margin-bottom: 2rem;">
           <div class="card-head">
-            <div class="card-ico">📌</div>
             <div class="card-title">Detalle — <span id="roundDetailTitle">Ronda 1</span></div>
           </div>
           <div class="round-detail-grid">
@@ -2551,12 +2161,11 @@
             <div class="rdc">
               <div class="rdc-label">Estado</div>
               <div class="status-btns">
-                <button class="st-btn" id="stBtnPending" onclick="setRoundStatus('pending')" type="button">⏳
-                  Pendiente</button>
-                <button class="st-btn" id="stBtnCurrent" onclick="setRoundStatus('current')" type="button">▶️ En
+                <button class="st-btn" id="stBtnPending" onclick="setRoundStatus('pending')"
+                  type="button">Pendiente</button>
+                <button class="st-btn" id="stBtnCurrent" onclick="setRoundStatus('current')" type="button">En
                   curso</button>
-                <button class="st-btn" id="stBtnDone" onclick="setRoundStatus('done')" type="button">✅
-                  Completada</button>
+                <button class="st-btn" id="stBtnDone" onclick="setRoundStatus('done')" type="button">Completada</button>
               </div>
             </div>
             <div class="rdc">
@@ -2574,10 +2183,9 @@
 
         <div class="card">
           <div class="card-head">
-            <div class="card-ico">📊</div>
-            <div class="card-title">Resumen de Todas las Rondas</div>
+            <div class="card-title">Resumen de Rondas</div>
           </div>
-          <div style="overflow-x:auto;">
+          <div class="hist-table-wrap">
             <table class="ht">
               <thead>
                 <tr>
@@ -2602,26 +2210,25 @@
     // ═══════════════════════════
     // CONSTANTS
     // ═══════════════════════════
-    const COST_PER_SP = 50000;   // cada vendedor cuesta exactamente $50,000
+    const COST_PER_SP = 50000;
     const DIST_MARGIN = 0.10;
     const DIST_PASS = 0.05;
+
+    // Colores unificados de segmentos de acuerdo a la imagen provista
     const SEGS = [
-      { id: "A", name: "Segmento A", color: "#c05000" },
-      { id: "B", name: "Segmento B", color: "#1a4fa0" },
-      { id: "C", name: "Segmento C", color: "#0d6640" },
-      { id: "D", name: "Segmento D", color: "#7319a0" },
+      { id: "A", name: "Segmento A", color: "var(--seg-a)" },
+      { id: "B", name: "Segmento B", color: "var(--seg-b)" },
+      { id: "C", name: "Segmento C", color: "var(--seg-c)" },
+      { id: "D", name: "Segmento D", color: "var(--seg-d)" },
     ];
     const SAT_NAMES = ["Muy insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy satisfecho"];
-    const SAT_CLS = ["s1", "s1", "s3", "s4", "s5"];
     const SQ_LEVELS = ["Pobre", "Justo", "Bueno", "Excelente"];
-    const SQ_COLORS = ["#e05050", "#e09830", "#2080c0", "#0d6640"];
-    const SQ_CLS = ["poor", "fair", "good", "excellent"];
 
     // ═══════════════════════════
     // STATE
     // ═══════════════════════════
     let decisions = [];
-    try { decisions = JSON.parse(localStorage.getItem("mktSim_v6") || "[]"); } catch (e) { }
+    try { decisions = JSON.parse(localStorage.getItem("mktSim_v8") || "[]"); } catch (e) { }
 
     let msLarge = { A: { pct: 0, delta: 0 }, B: { pct: 0, delta: 0 }, C: { pct: 0, delta: 0 }, D: { pct: 0, delta: 0 } };
     let msSmall = { pct: 0, delta: 0 };
@@ -2633,7 +2240,7 @@
     let selectedRound = 0;
 
     try {
-      const a = JSON.parse(localStorage.getItem("mktSim_analysis_v6") || "{}");
+      const a = JSON.parse(localStorage.getItem("mktSim_analysis_v8") || "{}");
       if (a.msLarge) msLarge = a.msLarge;
       if (a.msSmall) msSmall = a.msSmall;
       if (a.revLargeVal !== undefined) revLargeVal = a.revLargeVal;
@@ -2643,7 +2250,7 @@
       if (a.sqVals) sqVals = a.sqVals;
     } catch (e) { }
     try {
-      const r = JSON.parse(localStorage.getItem("mktSim_rounds_v6") || "[]");
+      const r = JSON.parse(localStorage.getItem("mktSim_rounds_v8") || "[]");
       if (r.length) rounds = r;
     } catch (e) { }
 
@@ -2656,11 +2263,11 @@
     const FMT2 = (n, d = 2) => "$" + n.toFixed(d);
 
     function saveAnalysis() {
-      localStorage.setItem("mktSim_analysis_v6",
+      localStorage.setItem("mktSim_analysis_v8",
         JSON.stringify({ msLarge, msSmall, revLargeVal, revSmallVal, satLarge, satSmall, sqVals }));
     }
     function saveRoundsLS() {
-      localStorage.setItem("mktSim_rounds_v6", JSON.stringify(rounds));
+      localStorage.setItem("mktSim_rounds_v8", JSON.stringify(rounds));
     }
 
     // ═══════════════════════════
@@ -2686,23 +2293,21 @@
     // ═══════════════════════════
     // CALCULATIONS — SALES FORCE
     // ═══════════════════════════
-    // Vendedores: el usuario edita el número, el costo = n × $50,000
-    // calcSales() es llamado tanto por oninput del campo como por los botones +/-
     function getSP() { return parseInt($("numSP").value) || 0; }
 
     function changeSP(delta) {
-      // Forzar lectura limpia del valor actual antes de modificar
       const current = parseInt($("numSP").value) || 0;
       const next = Math.max(0, current + delta);
       $("numSP").value = next;
-      calcSales();     // recalcular inmediatamente
+      calcSales();
     }
 
     function calcSales() {
       const n = getSP();
-      const total = n * COST_PER_SP;  // ← cálculo correcto: n × 50000
+      const total = n * COST_PER_SP;
       $("spTotal").textContent = FMT(total);
-      $("spDetail").textContent = n + " vendedor" + (n !== 1 ? "es" : "") + " × " + FMT(COST_PER_SP) + " = " + FMT(total);
+      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
+
       const large = total * 0.70;
       const small = total * 0.30;
       $("bkLarge").textContent = FMT(large);
@@ -2714,8 +2319,7 @@
     }
 
     // ═══════════════════════════
-    // CALCULATIONS — SEGMENTS
-    // Regla: deben distribuir hasta 100%, se autolimita el input modificado si supera 100%.
+    // CALCULATIONS — SEGMENTS (AUTO-LIMIT TO 100%)
     // ═══════════════════════════
     function calcSegments(changedId) {
       if (changedId) {
@@ -2731,55 +2335,41 @@
       SEGS.forEach(s => {
         const v = Math.max(0, parseFloat($("seg" + s.id).value) || 0);
         total += v;
-        const pct = Math.min(v, 100);
-        $("bar" + s.id).style.width = pct + "%";
-        $("segPctDisp_" + s.id).textContent = v.toFixed(1) + "%";
+        $("bar" + s.id).style.width = Math.min(v, 100) + "%";
       });
+
       const tv = $("segTotalVal");
       tv.textContent = total.toFixed(1) + "%";
-      if (total > 100) {
-        tv.style.color = "var(--danger)";
-      } else if (Math.abs(total - 100) < 0.01) {
-        tv.style.color = "var(--success)";
-      } else {
-        tv.style.color = "var(--warn)";
-      }
+
+      if (total > 100) { tv.style.color = "var(--danger)"; }
+      else if (Math.abs(total - 100) < 0.01) { tv.style.color = "var(--success)"; }
+      else { tv.style.color = "var(--warn)"; }
     }
 
     // ═══════════════════════════
     // CALCULATIONS — PRICES
-    // Precio neto = listPrice × (1 - descuento/100)
     // ═══════════════════════════
     function calcPrices() {
       const lp = N("listPrice");
       SEGS.forEach(s => {
         const disc = N("disc" + s.id) / 100;
-        const net = lp * (1 - disc);
-        $("net" + s.id).textContent = FMT2(net, 2);
+        $("net" + s.id).textContent = FMT2(lp * (1 - disc), 2);
       });
-      // Precio de lista pequeños siempre espeja al de grandes
       $("smallListDisplay").textContent = lp.toFixed(0);
-      calcSmall();   // recalcular cadena distribuidores
+      calcSmall();
     }
 
-    // ═══════════════════════════
-    // CALCULATIONS — SMALL CLIENTS
-    // precioDistribuidor = lista × (1 − descDist)
-    // margenAmt = distribP × 10%
-    // passAmt   = distribP × 5%
-    // netoFinal = distribP + margenAmt + passAmt
-    // ═══════════════════════════
     function calcSmall() {
       const lp = N("listPrice");
       const dDisc = N("distDisc") / 100;
       const dP = lp * (1 - dDisc);
       const mAmt = dP * DIST_MARGIN;
       const pAmt = dP * DIST_PASS;
-      const net = dP + mAmt + pAmt;
+
       $("distPrice").textContent = FMT2(dP, 2);
       $("distMarginAmt").textContent = FMT2(mAmt, 2);
       $("distPassAmt").textContent = FMT2(pAmt, 2);
-      $("smallNetPrice").textContent = FMT2(net, 2);
+      $("smallNetPrice").textContent = FMT2(dP + mAmt + pAmt, 2);
     }
 
     function calcMarketing() {
@@ -2801,10 +2391,9 @@
     // ═══════════════════════════
     function updateStrip() {
       const budget = N("totalBudget");
-      const sales = getSP() * COST_PER_SP;
-      const mkt = N("imc") + N("research") + N("social") + N("directComm");
-      const prod = N("battery") + N("mfgEff") + N("sensorSize") + N("latency");
-      const used = sales + mkt + prod;
+      const used = (getSP() * COST_PER_SP) +
+        (N("imc") + N("research") + N("social") + N("directComm")) +
+        (N("battery") + N("mfgEff") + N("sensorSize") + N("latency"));
       const remain = budget - used;
       const pct = budget > 0 ? Math.min(used / budget * 100, 100) : 0;
 
@@ -2818,17 +2407,17 @@
       const cls = remain < 0 ? "over" : pct > 94 ? "warn" : "ok";
       $("remainLbl").className = "bsi-val " + cls;
       $("usedLbl").className = "bsi-val " + (used > budget ? "over" : "ok");
-      $("sumRemain").style.color = remain < 0 ? "var(--danger)" : remain === 0 ? "var(--success)" : "var(--accent)";
+      $("sumRemain").style.color = remain < 0 ? "var(--danger)" : remain === 0 ? "var(--success)" : "var(--text)";
 
       const bar = $("bBar");
       bar.style.width = pct + "%";
-      bar.style.background = used > budget ? "var(--danger)" : pct > 90 ? "var(--warn)" : "var(--success)";
+      bar.style.background = used > budget ? "var(--danger)" : pct > 90 ? "var(--warn)" : "var(--text)";
     }
 
     function calcAll() {
       calcSales();
       calcSegments();
-      calcPrices();    // incluye calcSmall()
+      calcPrices();
       calcMarketing();
       calcProduct();
     }
@@ -2860,9 +2449,9 @@
 
     function saveDecision() {
       decisions.push(gatherData());
-      localStorage.setItem("mktSim_v6", JSON.stringify(decisions));
+      localStorage.setItem("mktSim_v8", JSON.stringify(decisions));
       renderHistory();
-      showToast("✅ Decisión guardada", "ok");
+      showToast("Decision guardada", "ok");
     }
 
     function loadDecision(id) {
@@ -2879,30 +2468,30 @@
         });
       $("notes").value = d.notes;
       calcAll();
-      showToast("📂 Decisión cargada", "ok");
+      showToast("Decision cargada", "ok");
     }
 
     function deleteDecision(id) {
       decisions = decisions.filter(d => d.id !== id);
-      localStorage.setItem("mktSim_v6", JSON.stringify(decisions));
+      localStorage.setItem("mktSim_v8", JSON.stringify(decisions));
       renderHistory();
     }
 
     function renderHistory() {
-      $("histCount").textContent = decisions.length + " guardada(s)";
+      $("histCount").textContent = decisions.length + " guardadas";
       const body = $("histBody");
       if (!decisions.length) {
-        body.innerHTML = '<tr><td colspan="15" style="text-align:center;color:var(--muted);padding:1.4rem;font-size:.71rem;">Sin decisiones guardadas.</td></tr>';
+        body.innerHTML = '<tr><td colspan="15" style="text-align:center;color:var(--muted);padding:1.5rem;">Sin decisiones guardadas.</td></tr>';
         return;
       }
       body.innerHTML = decisions.map((d, i) => `<tr>
     <td style="color:var(--muted)">${i + 1}</td>
-    <td style="color:var(--accent);font-weight:700">${d.period}</td>
+    <td style="color:var(--text);font-weight:600">${d.period}</td>
     <td>${d.name}</td>
     <td>${d.segA}%</td><td>${d.segB}%</td><td>${d.segC}%</td><td>${d.segD}%</td>
     <td>${d.numSP}</td><td>$${d.listPrice}</td>
     <td>${FMT(d.sales)}</td><td>${FMT(d.mkt)}</td><td>${FMT(d.prod)}</td>
-    <td style="color:var(--accent);font-weight:700">${FMT(d.used)}</td>
+    <td style="color:var(--text);font-weight:600">${FMT(d.used)}</td>
     <td><button class="lbtn" onclick="loadDecision(${d.id})">Cargar</button></td>
     <td><button class="dbtn" onclick="deleteDecision(${d.id})">✕</button></td>
   </tr>`).join("");
@@ -2916,7 +2505,7 @@
     function buildMarketShare() {
       $("ms-large-body").innerHTML = SEGS.map(s => `
     <div class="ms-row">
-      <span class="ms-seg-lbl"><span class="ms-dot" style="background:${s.color}"></span>${s.name}</span>
+      <span class="ms-seg-lbl" style="color:${s.color}">${s.name}</span>
       <div class="ms-pct-iw">
         <input type="number" id="msL${s.id}" value="${msLarge[s.id].pct}" min="0" max="100" step="0.01" placeholder="0"
           oninput="msLarge['${s.id}'].pct=parseFloat(this.value)||0;saveAnalysis();">
@@ -2933,7 +2522,7 @@
 
       $("ms-small-body").innerHTML = `
     <div class="ms-row">
-      <span class="ms-seg-lbl"><span class="ms-dot" style="background:#f5a623"></span>Pequeños</span>
+      <span class="ms-seg-lbl" style="color:var(--muted)">Pequeños</span>
       <div class="ms-pct-iw">
         <input type="number" id="msSS" value="${msSmall.pct}" min="0" max="100" step="0.01" placeholder="0"
           oninput="msSmall.pct=parseFloat(this.value)||0;saveAnalysis();">
@@ -2975,32 +2564,26 @@
       $("sat-large-body").innerHTML = SEGS.map(s => {
         const st = satLarge[s.id];
         return `<div class="sat-row">
-      <div class="sat-ico-wrap" style="background:${s.color}18;border:2px solid ${s.color}30"><span>👥</span></div>
-      <div class="sat-info">
-        <div class="sat-name" style="color:${s.color}">${s.name}</div>
-        <div class="stars" id="starsL${s.id}">${buildStars("L", s.id, st.stars || 0)}</div>
-        <div class="sat-rating-lbl ${SAT_CLS[Math.max(0, (st.stars || 0) - 1)]}" id="satLblL${s.id}">
-          ${st.stars ? SAT_NAMES[(st.stars || 1) - 1] : "Sin calificar"}
-        </div>
-        <textarea class="sat-cmt" id="satCmtL${s.id}" placeholder="Comentario del cliente..."
-          oninput="satLarge['${s.id}'].comment=this.value;saveAnalysis();">${st.comment || ""}</textarea>
+      <div class="sat-name" style="color:${s.color}">${s.name}</div>
+      <div class="stars" id="starsL${s.id}">${buildStars("L", s.id, st.stars || 0)}</div>
+      <div class="sat-rating-lbl" id="satLblL${s.id}">
+        ${st.stars ? SAT_NAMES[(st.stars || 1) - 1] : "Sin calificar"}
       </div>
+      <textarea class="sat-cmt" id="satCmtL${s.id}" placeholder="Comentario..."
+        oninput="satLarge['${s.id}'].comment=this.value;saveAnalysis();">${st.comment || ""}</textarea>
     </div>`;
       }).join("");
 
       const ss = satSmall;
       $("sat-small-body").innerHTML = `
     <div class="sat-row">
-      <div class="sat-ico-wrap" style="background:#f5a62318;border:2px solid #f5a62330"><span>🏪</span></div>
-      <div class="sat-info">
-        <div class="sat-name" style="color:#b07000">Pequeños Clientes</div>
-        <div class="stars" id="starsSALL">${buildStars("S", "ALL", ss.stars || 0)}</div>
-        <div class="sat-rating-lbl ${SAT_CLS[Math.max(0, (ss.stars || 0) - 1)]}" id="satLblSALL">
-          ${ss.stars ? SAT_NAMES[(ss.stars || 1) - 1] : "Sin calificar"}
-        </div>
-        <textarea class="sat-cmt" id="satCmtSALL" placeholder="Comentario del cliente..."
-          oninput="satSmall.comment=this.value;saveAnalysis();">${ss.comment || ""}</textarea>
+      <div class="sat-name" style="color:var(--muted)">Pequeños Clientes</div>
+      <div class="stars" id="starsSALL">${buildStars("S", "ALL", ss.stars || 0)}</div>
+      <div class="sat-rating-lbl" id="satLblSALL">
+        ${ss.stars ? SAT_NAMES[(ss.stars || 1) - 1] : "Sin calificar"}
       </div>
+      <textarea class="sat-cmt" id="satCmtSALL" placeholder="Comentario..."
+        oninput="satSmall.comment=this.value;saveAnalysis();">${ss.comment || ""}</textarea>
     </div>`;
     }
 
@@ -3009,9 +2592,7 @@
       else satSmall.stars = stars;
       saveAnalysis();
       $("stars" + grp + seg).innerHTML = buildStars(grp, seg, stars);
-      const lbl = $("satLbl" + grp + seg);
-      lbl.textContent = SAT_NAMES[stars - 1];
-      lbl.className = "sat-rating-lbl " + SAT_CLS[stars - 1];
+      $("satLbl" + grp + seg).textContent = SAT_NAMES[stars - 1];
     }
 
     // ═══════════════════════════
@@ -3021,17 +2602,16 @@
       $("sq-body").innerHTML = SEGS.map(s => {
         const v = sqVals[s.id] || 0;
         return `<div class="sq-row">
-      <div class="sq-ico" style="background:${s.color}18;border:2px solid ${s.color}30"><span>👤</span></div>
       <span class="sq-name" style="color:${s.color}">${s.name}</span>
       <div class="sq-track-wrap">
         <div class="sq-track-labels"><span>POBRE</span><span>JUSTO</span><span>BUENO</span><span>EXCELENTE</span></div>
         <div class="sq-blocks" id="sqB${s.id}">
           ${SQ_LEVELS.map((lv, i) =>
-          `<div class="sq-block${i === v ? " on" : ""}" style="background:${SQ_COLORS[i]}" onclick="setSQ('${s.id}',${i})" title="${lv}"></div>`
+          `<div class="sq-block${i === v ? " on" : ""}" onclick="setSQ('${s.id}',${i})" title="${lv}"></div>`
         ).join("")}
         </div>
       </div>
-      <span class="sq-badge ${SQ_CLS[v]}" id="sqBadge${s.id}">${SQ_LEVELS[v]}</span>
+      <span class="sq-badge" id="sqBadge${s.id}">${SQ_LEVELS[v]}</span>
     </div>`;
       }).join("");
     }
@@ -3039,13 +2619,10 @@
     function setSQ(seg, level) {
       sqVals[seg] = level;
       saveAnalysis();
-      const container = $("sqB" + seg);
-      container.innerHTML = SQ_LEVELS.map((lv, i) =>
-        `<div class="sq-block${i === level ? " on" : ""}" style="background:${SQ_COLORS[i]}" onclick="setSQ('${seg}',${i})" title="${lv}"></div>`
+      $("sqB" + seg).innerHTML = SQ_LEVELS.map((lv, i) =>
+        `<div class="sq-block${i === level ? " on" : ""}" onclick="setSQ('${seg}',${i})" title="${lv}"></div>`
       ).join("");
-      const b = $("sqBadge" + seg);
-      b.textContent = SQ_LEVELS[level];
-      b.className = "sq-badge " + SQ_CLS[level];
+      $("sqBadge" + seg).textContent = SQ_LEVELS[level];
     }
 
     // ═══════════════════════════
@@ -3053,7 +2630,7 @@
     // ═══════════════════════════
     function buildRounds() {
       $("roundsRow").innerHTML = rounds.map((r, i) => `
-    <div class="round-pill${i === selectedRound ? " selected" : ""} ${r.status}" id="rpill${i}" onclick="selectRound(${i})">
+    <div class="round-pill${i === selectedRound ? " selected" : ""}" onclick="selectRound(${i})">
       <span class="round-num">${r.round}</span>
       <span class="round-period-lbl">${r.period || "Sin período"}</span>
       <span class="round-status-dot ${r.status}"></span>
@@ -3071,8 +2648,7 @@
       const ST_CLS = { pending: "ap", current: "ac", done: "ad" };
       ["pending", "current", "done"].forEach(s => {
         const cap = s.charAt(0).toUpperCase() + s.slice(1);
-        const btn = $("stBtn" + cap);
-        btn.className = "st-btn" + (r.status === s ? " " + ST_CLS[s] : "");
+        $("stBtn" + cap).className = "st-btn" + (r.status === s ? " " + ST_CLS[s] : "");
       });
       document.querySelectorAll(".round-pill").forEach((p, i) => {
         p.classList.toggle("selected", i === idx);
@@ -3092,19 +2668,17 @@
       rounds[selectedRound].results = $("rndResults").value;
       saveRoundsLS();
       buildRounds();
-      const r = rounds[selectedRound];
-      $("roundDetailTitle").textContent = "Ronda " + r.round + (r.period ? " — " + r.period : "");
+      $("roundDetailTitle").textContent = "Ronda " + rounds[selectedRound].round + ($("rndPeriod").value ? " — " + $("rndPeriod").value : "");
     }
 
     function renderRoundSummary() {
-      const EM = { pending: "⏳", current: "▶️", done: "✅" };
       const LB = { pending: "Pendiente", current: "En curso", done: "Completada" };
       $("roundSummaryBody").innerHTML = rounds.map(r => `<tr>
-    <td style="font-family:var(--mono);font-weight:700;color:var(--accent)">${r.round}</td>
+    <td style="font-family:var(--mono);font-weight:600;color:var(--text)">${r.round}</td>
     <td>${r.period || "—"}</td>
-    <td>${EM[r.status]} ${LB[r.status]}</td>
-    <td style="max-width:180px;white-space:normal;font-size:.7rem">${r.objectives || "—"}</td>
-    <td style="max-width:180px;white-space:normal;font-size:.7rem">${r.results || "—"}</td>
+    <td>${LB[r.status]}</td>
+    <td style="max-width:200px;white-space:normal;font-size:0.75rem">${r.objectives || "—"}</td>
+    <td style="max-width:200px;white-space:normal;font-size:0.75rem">${r.results || "—"}</td>
   </tr>`).join("");
     }
 
@@ -3122,7 +2696,7 @@
     // EXPORT EXCEL
     // ═══════════════════════════
     function exportExcel() {
-      if (!decisions.length) { showToast("⚠️ Sin decisiones guardadas", "err"); return; }
+      if (!decisions.length) { showToast("Sin decisiones guardadas", "err"); return; }
       const wb = XLSX.utils.book_new();
       const h = ["#", "Período", "Nombre", "Guardado", "Vendedores", "P.Lista",
         "DiscA%", "DiscB%", "DiscC%", "DiscD%", "DiscDist%",
@@ -3145,7 +2719,7 @@
       ws2["!cols"] = [{ wch: 8 }, { wch: 14 }, { wch: 14 }, { wch: 40 }, { wch: 40 }];
       XLSX.utils.book_append_sheet(wb, ws2, "Rondas");
       XLSX.writeFile(wb, "simulacion-marketing.xlsx");
-      showToast("📊 Excel exportado", "ok");
+      showToast("Excel exportado", "ok");
     }
 
     // ═══════════════════════════
@@ -3156,63 +2730,63 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
       const W = 297;
-      doc.setFillColor(8, 13, 24); doc.rect(0, 0, W, 210, "F");
-      doc.setFillColor(26, 79, 160); doc.rect(0, 0, W, 14, "F");
+      doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
+      doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
       doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
-      doc.text("Simulación de Marketing — Decisiones", 10, 9);
-      doc.setFontSize(8); doc.setTextColor(180, 200, 240);
-      doc.text(d.period + " · " + d.name + " · " + d.savedAt, W - 10, 9, { align: "right" });
-      const C = [10, 80, 150, 220]; let y = 22;
-      function sec(t, x) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 140, 220); doc.text(t.toUpperCase(), x, y); return y + 5; }
+      doc.text("Simulación de Marketing — Grupo 5", 10, 10);
+      doc.setFontSize(8); doc.setTextColor(150, 150, 160);
+      doc.text(d.period + " · " + d.name + " · " + d.savedAt, W - 10, 10, { align: "right" });
+      const C = [10, 80, 150, 220]; let y = 26;
+      function sec(t, x) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text(t.toUpperCase(), x, y); return y + 6; }
       function row(l, v, x, yy, vc) {
-        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(190, 200, 220); doc.text(l, x, yy);
-        doc.setFont("helvetica", "bold"); doc.setTextColor(...(vc || [220, 230, 255])); doc.text(String(v), x + 62, yy, { align: "right" }); return yy + 5;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(l, x, yy);
+        doc.setFont("helvetica", "bold"); doc.setTextColor(...(vc || [15, 23, 42])); doc.text(String(v), x + 62, yy, { align: "right" }); return yy + 5;
       }
       let y1 = sec("Ventas", C[0]);
       y1 = row("Vendedores", d.numSP + " × $50k", C[0], y1);
-      y1 = row("Total Ventas", FMT(d.sales), C[0], y1, [100, 200, 140]);
-      y1 += 2; y1 = sec("Segmentos", C[0]);
+      y1 = row("Total Ventas", FMT(d.sales), C[0], y1);
+      y1 += 3; y1 = sec("Segmentos", C[0]);
       SEGS.forEach(s => { y1 = row("Seg " + s.id, d["seg" + s.id] + "%", C[0], y1); });
       let y2 = sec("Precios Grandes", C[1]);
       y2 = row("P.Lista", FMT2(d.listPrice, 0), C[1], y2);
       SEGS.forEach(s => { y2 = row("Desc " + s.id, d["disc" + s.id] + "%", C[1], y2); });
-      y2 += 2; y2 = sec("Precios Pequeños", C[1]);
+      y2 += 3; y2 = sec("Precios Pequeños", C[1]);
       y2 = row("Desc.Dist.", d.distDisc + "%", C[1], y2);
       const dp = d.listPrice * (1 - d.distDisc / 100);
-      y2 = row("Neto Final", FMT2(dp * (1 + DIST_MARGIN) * (1 + DIST_PASS), 2), C[1], y2, [100, 200, 140]);
+      y2 = row("Neto Final", FMT2(dp * (1 + DIST_MARGIN) * (1 + DIST_PASS), 2), C[1], y2);
       let y3 = sec("Marketing", C[2]);
       y3 = row("IMC", FMT(d.imc), C[2], y3); y3 = row("Investigación", FMT(d.research), C[2], y3);
       y3 = row("Redes", FMT(d.social), C[2], y3); y3 = row("Com.Dir", FMT(d.directComm), C[2], y3);
-      y3 = row("Total", FMT(d.mkt), C[2], y3, [100, 200, 140]);
-      y3 += 2; y3 = sec("Producto", C[2]);
+      y3 = row("Total", FMT(d.mkt), C[2], y3);
+      y3 += 3; y3 = sec("Producto", C[2]);
       y3 = row("Batería", FMT(d.battery), C[2], y3); y3 = row("Mfg", FMT(d.mfgEff), C[2], y3);
       y3 = row("Sensor", FMT(d.sensorSize), C[2], y3); y3 = row("Latencia", FMT(d.latency), C[2], y3);
-      y3 = row("Total", FMT(d.prod), C[2], y3, [100, 200, 140]);
+      y3 = row("Total", FMT(d.prod), C[2], y3);
       let y4 = sec("Resumen", C[3]);
       y4 = row("Presupuesto", FMT(d.budget), C[3], y4);
       y4 = row("Ventas", FMT(d.sales), C[3], y4); y4 = row("Mkt", FMT(d.mkt), C[3], y4); y4 = row("Prod", FMT(d.prod), C[3], y4);
-      doc.setDrawColor(50, 70, 110); doc.line(C[3], y4, C[3] + 68, y4); y4 += 2;
-      y4 = row("Usado", FMT(d.used), C[3], y4, [200, 180, 80]);
+      doc.setDrawColor(226, 232, 240); doc.line(C[3], y4, C[3] + 68, y4); y4 += 3;
+      y4 = row("Usado", FMT(d.used), C[3], y4);
       const rem = d.budget - d.used;
-      y4 = row("Restante", FMT(rem), C[3], y4, rem < 0 ? [220, 80, 80] : [80, 200, 130]);
-      const yn = Math.max(y1, y2, y3, y4) + 6;
-      if (d.notes && yn < 195) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 140, 220); doc.text("NOTAS", C[0], yn); doc.setFont("helvetica", "normal"); doc.setFontSize(7.8); doc.setTextColor(190, 200, 220); doc.text(doc.splitTextToSize(d.notes, 260), C[0], yn + 5); }
+      y4 = row("Restante", FMT(rem), C[3], y4, rem < 0 ? [239, 68, 68] : [16, 185, 129]);
+      const yn = Math.max(y1, y2, y3, y4) + 8;
+      if (d.notes && yn < 195) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("ESTRATEGIA & NOTAS", C[0], yn); doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(doc.splitTextToSize(d.notes, 260), C[0], yn + 5); }
       if (rounds.some(r => r.period || r.objectives || r.results)) {
-        doc.addPage(); doc.setFillColor(8, 13, 24); doc.rect(0, 0, W, 210, "F");
-        doc.setFillColor(26, 79, 160); doc.rect(0, 0, W, 14, "F");
+        doc.addPage(); doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
+        doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
-        doc.text("Seguimiento de Rondas", 10, 9); let ry = 22;
+        doc.text("Seguimiento de Rondas", 10, 10); let ry = 26;
         rounds.forEach(r => {
           if (ry > 196) return;
-          doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(100, 140, 220);
-          doc.text(`Ronda ${r.round}${r.period ? " — " + r.period : ""} [${r.status}]`, 10, ry); ry += 5;
-          if (r.objectives) { doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(150, 160, 200); doc.text("Objetivos:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(190, 200, 220); const ol = doc.splitTextToSize(r.objectives, 260); doc.text(ol, 12, ry); ry += ol.length * 4 + 1; }
-          if (r.results) { doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(150, 160, 200); doc.text("Resultados:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(190, 200, 220); const rl = doc.splitTextToSize(r.results, 260); doc.text(rl, 12, ry); ry += rl.length * 4 + 3; }
-          doc.setDrawColor(30, 50, 80); doc.line(10, ry, W - 10, ry); ry += 4;
+          doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
+          doc.text(`Ronda ${r.round}${r.period ? " — " + r.period : ""} [${r.status}]`, 10, ry); ry += 6;
+          if (r.objectives) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("Objetivos:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(71, 85, 105); const ol = doc.splitTextToSize(r.objectives, 260); doc.text(ol, 12, ry); ry += ol.length * 4 + 2; }
+          if (r.results) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("Resultados:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(71, 85, 105); const rl = doc.splitTextToSize(r.results, 260); doc.text(rl, 12, ry); ry += rl.length * 4 + 4; }
+          doc.setDrawColor(226, 232, 240); doc.line(10, ry, W - 10, ry); ry += 5;
         });
       }
       doc.save("sim-marketing-" + d.period.replace(" ", "-") + ".pdf");
-      showToast("📄 PDF exportado", "ok");
+      showToast("PDF exportado", "ok");
     }
 
     // ═══════════════════════════
