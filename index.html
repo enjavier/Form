@@ -64,7 +64,6 @@
     [data-theme="dark"] .t-track { background: var(--muted); }
     .t-knob { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; background: var(--surface); border-radius: 50%; transition: transform 0.3s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
     [data-theme="dark"] .t-knob { transform: translateX(14px); }
-    .t-lbl { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
     .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); transition: all 0.2s; white-space: nowrap; }
     .btn:hover { background: var(--card2); border-color: var(--muted2); }
@@ -89,7 +88,7 @@
     /* ═══ CARDS ═══ */
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); }
     .card-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border2); background: var(--card2); }
-    .card-title { font-weight: 600; font-size: 0.85rem; }
+    .card-title { font-weight: 600; font-size: 0.85rem; color: var(--text); }
     .card-body { padding: 1.2rem; }
 
     /* ═══ GLOBAL PERIOD BAR ═══ */
@@ -115,7 +114,7 @@
     .field > label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-bottom: 0.4rem; }
     .iw { display: flex; align-items: stretch; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .iw-pre, .iw-suf { padding: 0 0.8rem; background: var(--card2); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; }
-    .iw input { flex: 1; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0.6rem; min-width: 0; }
+    .iw input { flex: 1; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0.6rem; min-width: 0; outline: none;}
     .iw input[type=number]::-webkit-inner-spin-button, .iw input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     .iw-locked { display: flex; align-items: stretch; background: var(--locked); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .iw-locked .iw-pre { background: transparent; border-color: var(--border); color: var(--muted); }
@@ -133,12 +132,23 @@
     .bs-bar-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
     .bs-bar-labels span { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
+    /* ═══ BUDGET SUMMARY CARD (RESTORED) ═══ */
+    .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); margin-top: 1.5rem; }
+    .sum-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .sum-cell { padding: 1.5rem; border-right: 1px solid var(--border); }
+    .sum-cell:last-child { border-right: none; }
+    .sum-lbl { font-size: 0.7rem; font-weight: 500; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase;}
+    .sum-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--text); }
+    .sum-footer { background: var(--card2); border-top: 1px solid var(--border); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .sum-footer-lbl { font-size: 0.8rem; font-weight: 500; color: var(--muted); text-transform: uppercase;}
+    .sum-footer-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; }
+
     /* ═══ SPECIFIC WIDGETS ═══ */
-    .sp-widget { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .sp-widget { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .sp-counter { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
     .sp-btn { width: 36px; height: 36px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; color: var(--muted); display: flex; align-items: center; justify-content: center; }
     .sp-btn:hover { background: var(--card2); color: var(--text); }
-    .sp-num { width: 50px; text-align: center; background: transparent; border: none; font-family: var(--mono); font-size: 1rem; font-weight: 500; border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; outline: none; }
+    .sp-num { width: 50px; text-align: center; background: transparent; border: none; font-family: var(--mono); font-size: 1rem; font-weight: 500; border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; outline: none; color: var(--text);}
 
     .seg-wrap { display: flex; flex-direction: column; gap: 1rem; }
     .seg-item { display: flex; align-items: center; gap: 1rem; }
@@ -146,13 +156,13 @@
     .seg-bar-track { flex: 1; height: 8px; background: var(--border2); border-radius: 4px; position: relative; overflow: hidden; }
     .seg-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; position: absolute; left: 0; top: 0; }
     .seg-inp-wrap { display: flex; align-items: center; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; width: 70px; }
-    .seg-inp-wrap input { width: 100%; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; text-align: right; padding: 0.3rem 0; outline: none; }
+    .seg-inp-wrap input { width: 100%; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; text-align: right; padding: 0.3rem 0; outline: none; color:var(--text);}
     .seg-inp-wrap span { padding: 0 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
 
     .net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
     .net-chip { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
     .net-chip-lbl { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
-    .net-chip-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; }
+    .net-chip-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text);}
 
     .dist-chain { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
     .dc-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); }
@@ -164,12 +174,24 @@
     .star { color: var(--border); transition: transform 0.1s; }
     .star.on { color: var(--warn); }
     .sat-row { display: flex; flex-direction: column; gap: 0.6rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
-    .sat-cmt-input { width: 100%; min-height: 60px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; background: var(--inp); color: var(--text); font-size: 0.8rem; resize: vertical; margin-top: 0.5rem;}
+    .sat-cmt-input { width: 100%; min-height: 60px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; background: var(--inp); color: var(--text); font-size: 0.8rem; resize: vertical; margin-top: 0.5rem; outline: none;}
     .hist-comments-list { margin-top: 1.5rem; border-top: 1px solid var(--border2); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; max-height: 350px; overflow-y: auto; }
     .hist-comment-item { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; }
     .hc-meta { font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
     .hc-text { font-size: 0.8rem; color: var(--text); margin-bottom: 0.4rem; padding-left: 0.5rem; border-left: 2px solid var(--border); }
     .hc-seg-label { font-weight: 600; font-size: 0.75rem; color: var(--text); }
+
+    /* ═══ SALES QUALITY (RESTORED) ═══ */
+    .sq-row { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
+    .sq-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .sq-name { font-weight: 500; font-size: 0.85rem; width: 90px; flex-shrink: 0; color: var(--text); }
+    .sq-track-wrap { flex: 1; }
+    .sq-track-labels { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 500; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase;}
+    .sq-blocks { display: flex; gap: 4px; }
+    .sq-block { flex: 1; height: 8px; border-radius: 4px; cursor: pointer; background: var(--border); transition: background 0.2s; }
+    .sq-block:hover { background: var(--muted2); }
+    .sq-block.on { background: var(--text); }
+    .sq-badge { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; padding: 0.3rem 0.8rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0; min-width: 90px; text-align: center; background: var(--card2); border: 1px solid var(--border); color: var(--text);}
 
     /* ═══ ROUND STATUS ═══ */
     .status-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -184,8 +206,14 @@
 
     @media(max-width: 768px) {
       .g2, .chart-grid, .g3 { grid-template-columns: 1fr; }
+      .sum-grid { grid-template-columns: 1fr 1fr; }
+      .sum-cell:nth-child(2) { border-right: none; }
+      .sum-cell:nth-child(3) { border-top: 1px solid var(--border); }
+      .sum-cell:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
       .global-bar, .bstrip { flex-direction: column; align-items: stretch; }
       .pgrp input { width: 100%; }
+      .sq-row { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+      .sq-badge { align-self: flex-end; }
     }
   </style>
 </head>
@@ -256,7 +284,7 @@
     <div class="tab-pane" id="tab-decisions">
       
       <div class="bstrip">
-        <div class="bsi"><span class="bsi-label">Presupuesto</span>
+        <div class="bsi"><span class="bsi-label">Presupuesto Inicial</span>
           <div class="iw"><span class="iw-pre">$</span><input type="number" id="totalBudget" value="800000" oninput="calcAll()"></div>
         </div>
         <div class="bstrip-bar-wrap">
@@ -307,6 +335,11 @@
               </div>
             </div>
           </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
+            <div class="card-body"><textarea id="notes" style="width:100%; min-height:150px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text); outline:none; resize:vertical;" placeholder="Justificación de la decisión del trimestre..."></textarea></div>
+          </div>
         </div>
 
         <div class="col-flex">
@@ -326,40 +359,51 @@
             <div class="card-head"><div class="card-title">Presupuesto de Ventas</div></div>
             <div class="card-body">
               <div class="sp-widget">
-                <div><div style="font-weight:600;font-size:0.8rem">Fuerza de ventas</div><div style="font-size:0.7rem;color:var(--muted)" id="spDetail">11 × $50,000</div></div>
+                <div><div style="font-weight:600;font-size:0.8rem;color:var(--text);">Fuerza de ventas</div><div style="font-size:0.7rem;color:var(--muted)" id="spDetail">11 × $50,000</div></div>
                 <div style="display:flex;align-items:center;gap:1rem;">
                   <div class="sp-counter"><button class="sp-btn" onclick="changeSP(-1)">−</button><input type="number" class="sp-num" id="numSP" value="11" oninput="calcSales()"><button class="sp-btn" onclick="changeSP(1)">+</button></div>
-                  <span style="font-weight:600;font-family:var(--mono)" id="spTotal">$550,000</span>
+                  <span style="font-weight:600;font-family:var(--mono);color:var(--text);" id="spTotal">$550,000</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="card">
-            <div class="card-head"><div class="card-title">Presupuesto de Marketing & Producto</div></div>
-            <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
-              <div>
-                <div class="field"><label>Com. Integrada</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Inv. Mercados</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Redes Sociales</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" oninput="calcAll()"></div></div>
-                <div class="field"><label>Com. Directa</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" oninput="calcAll()"></div></div>
-              </div>
-              <div>
-                <div class="field"><label>Duración Batería</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Eficiencia Mfg</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Tamaño Sensor</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Latencia</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" oninput="calcAll()"></div></div>
-              </div>
+            <div class="card-head"><div class="card-title">Presupuesto de Marketing</div></div>
+            <div class="card-body">
+              <div class="field"><label>Comunicación Integrada</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" oninput="calcAll()"></div></div>
+              <div class="field"><label>Investigación Mercados</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" oninput="calcAll()"></div></div>
+              <div class="field"><label>Redes Sociales</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" oninput="calcAll()"></div></div>
+              <div class="field"><label>Comunicación Directa</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" oninput="calcAll()"></div></div>
             </div>
           </div>
-          
+
           <div class="card">
-            <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
-            <div class="card-body"><textarea id="notes" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text)" placeholder="Justificación de la decisión del trimestre..."></textarea></div>
+            <div class="card-head"><div class="card-title">Desarrollo de Producto</div></div>
+            <div class="card-body">
+              <div class="field"><label>Duración Batería</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" oninput="calcAll()"></div></div>
+              <div class="field"><label>Eficiencia de Fabricación</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" oninput="calcAll()"></div></div>
+              <div class="field"><label>Tamaño Sensor</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" oninput="calcAll()"></div></div>
+              <div class="field"><label>Reducción Latencia</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" oninput="calcAll()"></div></div>
+            </div>
           </div>
 
         </div>
       </div>
+
+      <div class="summary-card">
+        <div class="sum-grid">
+          <div class="sum-cell"><div class="sum-lbl">Fuerza Ventas</div><div class="sum-val" id="sumSales">$0</div></div>
+          <div class="sum-cell"><div class="sum-lbl">Marketing</div><div class="sum-val" id="sumMkt">$0</div></div>
+          <div class="sum-cell"><div class="sum-lbl">Producto</div><div class="sum-val" id="sumProd">$0</div></div>
+          <div class="sum-cell"><div class="sum-lbl">Presupuesto</div><div class="sum-val" id="sumBudget">$0</div></div>
+        </div>
+        <div class="sum-footer">
+          <span class="sum-footer-lbl">Presupuesto Restante</span>
+          <span class="sum-footer-val" id="sumRemain" style="color:var(--success);">$0</span>
+        </div>
+      </div>
+
     </div>
 
     <div class="tab-pane" id="tab-analysis">
@@ -379,6 +423,7 @@
               </div>
             </div>
           </div>
+
           <div class="card">
             <div class="card-head"><div class="card-title">Cuota de Mercado (Market Share %)</div></div>
             <div class="card-body">
@@ -391,13 +436,23 @@
               </div>
             </div>
           </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Calidad de Ventas</div></div>
+            <div class="card-body">
+              <div style="font-size:0.75rem; font-weight:600; color:var(--text); margin-bottom:1rem;">Evaluación por Segmento</div>
+              <div id="sq-body"></div>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios por Segmento</div></div>
-          <div class="card-body">
-            <div id="satStarsBody"></div>
-            
-            <div class="hist-comments-list" id="satHistCommentsList"></div>
+
+        <div class="col-flex">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios por Segmento</div></div>
+            <div class="card-body">
+              <div id="satStarsBody"></div>
+              <div class="hist-comments-list" id="satHistCommentsList"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -416,12 +471,12 @@
               </div>
             </div>
             <div class="field"><label>Objetivos del Trimestre</label>
-              <textarea id="rndObj" style="width:100%;min-height:150px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué metas quieren lograr en este YQ?"></textarea>
+              <textarea id="rndObj" style="width:100%;min-height:150px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text);outline:none;resize:vertical;" placeholder="¿Qué metas quieren lograr en este YQ?"></textarea>
             </div>
           </div>
           <div>
             <div class="field"><label>Resultados y Aprendizajes</label>
-              <textarea id="rndRes" style="width:100%;min-height:215px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué ocurrió en este período? ¿Qué aprendieron?"></textarea>
+              <textarea id="rndRes" style="width:100%;min-height:215px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text);outline:none;resize:vertical;" placeholder="¿Qué ocurrió en este período? ¿Qué aprendieron?"></textarea>
             </div>
           </div>
         </div>
@@ -432,7 +487,7 @@
       <div class="card">
         <div class="card-head"><div class="card-title">Noticias del Mercado (Editable por YQ)</div></div>
         <div class="card-body">
-          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem;" placeholder="Escribe aquí las noticias relevantes del mercado para el Año y Trimestre seleccionado..."></textarea>
+          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem; outline:none; resize:vertical;" placeholder="Escribe aquí las noticias relevantes del mercado para el Año y Trimestre seleccionado..."></textarea>
         </div>
       </div>
     </div>
@@ -446,10 +501,13 @@
     // ═══════════════════════════
     const COST_PER_SP = 50000; const DIST_MARGIN = 0.10; const DIST_PASS = 0.05;
     const SEGS = [{id:"A",c:"var(--seg-a)",n:"Segmento A"},{id:"B",c:"var(--seg-b)",n:"Segmento B"},{id:"C",c:"var(--seg-c)",n:"Segmento C"},{id:"D",c:"var(--seg-d)",n:"Segmento D"}];
+    const SQ_LEVELS = ["Pobre", "Justo", "Bueno", "Excelente"];
+    
     let DB = []; try { DB = JSON.parse(localStorage.getItem("mktDSS_G5") || "[]"); } catch(e){}
     
     let currentRoundStatus = "pending";
     let satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 };
+    let sqVals = { A: 0, B: 0, C: 0, D: 0 }; // Restaurado: Calidad de ventas
     let charts = {};
 
     // ═══════════════════════════
@@ -470,8 +528,32 @@
     // ═══════════════════════════
     // UI BUILDERS
     // ═══════════════════════════
+    
+    // 1. Calidad de Ventas (Restaurado)
+    function buildSalesQuality() {
+      $("sq-body").innerHTML = SEGS.map(s => {
+        const v = sqVals[s.id] || 0;
+        return `<div class="sq-row">
+          <span class="sq-name" style="color:${s.c}">${s.n}</span>
+          <div class="sq-track-wrap">
+            <div class="sq-track-labels"><span>POBRE</span><span>JUSTO</span><span>BUENO</span><span>EXCELENTE</span></div>
+            <div class="sq-blocks" id="sqB${s.id}">
+              ${SQ_LEVELS.map((lv, i) => `<div class="sq-block${i <= v ? " on" : ""}" onclick="setSQ('${s.id}',${i})" title="${lv}"></div>`).join("")}
+            </div>
+          </div>
+          <span class="sq-badge" id="sqBadge${s.id}">${SQ_LEVELS[v]}</span>
+        </div>`;
+      }).join("");
+    }
+
+    function setSQ(seg, level) {
+      sqVals[seg] = level;
+      $("sqB" + seg).innerHTML = SQ_LEVELS.map((lv, i) => `<div class="sq-block${i <= level ? " on" : ""}" onclick="setSQ('${seg}',${i})" title="${lv}"></div>`).join("");
+      $("sqBadge" + seg).textContent = SQ_LEVELS[level];
+    }
+
+    // 2. Satisfacción y Comentarios
     function buildSatisfactionStars() {
-      // Estrellas y comentarios POR SEGMENTO
       let html = SEGS.map(s => `
         <div class="sat-row">
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -483,13 +565,14 @@
       html += `
         <div class="sat-row" style="border-bottom:none;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-weight:600;">Pequeños Clientes</div>
+            <div style="font-weight:600;color:var(--text);">Pequeños Clientes</div>
             <div class="stars" id="starsS_ALL">${buildStars("S_ALL", satData["S_ALL"])}</div>
           </div>
           <textarea id="satCmt_S_ALL" class="sat-cmt-input" placeholder="Comentarios y feedback de Pequeños Clientes..."></textarea>
         </div>`;
       $("satStarsBody").innerHTML = html;
     }
+    
     function buildStars(key, val) { return [1,2,3,4,5].map(n => `<span class="star${n<=val?" on":""}" onclick="setStar('${key}',${n})">★</span>`).join(""); }
     function setStar(key, val) { satData[key] = val; $("stars"+key).innerHTML = buildStars(key, val); }
 
@@ -501,36 +584,21 @@
       if (pastRecords.length === 0) {
         html = '<div style="color:var(--muted2); font-size:0.8rem; text-align:center;">Sin historial de comentarios anteriores</div>';
       } else {
-        // Ordenamos del más reciente al más antiguo
         [...pastRecords].reverse().forEach(d => {
           let cmtBlocks = "";
-          // Revisamos cada segmento para ver si tiene comentarios en ese periodo
-          const keys = [
-            {k:"L_A", n:"Seg A"}, {k:"L_B", n:"Seg B"}, {k:"L_C", n:"Seg C"}, 
-            {k:"L_D", n:"Seg D"}, {k:"S_ALL", n:"Pequeños"}
-          ];
+          const keys = [{k:"L_A", n:"Seg A"}, {k:"L_B", n:"Seg B"}, {k:"L_C", n:"Seg C"}, {k:"L_D", n:"Seg D"}, {k:"S_ALL", n:"Pequeños"}];
           keys.forEach(obj => {
             if(d.satComments[obj.k] && d.satComments[obj.k].trim() !== "") {
-              cmtBlocks += `
-                <div style="margin-bottom:0.5rem;">
-                  <span class="hc-seg-label">${obj.n}:</span> 
-                  <div class="hc-text">${d.satComments[obj.k].replace(/\n/g, '<br>')}</div>
-                </div>`;
+              cmtBlocks += `<div style="margin-bottom:0.5rem;"><span class="hc-seg-label">${obj.n}:</span> <div class="hc-text">${d.satComments[obj.k].replace(/\n/g, '<br>')}</div></div>`;
             }
           });
-          
-          if(cmtBlocks !== "") {
-            html += `
-              <div class="hist-comment-item">
-                <div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div>
-                ${cmtBlocks}
-              </div>`;
-          }
+          if(cmtBlocks !== "") { html += `<div class="hist-comment-item"><div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div>${cmtBlocks}</div>`; }
         });
       }
       $("satHistCommentsList").innerHTML = html;
     }
 
+    // 3. Status Rondas
     function setRoundStatus(s) {
       currentRoundStatus = s;
       ["pending","current","done"].forEach(id => {
@@ -540,7 +608,7 @@
     }
 
     // ═══════════════════════════
-    // CALCULATORS (DECISIONS)
+    // CALCULATORS
     // ═══════════════════════════
     function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value||0) + d); calcAll(); }
     
@@ -569,25 +637,35 @@
     function calcAll() {
       calcSegments(); calcPrices();
       const n = parseInt($("numSP").value||0);
-      $("spTotal").textContent = FMT(n * COST_PER_SP);
-      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
       
       const sales = n * COST_PER_SP;
+      $("spTotal").textContent = FMT(sales);
+      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
+      
       const mkt = N("imc")+N("research")+N("social")+N("directComm");
       const prod = N("battery")+N("mfgEff")+N("sensorSize")+N("latency");
-      const used = sales + mkt + prod;
+      
       const budget = N("totalBudget");
+      const used = sales + mkt + prod;
       const remain = budget - used;
       const pct = budget>0 ? Math.min((used/budget)*100, 100) : 0;
       
+      // Top Strip
       $("usedLbl").textContent = FMT(used); $("remainLbl").textContent = FMT(remain);
       $("usedLbl").className = "bsi-val " + (used>budget?"over":"ok");
       $("remainLbl").className = "bsi-val " + (remain<0?"over":pct>94?"warn":"ok");
-      
       $("bBar").style.width = pct+"%";
       $("bBar").style.background = used>budget?"var(--danger)":pct>90?"var(--warn)":"var(--text)";
       $("pctLblBar").textContent = Math.round(pct)+"%";
       $("remainLblBar").textContent = FMT(remain)+" restante";
+
+      // Bottom Summary Card (Restaurada)
+      $("sumSales").textContent = FMT(sales);
+      $("sumMkt").textContent = FMT(mkt);
+      $("sumProd").textContent = FMT(prod);
+      $("sumBudget").textContent = FMT(budget);
+      $("sumRemain").textContent = FMT(remain);
+      $("sumRemain").style.color = remain < 0 ? "var(--danger)" : "var(--success)";
     }
 
     // ═══════════════════════════
@@ -596,7 +674,6 @@
     function gatherData() {
       const sp = parseInt($("numSP").value||0);
       
-      // Capturar comentarios por segmento
       const satComments = {
         L_A: $("satCmt_L_A").value, L_B: $("satCmt_L_B").value, 
         L_C: $("satCmt_L_C").value, L_D: $("satCmt_L_D").value, 
@@ -617,6 +694,7 @@
         // Análisis
         revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
         msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
+        sqVals: JSON.parse(JSON.stringify(sqVals)), // Se guarda calidad de ventas
         sat: JSON.parse(JSON.stringify(satData)), satComments: satComments,
         
         // Rondas y Noticias
@@ -627,34 +705,31 @@
 
     function saveData() {
       const d = gatherData(); 
-      // Si ya existe el periodo, lo reemplazamos
       DB = DB.filter(x => x.period !== d.period);
       DB.push(d);
-      
-      // Ordenar por Periodo (Y1 Q1, Y1 Q2...)
       DB.sort((a,b) => a.period.localeCompare(b.period));
       
       localStorage.setItem("mktDSS_G5", JSON.stringify(DB));
       buildHistoricalComments(); showToast("Período Guardado Exitosamente");
+      renderDashboard(); // Update dashboard with new data
     }
 
     function loadPeriodData() {
       const pid = $("selYear").value + " " + $("selQ").value;
       const d = DB.find(x => x.period === pid);
       if(!d) {
-        // Limpiar para nuevo periodo
         $("decisionName").value=""; $("notes").value="";
         $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
         $("msL_A").value=0; $("msL_B").value=0; $("msL_C").value=0; $("msL_D").value=0; $("msS").value=0;
         
-        satData={L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
+        sqVals = { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
+        satData = {L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
         
         setRoundStatus("pending"); $("rndObj").value=""; $("rndRes").value="";
         $("marketNews").value="";
         calcAll();
         showToast("Período Nuevo");
       } else {
-        // Cargar datos existentes
         $("decisionName").value=d.name||""; $("notes").value=d.notes||"";
         
         $("totalBudget").value=d.budget||800000; $("numSP").value=d.numSP||11;
@@ -666,14 +741,12 @@
         $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
         $("msL_A").value=d.msL_A||0; $("msL_B").value=d.msL_B||0; $("msL_C").value=d.msL_C||0; $("msL_D").value=d.msL_D||0; $("msS").value=d.msS||0;
         
-        satData=d.sat||{L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
+        sqVals = d.sqVals || { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
+        satData = d.sat || {L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
         
-        // Cargar comentarios en los textareas generados por buildSatisfactionStars
         if(d.satComments) {
-          $("satCmt_L_A").value = d.satComments.L_A || "";
-          $("satCmt_L_B").value = d.satComments.L_B || "";
-          $("satCmt_L_C").value = d.satComments.L_C || "";
-          $("satCmt_L_D").value = d.satComments.L_D || "";
+          $("satCmt_L_A").value = d.satComments.L_A || ""; $("satCmt_L_B").value = d.satComments.L_B || "";
+          $("satCmt_L_C").value = d.satComments.L_C || ""; $("satCmt_L_D").value = d.satComments.L_D || "";
           $("satCmt_S_ALL").value = d.satComments.S_ALL || "";
         }
 
@@ -686,10 +759,9 @@
     }
 
     // ═══════════════════════════
-    // DASHBOARD & CHARTS (ALL EVOLUTIONARY)
+    // DASHBOARD & CHARTS
     // ═══════════════════════════
     function getDashboardData() {
-      // Usamos todo el DB (que ya debe estar ordenado por YQ)
       let res=[]; let accProfit=0;
       for(let d of DB) {
         let rev=(d.revL||0)+(d.revS||0); let prof=d.profit||0; accProfit+=prof;
@@ -701,7 +773,7 @@
 
     function renderDashboard() {
       const data=getDashboardData(); 
-      if(!data.length) return; // Si no hay datos guardados, no dibuja nada.
+      if(!data.length) return;
       
       const last=data[data.length-1];
       $("kpiRev").textContent=FMT(last.rev); $("kpiProfit").textContent=FMT(last.profit); $("kpiUnits").textContent=last.unitsTotal.toLocaleString(); $("kpiAccProfit").textContent=FMT(last.accProfit); $("kpiSat").textContent=last.avgSat.toFixed(1)+" ★";
@@ -713,15 +785,13 @@
       Chart.defaults.color=isDark?"#8b8b99":"#64748b"; Chart.defaults.font.family="'Inter', sans-serif";
       const commonOps={responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}},plugins:{legend:{labels:{color:tc}}}};
 
-      // 1. Chart Finanzas Histórica
       if(charts.fin) charts.fin.destroy(); 
       charts.fin=new Chart($("chartFin"), { 
         type:'bar', 
-        data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb' }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981' }]}, 
+        data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb', borderRadius: 4 }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981', tension:0.3, borderWidth:2 }]}, 
         options:commonOps 
       });
       
-      // 2. Chart Evolución Cuota de Mercado (Todos los segmentos en líneas)
       if(charts.msL) charts.msL.destroy(); 
       charts.msL=new Chart($("chartMSL"), { 
         type:'line', 
@@ -735,15 +805,13 @@
         options:commonOps 
       });
       
-      // 3. Chart Evolución Ventas Unitarias
       if(charts.unitsSep) charts.unitsSep.destroy(); 
       charts.unitsSep=new Chart($("chartUnitsSep"), { 
         type:'bar', 
-        data:{ labels, datasets:[{ label:'Grandes Clientes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840' }, { label:'Pequeños Clientes', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096' }]}, 
+        data:{ labels, datasets:[{ label:'Grandes Clientes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840', borderRadius:4 }, { label:'Pequeños Clientes', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096', borderRadius:4 }]}, 
         options:{...commonOps, scales:{x:{grid:{color:gridC}, stacked:true},y:{grid:{color:gridC}, stacked:true}}, plugins:{legend:{labels:{color:tc}}, tooltip:{mode:'index'}}} 
       });
       
-      // 4. Chart Evolución Satisfacción
       if(charts.sat) charts.sat.destroy(); 
       charts.sat=new Chart($("chartSat"), { 
         type:'line', 
@@ -789,6 +857,11 @@
       doc.setFont("helvetica","normal");
       doc.text(`A: ${d.msL_A}% | B: ${d.msL_B}% | C: ${d.msL_C}% | D: ${d.msL_D}% | Pequeños: ${d.msS}%`, 15, y); y+=10;
       
+      // Calidad de Ventas (Restaurada para el PDF)
+      doc.setFont("helvetica","bold"); doc.text("Calidad de Ventas:", 10, y); y+=5; 
+      doc.setFont("helvetica","normal");
+      doc.text(`A: ${SQ_LEVELS[d.sqVals.A]} | B: ${SQ_LEVELS[d.sqVals.B]} | C: ${SQ_LEVELS[d.sqVals.C]} | D: ${SQ_LEVELS[d.sqVals.D]}`, 15, y); y+=10;
+
       // Comentarios de Satisfaccion
       doc.setFont("helvetica","bold"); doc.text("Feedback y Satisfacción:", 10, y); y+=5; 
       doc.setFont("helvetica","normal");
@@ -801,12 +874,12 @@
       }
       y+=5;
       
-      // Textos largos (Notas, Rondas, Noticias)
+      // Textos largos
       if(d.notes) { doc.setFont("helvetica","bold"); doc.text("Notas/Estrategia:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.notes, 270), 15, y); y+=15; }
       
-      if(y > 170) { doc.addPage(); y=20; }
-      if(d.rndObj) { doc.setFont("helvetica","bold"); doc.text("Objetivos Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndObj, 270), 15, y); y+=15; }
-      if(d.rndRes) { doc.setFont("helvetica","bold"); doc.text("Resultados Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndRes, 270), 15, y); y+=15; }
+      if(y > 160) { doc.addPage(); y=20; }
+      if(d.rndObj) { doc.setFont("helvetica","bold"); doc.text("Objetivos Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndObj, 270), 15, y); y+=20; }
+      if(d.rndRes) { doc.setFont("helvetica","bold"); doc.text("Resultados Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndRes, 270), 15, y); y+=20; }
       
       if(y > 150 && d.marketNews) { doc.addPage(); y=20; }
       if(d.marketNews) { doc.setFont("helvetica","bold"); doc.text("Noticias del Mercado:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.marketNews, 270), 15, y); }
@@ -815,7 +888,7 @@
     }
 
     // INIT
-    buildSatisfactionStars(); loadPeriodData(); renderDashboard();
+    buildSalesQuality(); buildSatisfactionStars(); loadPeriodData(); renderDashboard();
   </script>
 </body>
 </html>
