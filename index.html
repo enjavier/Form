@@ -4,573 +4,2451 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Simulador Estratégico de Marketing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <title>Simulación de Marketing</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
   <style>
     /* ═══ TOKENS ═══ */
     :root {
       --fnt: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
-      --seg-a: #682c47; --seg-b: #537fbb; --seg-c: #d77840; --seg-d: #5ab096;
+
+      /* Colores de segmentos extraídos de tu imagen */
+      --seg-a: #682c47;
+      --seg-b: #537fbb;
+      --seg-c: #d77840;
+      --seg-d: #5ab096;
     }
 
+    /* MODO CLARO (Default) - Minimalista */
     [data-theme="light"] {
-      --bg: #f8fafc; --bg2: #ffffff; --border: #e2e8f0; --border2: #f1f5f9;
-      --surface: #ffffff; --card: #ffffff; --card2: #f8fafc;
-      --accent: #0f172a; --accent2: #475569;
-      --text: #0f172a; --muted: #64748b; --muted2: #94a3b8;
-      --success: #10b981; --danger: #ef4444; --warn: #f59e0b;
-      --inp: #ffffff; --locked: #f1f5f9;
+      --bg: #f8fafc;
+      --bg2: #ffffff;
+      --border: #e2e8f0;
+      --border2: #f1f5f9;
+
+      --surface: #ffffff;
+      --card: #ffffff;
+      --card2: #f8fafc;
+
+      --accent: #0f172a;
+      --accent2: #475569;
+
+      --text: #0f172a;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+
+      --success: #10b981;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+
+      --inp: #ffffff;
+      --locked: #f1f5f9;
+
       --sh: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --sh-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
     }
 
+    /* MODO OSCURO - Gris Elegante Minimalista (Sin tonos azules) */
     [data-theme="dark"] {
-      --bg: #0d0d0f; --bg2: #141417; --border: rgba(255, 255, 255, 0.08); --border2: rgba(255, 255, 255, 0.04);
-      --surface: #121214; --card: #18181c; --card2: #202024;
-      --accent: #e2e2e4; --accent2: #8b8b99;
-      --text: #f0f0f2; --muted: #8b8b99; --muted2: #52525e;
-      --success: #34d399; --danger: #ef4444; --warn: #fbbf24;
-      --inp: rgba(10, 10, 12, 0.50); --locked: rgba(10, 10, 12, 0.30);
+      --bg: #0d0d0f;
+      --bg2: #141417;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.04);
+
+      --surface: #121214;
+      --card: #18181c;
+      --card2: #202024;
+
+      --accent: #e2e2e4;
+      --accent2: #8b8b99;
+
+      --text: #f0f0f2;
+      --muted: #8b8b99;
+      --muted2: #52525e;
+
+      --success: #34d399;
+      --danger: #ef4444;
+      --warn: #fbbf24;
+
+      --inp: rgba(10, 10, 12, 0.50);
+      --locked: rgba(10, 10, 12, 0.30);
+
       --sh: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       --sh-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     /* ═══ GLOBAL ═══ */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: var(--fnt); font-size: 14px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
-    textarea, input, select, button { font-family: var(--fnt); color: var(--text); }
-    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    /* ═══ HEADER & NAV ═══ */
-    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.6rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: var(--sh-sm); }
-    .logo-wrap { display: flex; align-items: center; gap: 1rem; }
-    .logo-badge { width: 44px; height: 44px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
-    .logo-title { font-weight: 700; font-size: 1.1rem; }
-    .logo-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
-    .hdr-right { display: flex; align-items: center; gap: 0.8rem; }
-    
-    .t-toggle { display: flex; align-items: center; gap: 0.4rem; background: var(--card2); border: 1px solid var(--border); border-radius: 20px; padding: 0.2rem 0.6rem; cursor: pointer; user-select: none; }
-    .t-track { width: 32px; height: 18px; background: var(--border); border-radius: 10px; position: relative; }
-    [data-theme="dark"] .t-track { background: var(--muted); }
-    .t-knob { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; background: var(--surface); border-radius: 50%; transition: transform 0.3s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
-    [data-theme="dark"] .t-knob { transform: translateX(14px); }
+    html {
+      scroll-behavior: smooth;
+    }
 
-    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); transition: all 0.2s; white-space: nowrap; }
-    .btn:hover { background: var(--card2); border-color: var(--muted2); }
-    .btn-save { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .btn-save:hover { opacity: 0.9; background: var(--text); color: var(--bg); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--fnt);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
 
-    .tab-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.6rem; display: flex; gap: 1.5rem; position: sticky; top: 77px; z-index: 190; flex-wrap: wrap; }
-    .tab-btn { padding: 1rem 0; border: none; background: transparent; color: var(--muted); font-weight: 500; font-size: 0.85rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
+    textarea,
+    input,
+    select,
+    button {
+      font-family: var(--fnt);
+      color: var(--text);
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* ═══ SCROLLBAR ═══ */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted2);
+    }
+
+    /* ═══ HEADER ═══ */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: var(--sh-sm);
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .logo-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .logo-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    /* Theme toggle */
+    .t-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .t-track {
+      width: 32px;
+      height: 18px;
+      background: var(--border);
+      border-radius: 10px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    [data-theme="dark"] .t-track {
+      background: var(--muted);
+    }
+
+    .t-knob {
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--surface);
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="dark"] .t-knob {
+      transform: translateX(14px);
+    }
+
+    .t-lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--card2);
+      border-color: var(--muted2);
+    }
+
+    .btn-save {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .btn-save:hover {
+      opacity: 0.9;
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    /* ═══ TAB NAV ═══ */
+    .tab-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.6rem;
+      display: flex;
+      gap: 1.5rem;
+      position: sticky;
+      top: 77px;
+      z-index: 190;
+    }
+
+    .tab-btn {
+      padding: 1rem 0;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+      border-bottom-color: var(--text);
+      font-weight: 600;
+    }
 
     /* ═══ LAYOUT ═══ */
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.4rem 5rem; }
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-    .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
-    .col-flex { display: flex; flex-direction: column; gap: 1.5rem; }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.4rem 5rem;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ═══ ELASTICITY WIDGET CSS ═══ */
+    .sim-grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .sim-grid-bot { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; align-items: center; }
 
     /* ═══ CARDS ═══ */
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); }
-    .card-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border2); background: var(--card2); }
-    .card-title { font-weight: 600; font-size: 0.85rem; color: var(--text); }
-    .card-body { padding: 1.2rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sh);
+    }
 
-    /* ═══ GLOBAL PERIOD BAR ═══ */
-    .global-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: var(--sh); flex-wrap: wrap;}
-    .gb-lbl { font-weight: 600; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .pgrp { display: flex; flex-direction: column; gap: 0.3rem; }
-    .pgrp label { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
-    .pgrp select, .pgrp input { background: var(--inp); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; font-size: 0.85rem; }
-    .pgrp input { width: 250px; }
+    .card-head {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border2);
+      background: var(--card2);
+    }
 
-    /* ═══ DASHBOARD ═══ */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: var(--sh-sm); }
-    .kpi-lbl { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
-    .kpi-val { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--text); }
-    
-    .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-    .chart-container { position: relative; height: 260px; width: 100%; }
+    .card-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
 
-    /* ═══ INPUTS ═══ */
-    .field { margin-bottom: 1rem; }
-    .field:last-child { margin-bottom: 0; }
-    .field > label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-bottom: 0.4rem; }
-    .iw { display: flex; align-items: stretch; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .iw-pre, .iw-suf { padding: 0 0.8rem; background: var(--card2); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; }
-    .iw input { flex: 1; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0.6rem; min-width: 0; outline: none;}
-    .iw input[type=number]::-webkit-inner-spin-button, .iw input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .iw-locked { display: flex; align-items: stretch; background: var(--locked); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .iw-locked .iw-pre { background: transparent; border-color: var(--border); color: var(--muted); }
-    .lock-val { flex: 1; padding: 0.5rem 0.6rem; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; color: var(--muted); display: flex; align-items: center; justify-content: space-between; }
-    
-    /* ═══ BUDGET STRIP ═══ */
-    .bstrip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: var(--sh); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-    .bsi { display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0; }
-    .bsi-label { font-size: 0.7rem; font-weight: 500; color: var(--muted); text-transform: uppercase; }
-    .bsi-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; }
-    .bsi-val.ok { color: var(--text); } .bsi-val.warn { color: var(--warn); } .bsi-val.over { color: var(--danger); }
-    .bstrip-bar-wrap { flex: 1; min-width: 200px; }
-    .bs-bar { background: var(--border2); border-radius: 4px; height: 8px; overflow: hidden; width: 100%; }
-    .bs-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease, background 0.4s; }
-    .bs-bar-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
-    .bs-bar-labels span { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+    .card-body {
+      padding: 1.2rem;
+    }
 
-    /* ═══ BUDGET SUMMARY CARD ═══ */
-    .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); margin-top: 1.5rem; }
-    .sum-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-    .sum-cell { padding: 1.5rem; border-right: 1px solid var(--border); }
-    .sum-cell:last-child { border-right: none; }
-    .sum-lbl { font-size: 0.7rem; font-weight: 500; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase;}
-    .sum-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--text); }
-    .sum-footer { background: var(--card2); border-top: 1px solid var(--border); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-    .sum-footer-lbl { font-size: 0.8rem; font-weight: 500; color: var(--muted); text-transform: uppercase;}
-    .sum-footer-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; }
+    /* ═══ SURFACE BAR (period + budget) ═══ */
+    .surface-bar {
+      margin-bottom: 1.5rem;
+    }
 
-    /* ═══ SPECIFIC WIDGETS ═══ */
-    .sp-widget { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .sp-counter { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
-    .sp-btn { width: 36px; height: 36px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; color: var(--muted); display: flex; align-items: center; justify-content: center; }
-    .sp-btn:hover { background: var(--card2); color: var(--text); }
-    .sp-num { width: 50px; text-align: center; background: transparent; border: none; font-family: var(--mono); font-size: 1rem; font-weight: 500; border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; outline: none; color: var(--text);}
+    .period-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-    .seg-wrap { display: flex; flex-direction: column; gap: 1rem; }
-    .seg-item { display: flex; align-items: center; gap: 1rem; }
-    .seg-label { width: 80px; font-size: 0.8rem; font-weight: 500; color: var(--text); }
-    .seg-bar-track { flex: 1; height: 8px; background: var(--border2); border-radius: 4px; position: relative; overflow: hidden; }
-    .seg-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; position: absolute; left: 0; top: 0; }
-    .seg-inp-wrap { display: flex; align-items: center; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; width: 70px; }
-    .seg-inp-wrap input { width: 100%; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; text-align: right; padding: 0.3rem 0; outline: none; color:var(--text);}
-    .seg-inp-wrap span { padding: 0 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+    .pgrp {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
 
-    .net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
-    .net-chip { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
-    .net-chip-lbl { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
-    .net-chip-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text);}
+    .pgrp label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
 
-    .dist-chain { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .dc-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); }
-    .dc-val { font-family: var(--mono); font-weight: 500; color: var(--text); }
-    .dc-hl { padding-top: 0.8rem; margin-top: 0.2rem; border-top: 1px solid var(--border); font-weight: 600;}
+    .pgrp select,
+    .pgrp input[type="text"] {
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
+    }
 
-    /* ═══ SATISFACTION COMMENTS ═══ */
-    .stars { display: flex; gap: 0.2rem; font-size: 1.2rem; cursor: pointer; user-select: none;}
-    .star { color: var(--border); transition: transform 0.1s; }
-    .star.on { color: var(--warn); }
-    .sat-row { display: flex; flex-direction: column; gap: 0.6rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
-    .sat-cmt-input { width: 100%; min-height: 60px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; background: var(--inp); color: var(--text); font-size: 0.8rem; resize: vertical; margin-top: 0.5rem; outline: none;}
-    .hist-comments-list { margin-top: 1.5rem; border-top: 1px solid var(--border2); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; max-height: 350px; overflow-y: auto; }
-    .hist-comment-item { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; }
-    .hc-meta { font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
-    .hc-text { font-size: 0.8rem; color: var(--text); margin-bottom: 0.4rem; padding-left: 0.5rem; border-left: 2px solid var(--border); }
-    .hc-seg-label { font-weight: 600; font-size: 0.75rem; color: var(--text); }
+    /* Budget strip */
+    .bstrip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--sh);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .bsi {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .bsi-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .bsi-val {
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .bsi-val.ok {
+      color: var(--text);
+    }
+
+    .bsi-val.warn {
+      color: var(--warn);
+    }
+
+    .bsi-val.over {
+      color: var(--danger);
+    }
+
+    .bew {
+      display: flex;
+      align-items: stretch;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bew-pfx {
+      padding: 0 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--card2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .bew input {
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      width: 120px;
+    }
+
+    .bew input[type=number]::-webkit-inner-spin-button,
+    .bew input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .bstrip-bar-wrap {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .bs-bar {
+      background: var(--border2);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .bs-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease, background 0.4s;
+    }
+
+    .bs-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+
+    .bs-bar-labels span {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ═══ FIELD / INPUT ═══ */
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field>label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .iw {
+      display: flex;
+      align-items: stretch;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .iw-pre,
+    .iw-suf {
+      padding: 0 0.8rem;
+      background: var(--card2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .iw-pre {
+      border-right: 1px solid var(--border);
+    }
+
+    .iw-suf {
+      border-left: 1px solid var(--border);
+    }
+
+    .iw input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 0.6rem;
+      min-width: 0;
+    }
+
+    .iw input[type=number]::-webkit-inner-spin-button,
+    .iw input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .iw-locked {
+      display: flex;
+      align-items: stretch;
+      background: var(--locked);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .iw-locked .iw-pre {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--muted);
+    }
+
+    .lock-val {
+      flex: 1;
+      padding: 0.5rem 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lock-icon {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+
+    /* ═══ SALESPEOPLE ═══ */
+    .sp-widget {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sp-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sp-lbl {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .sp-detail {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .sp-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sp-counter {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .sp-btn {
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .sp-btn:hover {
+      background: var(--card2);
+      color: var(--text);
+    }
+
+    .sp-num {
+      width: 50px;
+      text-align: center;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      height: 36px;
+      outline: none;
+    }
+
+    .sp-num[type=number]::-webkit-inner-spin-button,
+    .sp-num[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    /* ═══ SEGMENTS ═══ */
+    .seg-wrap {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .seg-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .seg-label {
+      width: 80px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .seg-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border2);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .seg-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .seg-inp-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      width: 70px;
+    }
+
+    .seg-inp-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: right;
+      padding: 0.3rem 0;
+      outline: none;
+    }
+
+    .seg-inp-wrap span {
+      padding: 0 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .seg-inp-wrap input[type=number]::-webkit-inner-spin-button,
+    .seg-inp-wrap input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .seg-total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .seg-total-lbl {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .seg-total-val {
+      font-family: var(--mono);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* ═══ BREAKDOWN ═══ */
+    .breakdown {
+      padding: 1.2rem;
+      border-radius: 8px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .bk-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .bk-label {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .bk-sub .bk-label {
+      padding-left: 1.2rem;
+      color: var(--muted);
+    }
+
+    .bk-inp-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      width: 65px;
+      overflow: hidden;
+      margin-right: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .bk-inp-wrap:focus-within {
+      border-color: var(--muted2);
+    }
+
+    .bk-inp-wrap input {
+      width: 100%;
+      text-align: right;
+      background: transparent;
+      border: none;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text);
+      padding: 0.3rem 0;
+      outline: none;
+    }
+
+    .bk-inp-wrap input[type=number]::-webkit-inner-spin-button,
+    .bk-inp-wrap input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .bk-inp-wrap span {
+      padding: 0 0.4rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-family: var(--mono);
+    }
+
+    .bk-val {
+      width: 75px;
+      text-align: right;
+      font-family: var(--mono);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .bk-fixed-pct {
+      width: 65px;
+      text-align: right;
+      padding-right: 0.8rem;
+      margin-right: 1.5rem;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .bk-total-row {
+      padding-top: 0.8rem;
+      margin-top: 0.2rem;
+      border-top: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    /* ═══ NET PRICE CHIPS ═══ */
+    .net-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .net-chip {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .net-chip-lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .net-chip-val {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ═══ DIST CHAIN ═══ */
+    .dist-chain {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .dc-note {
+      font-size: 0.7rem;
+      color: var(--muted);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .dc-val {
+      font-family: var(--mono);
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .dc-hl {
+      padding-top: 0.8rem;
+      margin-top: 0.2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .dc-hl .dc-lbl {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .dc-hl .dc-val {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* ═══ TOTAL ROW ═══ */
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .total-val {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    /* ═══ SUMMARY ═══ */
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sh);
+      margin-bottom: 2rem;
+    }
+
+    .sum-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sum-cell {
+      padding: 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .sum-cell:last-child {
+      border-right: none;
+    }
+
+    .sum-lbl {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sum-val {
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sum-footer {
+      background: var(--card2);
+      border-top: 1px solid var(--border);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sum-footer-lbl {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .sum-footer-val {
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* ═══ HISTORY ═══ */
+    .hist-panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      box-shadow: var(--sh);
+    }
+
+    .hist-panel.open {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .hist-table-wrap {
+      overflow-x: auto;
+    }
+
+    .ht {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .ht th {
+      text-align: left;
+      padding: 1rem 1.2rem;
+      background: var(--card2);
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .ht td {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border2);
+      font-family: var(--mono);
+      white-space: nowrap;
+      color: var(--text);
+    }
+
+    .ht tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dbtn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      opacity: 0.6;
+      font-size: 0.85rem;
+    }
+
+    .dbtn:hover {
+      opacity: 1;
+    }
+
+    .lbtn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      font-weight: 500;
+    }
+
+    .lbtn:hover {
+      background: var(--card2);
+    }
+
+    /* ═══ NOTES ═══ */
+    .notes-ta {
+      width: 100%;
+      height: 100%;
+      min-height: 150px;
+      resize: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    .notes-ta::placeholder {
+      color: var(--muted2);
+    }
+
+    /* ═══ ANALYSIS SECTION ═══ */
+    .analysis-sec-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .analysis-sec {
+      margin-bottom: 2.5rem;
+    }
+
+    .ms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* Market share row */
+    .ms-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .ms-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .ms-seg-lbl {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .ms-pct-iw {
+      display: flex;
+      align-items: stretch;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .ms-pct-iw input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 0.5rem 0.6rem;
+      min-width: 0;
+      outline: none;
+    }
+
+    .ms-pct-suf {
+      padding: 0 0.6rem;
+      background: var(--card2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid var(--border);
+    }
+
+    .ms-delta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .ms-delta-iw {
+      display: flex;
+      align-items: stretch;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      width: 75px;
+    }
+
+    .ms-delta-iw input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      padding: 0.5rem 0.6rem;
+      min-width: 0;
+      outline: none;
+    }
+
+    .ms-delta-lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Rev bar */
+    .rev-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border2);
+    }
+
+    .rev-lbl {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+    }
+
+    .rev-bar-outer {
+      height: 8px;
+      background: var(--border2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .rev-bar-inner {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .rev-iw {
+      display: flex;
+      align-items: stretch;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .rev-iw-pfx {
+      padding: 0 0.8rem;
+      background: var(--card2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .rev-iw input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 0.6rem;
+      min-width: 0;
+      outline: none;
+    }
+
+    /* ═══ SATISFACTION ═══ */
+    .sat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .sat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .sat-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .sat-name {
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .stars {
+      display: flex;
+      gap: 0.2rem;
+    }
+
+    .star {
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.1s;
+      line-height: 1;
+      color: var(--border);
+      user-select: none;
+    }
+
+    .star:hover {
+      transform: scale(1.1);
+    }
+
+    .star.on {
+      color: var(--warn);
+    }
+
+    .sat-rating-lbl {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .sat-cmt {
+      width: 100%;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 60px;
+      outline: none;
+    }
 
     /* ═══ SALES QUALITY ═══ */
-    .sq-row { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
-    .sq-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .sq-name { font-weight: 500; font-size: 0.85rem; width: 90px; flex-shrink: 0; color: var(--text); }
-    .sq-track-wrap { flex: 1; }
-    .sq-track-labels { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 500; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase;}
-    .sq-blocks { display: flex; gap: 4px; }
-    .sq-block { flex: 1; height: 8px; border-radius: 4px; cursor: pointer; background: var(--border); transition: background 0.2s; }
-    .sq-block:hover { background: var(--muted2); }
-    .sq-block.on { background: var(--text); }
-    .sq-badge { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; padding: 0.3rem 0.8rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0; min-width: 90px; text-align: center; background: var(--card2); border: 1px solid var(--border); color: var(--text);}
+    .sq-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border2);
+    }
 
-    /* ═══ ROUND STATUS ═══ */
-    .status-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .st-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.75rem; cursor: pointer; }
-    .st-btn.ap.active { border-color: var(--muted2); color: var(--text); background: var(--card2); }
-    .st-btn.ac.active { border-color: var(--warn); color: var(--warn); background: rgba(245, 158, 11, 0.1); }
-    .st-btn.ad.active { border-color: var(--success); color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .sq-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
 
-    .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; z-index: 999; border: 1px solid var(--border); }
-    .toast.ok { background: var(--text); color: var(--bg); }
-    .toast.show { opacity: 1; transform: translateY(0); }
+    .sq-name {
+      font-weight: 500;
+      font-size: 0.85rem;
+      width: 100px;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+
+    .sq-track-wrap {
+      flex: 1;
+    }
+
+    .sq-track-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sq-blocks {
+      display: flex;
+      gap: 4px;
+    }
+
+    .sq-block {
+      flex: 1;
+      height: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+
+    .sq-block:hover {
+      background: var(--muted2);
+    }
+
+    .sq-block.on {
+      background: var(--text);
+    }
+
+    .sq-badge {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 90px;
+      text-align: center;
+      background: var(--card2);
+      border: 1px solid var(--border);
+    }
+
+    /* ═══ ROUNDS ═══ */
+    .round-tracker {
+      margin-bottom: 2rem;
+    }
+
+    .round-tracker-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .rounds-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .round-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 120px;
+      padding: 1.2rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .round-pill:hover {
+      border-color: var(--muted2);
+    }
+
+    .round-pill.selected {
+      border-color: var(--text);
+      background: var(--card2);
+    }
+
+    .round-num {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .round-period-lbl {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--muted);
+      text-align: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .round-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .round-status-dot.pending {
+      background: var(--muted2);
+    }
+
+    .round-status-dot.current {
+      background: var(--warn);
+      box-shadow: 0 0 8px var(--warn);
+    }
+
+    .round-status-dot.done {
+      background: var(--success);
+    }
+
+    .round-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .rdc {
+      padding: 1.5rem;
+      border-right: 1px solid var(--border2);
+    }
+
+    .rdc:nth-child(even) {
+      border-right: none;
+    }
+
+    .rdc:nth-child(n+3) {
+      border-top: 1px solid var(--border2);
+    }
+
+    .rdc-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .rdc-input {
+      width: 100%;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+    }
+
+    .rdc-input.single {
+      min-height: unset;
+      height: 45px;
+      resize: none;
+    }
+
+    .status-btns {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .st-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .st-btn:hover {
+      background: var(--card2);
+      color: var(--text);
+    }
+
+    .st-btn.ap {
+      border-color: var(--muted2);
+      color: var(--text);
+    }
+
+    .st-btn.ac {
+      border-color: var(--warn);
+      color: var(--warn);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .st-btn.ad {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    /* ═══ TOAST ═══ */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+      border: 1px solid var(--border);
+    }
+
+    .toast.ok {
+      background: var(--text);
+      color: var(--bg);
+      box-shadow: var(--sh);
+    }
+
+    .toast.err {
+      background: var(--danger);
+      color: #fff;
+      box-shadow: var(--sh);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media(max-width: 900px) {
+      .sum-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .sum-cell:nth-child(2) {
+        border-right: none;
+      }
+
+      .sum-cell:nth-child(3) {
+        border-top: 1px solid var(--border);
+      }
+
+      .sum-cell:nth-child(4) {
+        border-top: 1px solid var(--border);
+        border-right: none;
+      }
+    }
 
     @media(max-width: 768px) {
-      .g2, .chart-grid, .g3 { grid-template-columns: 1fr; }
-      .sum-grid { grid-template-columns: 1fr 1fr; }
-      .sum-cell:nth-child(2) { border-right: none; }
-      .sum-cell:nth-child(3) { border-top: 1px solid var(--border); }
-      .sum-cell:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
-      .global-bar, .bstrip { flex-direction: column; align-items: stretch; }
-      .pgrp input { width: 100%; }
-      .sq-row { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
-      .sq-badge { align-self: flex-end; }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        position: relative;
+      }
+
+      .hdr-right {
+        width: 100%;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding-bottom: 0.2rem;
+      }
+
+      .tab-nav {
+        top: 0;
+        padding: 0.5rem 1rem 0;
+        overflow-x: auto;
+        gap: 0.5rem;
+      }
+
+      .tab-btn {
+        font-size: 0.8rem;
+        padding: 0.8rem 0.5rem;
+      }
+
+      .container {
+        padding: 1.5rem 1rem 4rem;
+      }
+
+      .g2,
+      .ms-grid,
+      .sat-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .bstrip {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .bstrip-bar-wrap {
+        width: 100%;
+      }
+
+      .bsi {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .bew {
+        width: 100%;
+      }
+
+      .bew input {
+        width: 100%;
+      }
+
+      .sum-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sum-cell {
+        border-right: none !important;
+        border-top: 1px solid var(--border);
+        padding: 1rem;
+      }
+
+      .sum-cell:first-child {
+        border-top: none;
+      }
+
+      .rounds-row {
+        justify-content: flex-start;
+      }
+
+      .round-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rdc {
+        border-right: none !important;
+        border-top: 1px solid var(--border2);
+        padding: 1rem;
+      }
+
+      .rdc:first-child {
+        border-top: none;
+      }
+
+      .period-bar {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+      }
+
+      .pgrp input[type="text"],
+      .pgrp select {
+        width: 100%;
+      }
+
+      .sq-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+      }
+
+      .sq-badge {
+        align-self: flex-end;
+      }
+
+      .ms-row {
+        flex-wrap: wrap;
+      }
+
+      .ms-seg-lbl {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+
+      .bk-row {
+        flex-wrap: wrap;
+      }
+
+      .bk-label {
+        width: 100%;
+        margin-bottom: 0.4rem;
+      }
+
+      .bk-sub .bk-label {
+        padding-left: 0;
+      }
+
+      /* Elasticity responsive classes */
+      .sim-grid-top { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
+      .sim-grid-bot { grid-template-columns: 1fr; gap: 1.5rem; }
+      .sim-grid-bot > div { border-left: none !important; border-right: none !important; padding: 0 !important; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem !important; text-align: center !important; }
+      .sim-grid-bot > div:last-child { border-bottom: none; padding-bottom: 0 !important; }
+      .sim-grid-bot .txt-right { text-align: center !important; }
+      .sim-grid-bot .flex-sb { justify-content: center; gap: 1rem; }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="logo-wrap">
-      <div class="logo-badge">G5</div>
-      <div>
-        <div class="logo-title">Simulador Estratégico de Marketing</div>
-        <div class="logo-sub">DSS — Decision Support System</div>
-      </div>
-    </div>
-    <div class="hdr-right">
-      <div class="t-toggle" onclick="toggleTheme()"><div class="t-track"><div class="t-knob"></div></div></div>
-      <button class="btn btn-save" onclick="saveData()">💾 Guardar Período</button>
-      <button class="btn" onclick="exportExcel()">📊 Excel</button>
-      <button class="btn" onclick="exportPDF()">📄 PDF</button>
-    </div>
-  </header>
+  <div id="root-wrap">
 
-  <nav class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('dashboard',this)">Resultados</button>
-    <button class="tab-btn" onclick="switchTab('decisions',this)">Decisiones</button>
-    <button class="tab-btn" onclick="switchTab('analysis',this)">Análisis</button>
-    <button class="tab-btn" onclick="switchTab('rounds',this)">Rondas</button>
-    <button class="tab-btn" onclick="switchTab('news',this)">Noticias</button>
-  </nav>
-
-  <div class="container">
-    
-    <div class="global-bar">
-      <div class="gb-lbl">Período Actual:</div>
-      <div class="pgrp">
-        <label>Año</label>
-        <select id="selYear" onchange="loadPeriodData()">
-          <option selected>Y1</option><option>Y2</option><option>Y3</option><option>Y4</option>
-        </select>
-      </div>
-      <div class="pgrp">
-        <label>Trimestre</label>
-        <select id="selQ" onchange="loadPeriodData()">
-          <option selected>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option>
-        </select>
-      </div>
-      <div class="pgrp" style="flex:1;">
-        <label>Nombre / Etiqueta de la Decisión</label>
-        <input type="text" id="decisionName" placeholder="Ej: Estrategia agresiva Q1">
-      </div>
-    </div>
-
-    <div class="tab-pane active" id="tab-dashboard">
-      <div class="kpi-grid">
-        <div class="kpi-card"><span class="kpi-lbl">Ingresos Totales (Trimestre)</span><span class="kpi-val" id="kpiRev">$0</span></div>
-        <div class="kpi-card"><span class="kpi-lbl">Beneficio Neto</span><span class="kpi-val" id="kpiProfit">$0</span></div>
-        <div class="kpi-card"><span class="kpi-lbl">Ventas Unitarias</span><span class="kpi-val" id="kpiUnits">0</span></div>
-        <div class="kpi-card"><span class="kpi-lbl">Beneficios Acumulados</span><span class="kpi-val" id="kpiAccProfit">$0</span></div>
-        <div class="kpi-card"><span class="kpi-lbl">Satisfacción Promedio</span><span class="kpi-val" id="kpiSat">0.0 ★</span></div>
-      </div>
-      <div class="chart-grid">
-        <div class="card"><div class="card-head"><div class="card-title">Evolución Financiera Histórica</div></div><div class="card-body"><div class="chart-container"><canvas id="chartFin"></canvas></div></div></div>
-        <div class="card"><div class="card-head"><div class="card-title">Evolución Cuota de Mercado (%)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartMSL"></canvas></div></div></div>
-        <div class="card"><div class="card-head"><div class="card-title">Evolución Ventas Unitarias</div></div><div class="card-body"><div class="chart-container"><canvas id="chartUnitsSep"></canvas></div></div></div>
-        <div class="card"><div class="card-head"><div class="card-title">Evolución Satisfacción (★)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartSat"></canvas></div></div></div>
-      </div>
-    </div>
-
-    <div class="tab-pane" id="tab-decisions">
-      
-      <div class="bstrip">
-        <div class="bsi"><span class="bsi-label">Presupuesto Inicial</span>
-          <div class="iw"><span class="iw-pre">$</span><input type="number" id="totalBudget" value="800000" oninput="calcAll()"></div>
+    <header>
+      <div class="logo-wrap">
+        <div class="logo-badge">G5</div>
+        <div>
+          <div class="logo-title">Maestría en Gerencia en Ventas y Equipos de Alto Rendimiento</div>
+          <div class="logo-sub">Simulación de Marketing — Gestión de Segmentos &amp; Clientes</div>
         </div>
-        <div class="bstrip-bar-wrap">
-          <div class="bs-bar"><div class="bs-bar-fill" id="bBar"></div></div>
-          <div class="bs-bar-labels"><span id="pctLblBar">0%</span><span id="remainLblBar">$0 restante</span></div>
-        </div>
-        <div class="bsi"><span class="bsi-label">Usado</span><span class="bsi-val ok" id="usedLbl">$0</span></div>
-        <div class="bsi"><span class="bsi-label">Restante</span><span class="bsi-val ok" id="remainLbl">$0</span></div>
       </div>
+      <div class="hdr-right">
+        <div class="t-toggle" onclick="toggleTheme()">
+          <div class="t-track">
+            <div class="t-knob"></div>
+          </div>
+          <span class="t-lbl" id="tLbl">Modo oscuro</span>
+        </div>
+        <button class="btn btn-ghost" onclick="toggleHistory()">📋 Historial</button>
+        <button class="btn btn-save" onclick="saveDecision()">💾 Guardar</button>
+        <button class="btn btn-excel" onclick="exportExcel()">📊 Excel</button>
+        <button class="btn btn-pdf" onclick="exportPDF()">📄 PDF</button>
+      </div>
+    </header>
 
-      <div class="g2">
-        <div class="col-flex">
+    <nav class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('decisions',this)">Decisiones</button>
+      <button class="tab-btn" onclick="switchTab('analysis',this)">Análisis</button>
+      <button class="tab-btn" onclick="switchTab('rounds',this)">Rondas</button>
+    </nav>
+
+    <div class="container">
+
+      <div class="tab-pane active" id="tab-decisions">
+
+        <div class="surface-bar">
+          <div class="period-bar">
+            <div class="pgrp">
+              <label>Año</label>
+              <select id="selYear">
+                <option>Y1</option>
+                <option>Y2</option>
+                <option selected>Y3</option>
+                <option>Y4</option>
+              </select>
+            </div>
+            <div class="pgrp">
+              <label>Trimestre</label>
+              <select id="selQ">
+                <option selected>Q1</option>
+                <option>Q2</option>
+                <option>Q3</option>
+                <option>Q4</option>
+              </select>
+            </div>
+            <div class="pgrp" style="flex:1;">
+              <label>Nombre de la decisión (opcional)</label>
+              <input type="text" id="decisionName" placeholder="Ej: Estrategia agresiva Seg A">
+            </div>
+          </div>
+        </div>
+
+        <div class="bstrip">
+          <div class="bsi">
+            <span class="bsi-label">Presupuesto</span>
+            <div class="bew">
+              <span class="bew-pfx">$</span>
+              <input type="number" id="totalBudget" value="800000" min="0" oninput="calcAll()">
+            </div>
+          </div>
+          <div class="bstrip-bar-wrap">
+            <div class="bs-bar">
+              <div class="bs-bar-fill" id="bBar" style="width:0%;background:var(--success);"></div>
+            </div>
+            <div class="bs-bar-labels"><span id="pctLblBar">0% utilizado</span><span id="remainLblBar">$800,000
+                restante</span></div>
+          </div>
+          <div class="bsi"><span class="bsi-label">Usado</span><span class="bsi-val ok" id="usedLbl">$0</span></div>
+          <div class="bsi"><span class="bsi-label">Restante</span><span class="bsi-val ok"
+              id="remainLbl">$800,000</span></div>
+        </div>
+
+        <div class="hist-panel" id="histPanel">
+          <div class="card-head" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card-title">Historial de Decisiones Guardadas</div>
+            <span style="font-size:.75rem;color:var(--muted);" id="histCount"></span>
+          </div>
+          <div class="hist-table-wrap">
+            <table class="ht">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Período</th>
+                  <th>Nombre</th>
+                  <th>SegA</th>
+                  <th>SegB</th>
+                  <th>SegC</th>
+                  <th>SegD</th>
+                  <th>Vend.</th>
+                  <th>P.Lista</th>
+                  <th>Ventas</th>
+                  <th>Mkt</th>
+                  <th>Prod</th>
+                  <th>Total</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="histBody">
+                <tr>
+                  <td colspan="15" style="text-align:center;color:var(--muted);padding:1.5rem;">Sin decisiones
+                    guardadas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="g2">
           <div class="card">
-            <div class="card-head"><div class="card-title">Precios — Grandes Clientes</div></div>
+            <div class="card-head">
+              <div class="card-title">Presupuesto de Ventas</div>
+            </div>
             <div class="card-body">
-              <div class="field"><label>Precio de Lista</label>
-                <div class="iw"><span class="iw-pre">$</span><input type="number" id="listPrice" value="142" oninput="calcPrices()"></div>
+
+              <div class="sp-widget">
+                <div class="sp-info">
+                  <div class="sp-lbl">Fuerza de ventas</div>
+                  <div class="sp-detail" id="spDetail">11 × $50,000</div>
+                </div>
+                <div class="sp-right">
+                  <div class="sp-counter">
+                    <button class="sp-btn" onclick="changeSP(-1)" type="button">−</button>
+                    <input type="number" class="sp-num" id="numSP" value="11" min="0" oninput="calcSales()">
+                    <button class="sp-btn" onclick="changeSP(1)" type="button">+</button>
+                  </div>
+                  <span class="sp-total" id="spTotal">$550,000</span>
+                </div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                <div class="field"><label>Desc. Seg A</label><div class="iw"><input type="number" id="discA" value="12" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg B</label><div class="iw"><input type="number" id="discB" value="10" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg C</label><div class="iw"><input type="number" id="discC" value="4" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg D</label><div class="iw"><input type="number" id="discD" value="18" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
+
+              <div class="breakdown">
+
+                <div class="bk-row">
+                  <span class="bk-label">Gasto en clientes pequeños</span>
+                  <div class="bk-inp-wrap">
+                    <input type="number" id="pctSmall" value="30" min="0" max="100" oninput="calcSales()"><span>%</span>
+                  </div>
+                  <span class="bk-val" id="bkSmall">$165,000</span>
+                </div>
+
+                <div class="bk-row">
+                  <span class="bk-label">Gasto en grandes clientes</span>
+                  <div class="bk-fixed-pct" id="pctLargeLbl">70%</div>
+                  <span class="bk-val" id="bkLarge">$385,000</span>
+                </div>
+
+                <div class="bk-row bk-sub">
+                  <span class="bk-label">Gasto para retener a grandes clientes</span>
+                  <div class="bk-inp-wrap">
+                    <input type="number" id="pctRetain" value="70" min="0" max="100"
+                      oninput="calcSales()"><span>%</span>
+                  </div>
+                  <span class="bk-val" id="bkRetain">$269,500</span>
+                </div>
+
+                <div class="bk-row bk-sub">
+                  <span class="bk-label">Gasto para adquirir grandes clientes</span>
+                  <div class="bk-fixed-pct" id="pctAcquireLbl">30%</div>
+                  <span class="bk-val" id="bkAcquire">$115,500</span>
+                </div>
+
+                <div class="bk-row bk-total-row">
+                  <span class="bk-label">Presupuesto total de ventas</span>
+                  <span class="bk-val" id="sumSalesBreakdown">$550,000</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Asignación por Segmento</div>
+            </div>
+            <div class="card-body">
+
+              <div class="seg-wrap">
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-a)">Segmento A</span>
+                  <div class="seg-bar-track">
+                    <div class="seg-bar-fill" id="barA" style="background:var(--seg-a);width:35%"></div>
+                  </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segA" value="35" min="0" max="100"
+                      oninput="calcSegments('A')"><span>%</span></div>
+                </div>
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-b)">Segmento B</span>
+                  <div class="seg-bar-track">
+                    <div class="seg-bar-fill" id="barB" style="background:var(--seg-b);width:15%"></div>
+                  </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segB" value="15" min="0" max="100"
+                      oninput="calcSegments('B')"><span>%</span></div>
+                </div>
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-c)">Segmento C</span>
+                  <div class="seg-bar-track">
+                    <div class="seg-bar-fill" id="barC" style="background:var(--seg-c);width:35%"></div>
+                  </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segC" value="35" min="0" max="100"
+                      oninput="calcSegments('C')"><span>%</span></div>
+                </div>
+                <div class="seg-item">
+                  <span class="seg-label" style="color:var(--seg-d)">Segmento D</span>
+                  <div class="seg-bar-track">
+                    <div class="seg-bar-fill" id="barD" style="background:var(--seg-d);width:15%"></div>
+                  </div>
+                  <div class="seg-inp-wrap"><input type="number" id="segD" value="15" min="0" max="100"
+                      oninput="calcSegments('D')"><span>%</span></div>
+                </div>
+              </div>
+
+              <div class="seg-total-row">
+                <span class="seg-total-lbl">Total Distribuido</span>
+                <span class="seg-total-val" id="segTotalVal">100%</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Precios — Grandes Clientes</div>
+            </div>
+            <div class="card-body">
+              <div class="field">
+                <label>Precio de Lista</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="listPrice" value="142" min="0"
+                    oninput="calcPrices()"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                <div class="field"><label>Desc. Seg A</label>
+                  <div class="iw"><input type="number" id="discA" value="12" min="0" max="100"
+                      oninput="calcPrices()"><span class="iw-suf">%</span></div>
+                </div>
+                <div class="field"><label>Desc. Seg B</label>
+                  <div class="iw"><input type="number" id="discB" value="10" min="0" max="100"
+                      oninput="calcPrices()"><span class="iw-suf">%</span></div>
+                </div>
+                <div class="field"><label>Desc. Seg C</label>
+                  <div class="iw"><input type="number" id="discC" value="4" min="0" max="100"
+                      oninput="calcPrices()"><span class="iw-suf">%</span></div>
+                </div>
+                <div class="field"><label>Desc. Seg D</label>
+                  <div class="iw"><input type="number" id="discD" value="18" min="0" max="100"
+                      oninput="calcPrices()"><span class="iw-suf">%</span></div>
+                </div>
               </div>
               <div class="net-grid">
-                <div class="net-chip"><span class="net-chip-lbl">Neto A</span><span class="net-chip-val" id="netA">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto B</span><span class="net-chip-val" id="netB">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto C</span><span class="net-chip-val" id="netC">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto D</span><span class="net-chip-val" id="netD">$0</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto A</span><span class="net-chip-val"
+                    id="netA">$124.96</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto B</span><span class="net-chip-val"
+                    id="netB">$127.80</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto C</span><span class="net-chip-val"
+                    id="netC">$136.32</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto D</span><span class="net-chip-val"
+                    id="netD">$116.44</span></div>
               </div>
             </div>
           </div>
 
           <div class="card">
-            <div class="card-head"><div class="card-title">Precios — Pequeños Clientes</div></div>
+            <div class="card-head">
+              <div class="card-title">Precios — Pequeños Clientes</div>
+            </div>
             <div class="card-body">
-              <div class="field"><label>Precio de Lista (espejo grandes)</label>
-                <div class="iw-locked"><span class="iw-pre">$</span><div class="lock-val"><span id="smallListDisplay">142</span><span>🔒</span></div></div>
+              <div class="field">
+                <label>Precio de Lista <small style="font-weight:400;color:var(--muted2);">(espejo
+                    grandes)</small></label>
+                <div class="iw-locked"><span class="iw-pre">$</span>
+                  <div class="lock-val"><span id="smallListDisplay">142</span><span class="lock-icon">🔒</span></div>
+                </div>
               </div>
-              <div class="field"><label>Descuento Distribuidores</label>
-                <div class="iw"><input type="number" id="distDisc" value="15" oninput="calcSmall()"><span class="iw-suf">%</span></div>
+              <div class="field">
+                <label>Descuento Distribuidores</label>
+                <div class="iw"><input type="number" id="distDisc" value="15" min="0" max="100"
+                    oninput="calcSmall()"><span class="iw-suf">%</span></div>
               </div>
               <div class="dist-chain">
-                <div class="dc-row"><span>Precio al Distribuidor</span><span class="dc-val" id="distPrice">$0</span></div>
-                <div class="dc-row"><span>Margen Dist. (10%)</span><span class="dc-val" id="distMarginAmt">$0</span></div>
-                <div class="dc-row"><span>Paso a Través (5%)</span><span class="dc-val" id="distPassAmt">$0</span></div>
-                <div class="dc-row dc-hl"><span>Precio Neto Final</span><span class="dc-val" id="smallNetPrice">$0</span></div>
+                <div class="dc-note">🔒 Auto-calculado (Margen 10%, Paso 5%)</div>
+                <div class="dc-row"><span>Precio al Distribuidor</span><span class="dc-val"
+                    id="distPrice">$120.70</span></div>
+                <div class="dc-row"><span>Margen Dist. (10%)</span><span class="dc-val" id="distMarginAmt">$12.07</span>
+                </div>
+                <div class="dc-row"><span>Paso a Través (5%)</span><span class="dc-val" id="distPassAmt">$6.04</span>
+                </div>
+                <div class="dc-row dc-hl"><span>Precio Neto Final</span><span class="dc-val"
+                    id="smallNetPrice">$138.80</span></div>
               </div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Cálculo de Elasticidad de Demanda</div></div>
-            <div class="card-body">
-              <p style="font-size:0.75rem; color:var(--muted); margin-bottom:1rem; line-height:1.4;">Ingresa los datos de dos períodos para calcular si la demanda de tu segmento es elástica o inelástica frente a cambios de precio.</p>
-              
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                <div style="background:var(--card2); padding:1rem; border:1px solid var(--border); border-radius:6px;">
-                  <div style="font-size:0.75rem; font-weight:600; margin-bottom:0.8rem; color:var(--text);">Período Base</div>
-                  <div class="field">
-                    <label>Precio Base ($)</label>
-                    <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP1" value="100" oninput="calcElasticity()"></div>
-                  </div>
-                  <div class="field" style="margin-bottom:0;">
-                    <label>Demanda Base (uds)</label>
-                    <div class="iw"><input type="number" id="simQ1" value="1000" oninput="calcElasticity()"></div>
-                  </div>
-                </div>
-
-                <div style="background:var(--card2); padding:1rem; border:1px solid var(--border); border-radius:6px;">
-                  <div style="font-size:0.75rem; font-weight:600; margin-bottom:0.8rem; color:var(--text);">Período Nuevo (Proyectado)</div>
-                  <div class="field">
-                    <label>Precio Nuevo ($)</label>
-                    <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP2" value="110" oninput="calcElasticity()"></div>
-                  </div>
-                  <div class="field" style="margin-bottom:0;">
-                    <label>Demanda Proyectada</label>
-                    <div class="iw"><input type="number" id="simQ2" value="850" oninput="calcElasticity()"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div style="background:var(--card2); border:1px solid var(--border); border-radius:6px; padding:1.2rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
-                  <span style="color:var(--muted)">Variación de Precio (ΔP):</span>
-                  <span id="simDeltaP" style="font-family:var(--mono); font-weight:600;">+10.0%</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.8rem; font-size:0.8rem;">
-                  <span style="color:var(--muted)">Variación de Demanda (ΔQ):</span>
-                  <span id="simDeltaQ" style="font-family:var(--mono); font-weight:600;">-15.0%</span>
-                </div>
-                
-                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:0.8rem; border-top:1px solid var(--border2); margin-bottom:0.8rem;">
-                  <div>
-                    <div style="font-weight:600; font-size:0.85rem; color:var(--text);">Coeficiente Elasticidad (Ed)</div>
-                    <div id="simEdType" style="font-size:0.7rem; font-weight:500; color:var(--danger);">Elástica (sensible)</div>
-                  </div>
-                  <span id="simEdVal" style="font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--text);">-1.50</span>
-                </div>
-                
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-top:0.8rem; border-top:1px solid var(--border2);">
-                  <div>
-                    <div style="font-size:0.7rem; color:var(--muted);">Ingreso Base: <span id="simRev1" style="font-family:var(--mono); color:var(--text);">$100,000</span></div>
-                    <div style="font-size:0.7rem; color:var(--muted); margin-top:0.2rem;">Ingreso Nuevo: <span id="simRev2" style="font-family:var(--mono); color:var(--text);">$93,500</span></div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:0.7rem; font-weight:600; color:var(--muted); text-transform:uppercase;">Impacto Neto</div>
-                    <div id="simRevDiff" style="font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--danger);">- $6,500</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
-            <div class="card-body"><textarea id="notes" style="width:100%; min-height:150px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text); outline:none; resize:vertical;" placeholder="Justificación de la decisión del trimestre..."></textarea></div>
           </div>
         </div>
 
-        <div class="col-flex">
-          <div class="card">
-            <div class="card-head"><div class="card-title">Asignación por Segmento (Fuerza de Ventas)</div></div>
-            <div class="card-body">
-              <div class="seg-wrap">
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-a)">Seg A</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barA" style="background:var(--seg-a)"></div></div><div class="seg-inp-wrap"><input type="number" id="segA" value="35" oninput="calcSegments('A')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-b)">Seg B</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barB" style="background:var(--seg-b)"></div></div><div class="seg-inp-wrap"><input type="number" id="segB" value="15" oninput="calcSegments('B')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-c)">Seg C</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barC" style="background:var(--seg-c)"></div></div><div class="seg-inp-wrap"><input type="number" id="segC" value="35" oninput="calcSegments('C')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-d)">Seg D</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barD" style="background:var(--seg-d)"></div></div><div class="seg-inp-wrap"><input type="number" id="segD" value="15" oninput="calcSegments('D')"><span>%</span></div></div>
-              </div>
-            </div>
-          </div>
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div class="card-head"><div class="card-title">Calculadora de Elasticidad de Demanda (Ed)</div></div>
+          <div class="card-body">
+            <p style="font-size:0.75rem; color:var(--muted); margin-bottom:1.5rem;">Ingresa los datos de precio y cantidad de un período base comparados con los de un nuevo período (real o proyectado) para calcular el coeficiente de elasticidad y el impacto neto en ingresos.</p>
 
-          <div class="card">
-            <div class="card-head"><div class="card-title">Presupuesto de Ventas</div></div>
-            <div class="card-body">
-              <div class="sp-widget">
-                <div><div style="font-weight:600;font-size:0.8rem;color:var(--text);">Fuerza de ventas</div><div style="font-size:0.7rem;color:var(--muted)" id="spDetail">11 × $50,000</div></div>
-                <div style="display:flex;align-items:center;gap:1rem;">
-                  <div class="sp-counter"><button class="sp-btn" onclick="changeSP(-1)">−</button><input type="number" class="sp-num" id="numSP" value="11" oninput="calcSales()"><button class="sp-btn" onclick="changeSP(1)">+</button></div>
-                  <span style="font-weight:600;font-family:var(--mono);color:var(--text);" id="spTotal">$550,000</span>
+            <div class="sim-grid-top">
+              <div style="background:var(--card2); padding:1.2rem; border:1px solid var(--border); border-radius:8px;">
+                <div style="font-size:0.75rem; font-weight:600; margin-bottom:1rem; color:var(--text); text-transform:uppercase;">Período Base</div>
+                <div class="field">
+                  <label>Precio Base ($)</label>
+                  <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP1" value="100" min="0" oninput="calcElasticity()"></div>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label>Cantidad Vendida (uds)</label>
+                  <div class="iw"><input type="number" id="simQ1" value="1000" min="0" oninput="calcElasticity()"></div>
+                </div>
+              </div>
+
+              <div style="background:var(--card2); padding:1.2rem; border:1px solid var(--border); border-radius:8px;">
+                <div style="font-size:0.75rem; font-weight:600; margin-bottom:1rem; color:var(--text); text-transform:uppercase;">Período Nuevo (Proyectado o Real)</div>
+                <div class="field">
+                  <label>Nuevo Precio ($)</label>
+                  <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP2" value="110" min="0" oninput="calcElasticity()"></div>
+                </div>
+                <div class="field" style="margin-bottom:0;">
+                  <label>Nueva Cantidad (uds)</label>
+                  <div class="iw"><input type="number" id="simQ2" value="850" min="0" oninput="calcElasticity()"></div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="card-head"><div class="card-title">Presupuesto de Marketing</div></div>
-            <div class="card-body">
-              <div class="field"><label>Comunicación Integrada</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" oninput="calcAll()"></div></div>
-              <div class="field"><label>Investigación Mercados</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" oninput="calcAll()"></div></div>
-              <div class="field"><label>Redes Sociales</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" oninput="calcAll()"></div></div>
-              <div class="field"><label>Comunicación Directa</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" oninput="calcAll()"></div></div>
+            <div style="background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:1.5rem;">
+              <div class="sim-grid-bot">
+
+                <div>
+                  <div class="flex-sb" style="display:flex; justify-content:space-between; margin-bottom:0.8rem; font-size:0.85rem;">
+                    <span style="color:var(--muted)">Variación Precio (ΔP):</span>
+                    <span id="simDeltaP" style="font-family:var(--mono); font-weight:600;">+10.0%</span>
+                  </div>
+                  <div class="flex-sb" style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                    <span style="color:var(--muted)">Variación Demanda (ΔQ):</span>
+                    <span id="simDeltaQ" style="font-family:var(--mono); font-weight:600;">-15.0%</span>
+                  </div>
+                </div>
+
+                <div style="text-align:center; padding:0 1rem; border-left:1px solid var(--border); border-right:1px solid var(--border);">
+                  <div style="font-weight:600; font-size:0.8rem; color:var(--text); margin-bottom:0.4rem;">Coeficiente Elasticidad (|Ed|)</div>
+                  <span id="simEdVal" style="font-family:var(--mono); font-size:1.6rem; font-weight:700; color:var(--text);">1.50</span>
+                  <div id="simEdType" style="font-size:0.8rem; font-weight:600; color:var(--danger); margin-top:0.2rem;">Elástica (sensible)</div>
+                </div>
+
+                <div class="txt-right" style="text-align:right;">
+                  <div style="font-size:0.75rem; color:var(--muted); margin-bottom:0.3rem;">Ingreso Base: <span id="simRev1" style="font-family:var(--mono); color:var(--text);">$100,000</span></div>
+                  <div style="font-size:0.75rem; color:var(--muted); margin-bottom:0.8rem;">Ingreso Nuevo: <span id="simRev2" style="font-family:var(--mono); color:var(--text);">$93,500</span></div>
+                  <div style="font-size:0.7rem; font-weight:600; color:var(--muted); text-transform:uppercase;">Impacto Neto</div>
+                  <div id="simRevDiff" style="font-family:var(--mono); font-weight:700; font-size:1.2rem; color:var(--danger);">- $6,500</div>
+                </div>
+
+              </div>
             </div>
           </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Desarrollo de Producto</div></div>
-            <div class="card-body">
-              <div class="field"><label>Duración Batería</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" oninput="calcAll()"></div></div>
-              <div class="field"><label>Eficiencia de Fabricación</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" oninput="calcAll()"></div></div>
-              <div class="field"><label>Tamaño Sensor</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" oninput="calcAll()"></div></div>
-              <div class="field"><label>Reducción Latencia</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" oninput="calcAll()"></div></div>
-            </div>
-          </div>
-
         </div>
+
+        <div class="g2">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Presupuesto de Marketing</div>
+            </div>
+            <div class="card-body">
+              <div class="field"><label>Comunicación Integrada</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" min="0"
+                    oninput="calcMarketing()"></div>
+              </div>
+              <div class="field"><label>Investigación Mercados</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" min="0"
+                    oninput="calcMarketing()"></div>
+              </div>
+              <div class="field"><label>Redes Sociales</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" min="0"
+                    oninput="calcMarketing()"></div>
+              </div>
+              <div class="field"><label>Comunicación Directa</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" min="0"
+                    oninput="calcMarketing()"></div>
+              </div>
+              <div class="total-row"><span>Total Marketing</span><span class="total-val" id="totalMkt">$120,000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Desarrollo de Producto</div>
+            </div>
+            <div class="card-body">
+              <div class="field"><label>Duración Batería</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" min="0"
+                    oninput="calcProduct()"></div>
+              </div>
+              <div class="field"><label>Eficiencia Fabricación</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" min="0"
+                    oninput="calcProduct()"></div>
+              </div>
+              <div class="field"><label>Tamaño Sensor</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" min="0"
+                    oninput="calcProduct()"></div>
+              </div>
+              <div class="field"><label>Reducción Latencia</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" min="0"
+                    oninput="calcProduct()"></div>
+              </div>
+              <div class="total-row"><span>Total Producto</span><span class="total-val" id="totalProd">$130,000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div class="card-head">
+            <div class="card-title">Estrategia & Notas</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <textarea class="notes-ta" id="notes" style="padding:1.5rem;"
+              placeholder="Escribe aquí la justificación, supuestos y objetivos del trimestre..."></textarea>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="sum-grid">
+            <div class="sum-cell">
+              <div class="sum-lbl">Fuerza Ventas</div>
+              <div class="sum-val" id="sumSales">$550,000</div>
+            </div>
+            <div class="sum-cell">
+              <div class="sum-lbl">Marketing</div>
+              <div class="sum-val" id="sumMkt">$120,000</div>
+            </div>
+            <div class="sum-cell">
+              <div class="sum-lbl">Producto</div>
+              <div class="sum-val" id="sumProd">$130,000</div>
+            </div>
+            <div class="sum-cell">
+              <div class="sum-lbl">Presupuesto</div>
+              <div class="sum-val" id="sumBudget">$800,000</div>
+            </div>
+          </div>
+          <div class="sum-footer">
+            <span class="sum-footer-lbl">Presupuesto Restante</span>
+            <span class="sum-footer-val" id="sumRemain" style="color:var(--success);">$0</span>
+          </div>
+        </div>
+
       </div>
+      <div class="tab-pane" id="tab-analysis">
 
-      <div class="summary-card">
-        <div class="sum-grid">
-          <div class="sum-cell"><div class="sum-lbl">Fuerza Ventas</div><div class="sum-val" id="sumSales">$0</div></div>
-          <div class="sum-cell"><div class="sum-lbl">Marketing</div><div class="sum-val" id="sumMkt">$0</div></div>
-          <div class="sum-cell"><div class="sum-lbl">Producto</div><div class="sum-val" id="sumProd">$0</div></div>
-          <div class="sum-cell"><div class="sum-lbl">Presupuesto</div><div class="sum-val" id="sumBudget">$0</div></div>
+        <div class="analysis-sec">
+          <div class="analysis-sec-title">Cuota de Mercado & Ingresos</div>
+          <div class="ms-grid">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Grandes Clientes</div>
+              </div>
+              <div class="card-body">
+                <div id="ms-large-body"></div>
+                <div class="rev-section">
+                  <div class="rev-lbl">Ingresos Trimestrales</div>
+                  <div class="rev-bar-outer">
+                    <div class="rev-bar-inner" id="rev-large-bar" style="background:var(--text);width:0%"></div>
+                  </div>
+                  <div class="rev-iw"><span class="rev-iw-pfx">$</span><input type="number" id="revLarge" value="0"
+                      min="0" placeholder="Ingresos grandes clientes" oninput="updateRevBars()"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Pequeños Clientes</div>
+              </div>
+              <div class="card-body">
+                <div id="ms-small-body"></div>
+                <div class="rev-section">
+                  <div class="rev-lbl">Ingresos Trimestrales</div>
+                  <div class="rev-bar-outer">
+                    <div class="rev-bar-inner" id="rev-small-bar" style="background:var(--muted);width:0%"></div>
+                  </div>
+                  <div class="rev-iw"><span class="rev-iw-pfx">$</span><input type="number" id="revSmall" value="0"
+                      min="0" placeholder="Ingresos pequeños clientes" oninput="updateRevBars()"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="sum-footer">
-          <span class="sum-footer-lbl">Presupuesto Restante</span>
-          <span class="sum-footer-val" id="sumRemain" style="color:var(--success);">$0</span>
+
+        <div class="analysis-sec">
+          <div class="analysis-sec-title">Satisfacción del Cliente</div>
+          <div class="sat-grid">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Grandes Clientes</div>
+              </div>
+              <div class="card-body" id="sat-large-body"></div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Pequeños Clientes</div>
+              </div>
+              <div class="card-body" id="sat-small-body"></div>
+            </div>
+          </div>
         </div>
+
+        <div class="analysis-sec">
+          <div class="analysis-sec-title">Calidad de Ventas</div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Evaluación por Segmento</div>
+            </div>
+            <div class="card-body" id="sq-body"></div>
+          </div>
+        </div>
+
       </div>
+      <div class="tab-pane" id="tab-rounds">
 
-    </div>
-
-    <div class="tab-pane" id="tab-analysis">
-      <div class="g2">
-        <div class="col-flex">
-          <div class="card">
-            <div class="card-head"><div class="card-title">Resultados Reales (Inputs para Dashboard)</div></div>
-            <div class="card-body">
-              <div class="g3">
-                <div class="field"><label>Ingresos Grandes</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revLarge" value="0"></div></div>
-                <div class="field"><label>Ingresos Pequeños</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revSmall" value="0"></div></div>
-                <div class="field"><label>Beneficio Neto</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="netProfit" value="0"></div></div>
-              </div>
-              <div class="g2" style="margin-top:1rem;">
-                <div class="field"><label>Ventas Unitarias (Grandes)</label><div class="iw"><input type="number" id="unitsL" value="0"><span class="iw-suf">uds</span></div></div>
-                <div class="field"><label>Ventas Unitarias (Pequeños)</label><div class="iw"><input type="number" id="unitsS" value="0"><span class="iw-suf">uds</span></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Cuota de Mercado (Market Share %)</div></div>
-            <div class="card-body">
-              <div class="g3">
-                <div class="field"><label>Segmento A</label><div class="iw"><input type="number" id="msL_A" value="0"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Segmento B</label><div class="iw"><input type="number" id="msL_B" value="0"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Segmento C</label><div class="iw"><input type="number" id="msL_C" value="0"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Segmento D</label><div class="iw"><input type="number" id="msL_D" value="0"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Pequeños Clientes</label><div class="iw"><input type="number" id="msS" value="0"><span class="iw-suf">%</span></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Calidad de Ventas</div></div>
-            <div class="card-body">
-              <div style="font-size:0.75rem; font-weight:600; color:var(--text); margin-bottom:1rem;">Evaluación por Segmento</div>
-              <div id="sq-body"></div>
-            </div>
-          </div>
+        <div class="round-tracker">
+          <div class="round-tracker-title">Progreso de Simulación</div>
+          <div class="rounds-row" id="roundsRow"></div>
         </div>
 
-        <div class="col-flex">
-          <div class="card">
-            <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios por Segmento</div></div>
-            <div class="card-body">
-              <div id="satStarsBody"></div>
-              <div class="hist-comments-list" id="satHistCommentsList"></div>
-            </div>
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-head">
+            <div class="card-title">Detalle — <span id="roundDetailTitle">Ronda 1</span></div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-pane" id="tab-rounds">
-      <div class="card">
-        <div class="card-head"><div class="card-title">Gestión de Ronda Actual</div></div>
-        <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
-          <div>
-            <div class="field"><label>Estado de la Ronda</label>
+          <div class="round-detail-grid">
+            <div class="rdc">
+              <div class="rdc-label">Período</div>
+              <input class="rdc-input single" type="text" id="rndPeriod" placeholder="Ej: Y2 Q4" oninput="saveRound()">
+            </div>
+            <div class="rdc">
+              <div class="rdc-label">Estado</div>
               <div class="status-btns">
-                <button class="st-btn ap active" id="stPending" onclick="setRoundStatus('pending')">Pendiente</button>
-                <button class="st-btn ac" id="stCurrent" onclick="setRoundStatus('current')">En Curso</button>
-                <button class="st-btn ad" id="stDone" onclick="setRoundStatus('done')">Completada</button>
+                <button class="st-btn" id="stBtnPending" onclick="setRoundStatus('pending')"
+                  type="button">Pendiente</button>
+                <button class="st-btn" id="stBtnCurrent" onclick="setRoundStatus('current')" type="button">En
+                  curso</button>
+                <button class="st-btn" id="stBtnDone" onclick="setRoundStatus('done')" type="button">Completada</button>
               </div>
             </div>
-            <div class="field"><label>Objetivos del Trimestre</label>
-              <textarea id="rndObj" style="width:100%;min-height:150px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text);outline:none;resize:vertical;" placeholder="¿Qué metas quieren lograr en este YQ?"></textarea>
+            <div class="rdc">
+              <div class="rdc-label">Objetivos</div>
+              <textarea class="rdc-input" id="rndObjectives" placeholder="¿Qué metas quieren lograr?"
+                oninput="saveRound()"></textarea>
             </div>
-          </div>
-          <div>
-            <div class="field"><label>Resultados y Aprendizajes</label>
-              <textarea id="rndRes" style="width:100%;min-height:215px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text);outline:none;resize:vertical;" placeholder="¿Qué ocurrió en este período? ¿Qué aprendieron?"></textarea>
+            <div class="rdc">
+              <div class="rdc-label">Resultados / Aprendizajes</div>
+              <textarea class="rdc-input" id="rndResults" placeholder="¿Qué ocurrió? ¿Qué aprendieron?"
+                oninput="saveRound()"></textarea>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="tab-pane" id="tab-news">
-      <div class="card">
-        <div class="card-head"><div class="card-title">Noticias del Mercado (Editable por YQ)</div></div>
-        <div class="card-body">
-          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem; outline:none; resize:vertical;" placeholder="Escribe aquí las noticias relevantes del mercado para el Año y Trimestre seleccionado..."></textarea>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Resumen de Rondas</div>
+          </div>
+          <div class="hist-table-wrap">
+            <table class="ht">
+              <thead>
+                <tr>
+                  <th>Ronda</th>
+                  <th>Período</th>
+                  <th>Estado</th>
+                  <th>Objetivos</th>
+                  <th>Resultados</th>
+                </tr>
+              </thead>
+              <tbody id="roundSummaryBody"></tbody>
+            </table>
+          </div>
         </div>
+
       </div>
     </div>
-
   </div>
   <div class="toast" id="toast"></div>
 
   <script>
     // ═══════════════════════════
-    // STATE & CONSTANTS
+    // CONSTANTS
     // ═══════════════════════════
-    const COST_PER_SP = 50000; const DIST_MARGIN = 0.10; const DIST_PASS = 0.05;
-    const SEGS = [{id:"A",c:"var(--seg-a)",n:"Segmento A"},{id:"B",c:"var(--seg-b)",n:"Segmento B"},{id:"C",c:"var(--seg-c)",n:"Segmento C"},{id:"D",c:"var(--seg-d)",n:"Segmento D"}];
+    const COST_PER_SP = 50000;
+    const DIST_MARGIN = 0.10;
+    const DIST_PASS = 0.05;
+
+    // Colores de los segmentos extraídos de la imagen
+    const SEGS = [
+      { id: "A", name: "Segmento A", color: "var(--seg-a)" },
+      { id: "B", name: "Segmento B", color: "var(--seg-b)" },
+      { id: "C", name: "Segmento C", color: "var(--seg-c)" },
+      { id: "D", name: "Segmento D", color: "var(--seg-d)" },
+    ];
+    const SAT_NAMES = ["Muy insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy satisfecho"];
     const SQ_LEVELS = ["Pobre", "Justo", "Bueno", "Excelente"];
-    
-    let DB = []; try { DB = JSON.parse(localStorage.getItem("mktDSS_G5") || "[]"); } catch(e){}
-    
-    let currentRoundStatus = "pending";
-    let satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 };
+
+    // ═══════════════════════════
+    // STATE
+    // ═══════════════════════════
+    let decisions = [];
+    try { decisions = JSON.parse(localStorage.getItem("mktSim_v9") || "[]"); } catch (e) { }
+
+    let msLarge = { A: { pct: 0, delta: 0 }, B: { pct: 0, delta: 0 }, C: { pct: 0, delta: 0 }, D: { pct: 0, delta: 0 } };
+    let msSmall = { pct: 0, delta: 0 };
+    let revLargeVal = 0, revSmallVal = 0;
+    let satLarge = { A: { stars: 0, comment: "" }, B: { stars: 0, comment: "" }, C: { stars: 0, comment: "" }, D: { stars: 0, comment: "" } };
+    let satSmall = { stars: 0, comment: "" };
     let sqVals = { A: 0, B: 0, C: 0, D: 0 };
-    let charts = {};
+    let rounds = Array.from({ length: 6 }, (_, i) => ({ round: i + 1, period: "", status: "pending", objectives: "", results: "" }));
+    let selectedRound = 0;
+
+    try {
+      const a = JSON.parse(localStorage.getItem("mktSim_analysis_v9") || "{}");
+      if (a.msLarge) msLarge = a.msLarge;
+      if (a.msSmall) msSmall = a.msSmall;
+      if (a.revLargeVal !== undefined) revLargeVal = a.revLargeVal;
+      if (a.revSmallVal !== undefined) revSmallVal = a.revSmallVal;
+      if (a.satLarge) satLarge = a.satLarge;
+      if (a.satSmall) satSmall = a.satSmall;
+      if (a.sqVals) sqVals = a.sqVals;
+    } catch (e) { }
+    try {
+      const r = JSON.parse(localStorage.getItem("mktSim_rounds_v9") || "[]");
+      if (r.length) rounds = r;
+    } catch (e) { }
 
     // ═══════════════════════════
     // UTILS
@@ -578,125 +2456,140 @@
     const $ = id => document.getElementById(id);
     const N = id => parseFloat($(id).value) || 0;
     const FMT = n => "$" + Math.round(n).toLocaleString("es-CO");
-    const FMT2 = n => "$" + n.toFixed(2);
-    const showToast = (msg) => { let t = $("toast"); t.textContent = msg; t.className = "toast show"; setTimeout(()=>t.classList.remove("show"), 2800); }
-    function toggleTheme() { const h = document.documentElement; h.setAttribute("data-theme", h.getAttribute("data-theme") === "dark" ? "light" : "dark"); if(charts.fin) renderDashboard(); }
+    const FMT2 = (n, d = 2) => "$" + n.toFixed(d);
+
+    function saveAnalysis() {
+      localStorage.setItem("mktSim_analysis_v9",
+        JSON.stringify({ msLarge, msSmall, revLargeVal, revSmallVal, satLarge, satSmall, sqVals }));
+    }
+    function saveRoundsLS() {
+      localStorage.setItem("mktSim_rounds_v9", JSON.stringify(rounds));
+    }
+
+    // ═══════════════════════════
+    // THEME
+    // ═══════════════════════════
+    function toggleTheme() {
+      const h = document.documentElement;
+      const dark = h.getAttribute("data-theme") === "dark";
+      h.setAttribute("data-theme", dark ? "light" : "dark");
+      $("tLbl").textContent = dark ? "Modo oscuro" : "Modo claro";
+    }
+
+    // ═══════════════════════════
+    // TABS
+    // ═══════════════════════════
     function switchTab(name, btn) {
-      document.querySelectorAll(".tab-pane, .tab-btn").forEach(p => p.classList.remove("active"));
-      $("tab-" + name).classList.add("active"); btn.classList.add("active");
-      if(name === 'dashboard') renderDashboard();
+      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      $("tab-" + name).classList.add("active");
+      btn.classList.add("active");
     }
 
     // ═══════════════════════════
-    // UI BUILDERS
+    // CALCULATIONS — SALES FORCE
     // ═══════════════════════════
-    
-    // 1. Calidad de Ventas
-    function buildSalesQuality() {
-      $("sq-body").innerHTML = SEGS.map(s => {
-        const v = sqVals[s.id] || 0;
-        return `<div class="sq-row">
-          <span class="sq-name" style="color:${s.c}">${s.n}</span>
-          <div class="sq-track-wrap">
-            <div class="sq-track-labels"><span>POBRE</span><span>JUSTO</span><span>BUENO</span><span>EXCELENTE</span></div>
-            <div class="sq-blocks" id="sqB${s.id}">
-              ${SQ_LEVELS.map((lv, i) => `<div class="sq-block${i <= v ? " on" : ""}" onclick="setSQ('${s.id}',${i})" title="${lv}"></div>`).join("")}
-            </div>
-          </div>
-          <span class="sq-badge" id="sqBadge${s.id}">${SQ_LEVELS[v]}</span>
-        </div>`;
-      }).join("");
+    function getSP() { return parseInt($("numSP").value) || 0; }
+
+    function changeSP(delta) {
+      const current = parseInt($("numSP").value) || 0;
+      const next = Math.max(0, current + delta);
+      $("numSP").value = next;
+      calcSales();
     }
 
-    function setSQ(seg, level) {
-      sqVals[seg] = level;
-      $("sqB" + seg).innerHTML = SQ_LEVELS.map((lv, i) => `<div class="sq-block${i <= level ? " on" : ""}" onclick="setSQ('${seg}',${i})" title="${lv}"></div>`).join("");
-      $("sqBadge" + seg).textContent = SQ_LEVELS[level];
+    function calcSales() {
+      const n = getSP();
+      const total = n * COST_PER_SP;
+      $("spTotal").textContent = FMT(total);
+      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
+
+      // Clientes pequeños
+      let pSmall = parseFloat($("pctSmall").value) || 0;
+      if (pSmall > 100) { pSmall = 100; $("pctSmall").value = 100; }
+      const pLarge = 100 - pSmall;
+      $("pctLargeLbl").textContent = pLarge + "%";
+
+      const smallAmt = total * (pSmall / 100);
+      const largeAmt = total * (pLarge / 100);
+
+      // Retención
+      let pRetain = parseFloat($("pctRetain").value) || 0;
+      if (pRetain > 100) { pRetain = 100; $("pctRetain").value = 100; }
+      const pAcquire = 100 - pRetain;
+      $("pctAcquireLbl").textContent = pAcquire + "%";
+
+      const retainAmt = largeAmt * (pRetain / 100);
+      const acquireAmt = largeAmt * (pAcquire / 100);
+
+      // Renderizar valores
+      $("bkSmall").textContent = FMT(smallAmt);
+      $("bkLarge").textContent = FMT(largeAmt);
+      $("bkRetain").textContent = FMT(retainAmt);
+      $("bkAcquire").textContent = FMT(acquireAmt);
+      $("sumSales").textContent = FMT(total);
+      $("sumSalesBreakdown").textContent = FMT(total);
+
+      updateStrip();
     }
 
-    // 2. Satisfacción y Comentarios
-    function buildSatisfactionStars() {
-      let html = SEGS.map(s => `
-        <div class="sat-row">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-weight:600;color:${s.c}">Grandes - ${s.n}</div>
-            <div class="stars" id="starsL_${s.id}">${buildStars("L_"+s.id, satData["L_"+s.id])}</div>
-          </div>
-          <textarea id="satCmt_L_${s.id}" class="sat-cmt-input" placeholder="Comentarios y feedback del ${s.n}..."></textarea>
-        </div>`).join("");
-      html += `
-        <div class="sat-row" style="border-bottom:none;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-weight:600;color:var(--text);">Pequeños Clientes</div>
-            <div class="stars" id="starsS_ALL">${buildStars("S_ALL", satData["S_ALL"])}</div>
-          </div>
-          <textarea id="satCmt_S_ALL" class="sat-cmt-input" placeholder="Comentarios y feedback de Pequeños Clientes..."></textarea>
-        </div>`;
-      $("satStarsBody").innerHTML = html;
-    }
-    
-    function buildStars(key, val) { return [1,2,3,4,5].map(n => `<span class="star${n<=val?" on":""}" onclick="setStar('${key}',${n})">★</span>`).join(""); }
-    function setStar(key, val) { satData[key] = val; $("stars"+key).innerHTML = buildStars(key, val); }
-
-    function buildHistoricalComments() {
-      const currentPeriod = $("selYear").value + " " + $("selQ").value;
-      const pastRecords = DB.filter(d => d.period !== currentPeriod && d.satComments);
-      
-      let html = "";
-      if (pastRecords.length === 0) {
-        html = '<div style="color:var(--muted2); font-size:0.8rem; text-align:center;">Sin historial de comentarios anteriores</div>';
-      } else {
-        [...pastRecords].reverse().forEach(d => {
-          let cmtBlocks = "";
-          const keys = [{k:"L_A", n:"Seg A"}, {k:"L_B", n:"Seg B"}, {k:"L_C", n:"Seg C"}, {k:"L_D", n:"Seg D"}, {k:"S_ALL", n:"Pequeños"}];
-          keys.forEach(obj => {
-            if(d.satComments[obj.k] && d.satComments[obj.k].trim() !== "") {
-              cmtBlocks += `<div style="margin-bottom:0.5rem;"><span class="hc-seg-label">${obj.n}:</span> <div class="hc-text">${d.satComments[obj.k].replace(/\n/g, '<br>')}</div></div>`;
-            }
-          });
-          if(cmtBlocks !== "") { html += `<div class="hist-comment-item"><div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div>${cmtBlocks}</div>`; }
-        });
+    // ═══════════════════════════
+    // CALCULATIONS — SEGMENTS (AUTO-LIMIT TO 100%)
+    // ═══════════════════════════
+    function calcSegments(changedId) {
+      if (changedId) {
+        let otherSum = 0;
+        SEGS.forEach(s => { if (s.id !== changedId) otherSum += N('seg' + s.id); });
+        let val = N('seg' + changedId);
+        if (otherSum + val > 100) {
+          $('seg' + changedId).value = Math.max(0, 100 - otherSum);
+        }
       }
-      $("satHistCommentsList").innerHTML = html;
-    }
 
-    // 3. Status Rondas
-    function setRoundStatus(s) {
-      currentRoundStatus = s;
-      ["pending","current","done"].forEach(id => {
-        let btn = $("st" + id.charAt(0).toUpperCase() + id.slice(1));
-        if(id===s) btn.classList.add("active"); else btn.classList.remove("active");
+      let total = 0;
+      SEGS.forEach(s => {
+        const v = Math.max(0, parseFloat($("seg" + s.id).value) || 0);
+        total += v;
+        $("bar" + s.id).style.width = Math.min(v, 100) + "%";
       });
+
+      const tv = $("segTotalVal");
+      tv.textContent = total.toFixed(1) + "%";
+
+      if (total > 100) { tv.style.color = "var(--danger)"; }
+      else if (Math.abs(total - 100) < 0.01) { tv.style.color = "var(--success)"; }
+      else { tv.style.color = "var(--text)"; }
     }
 
     // ═══════════════════════════
-    // CALCULATORS (DECISIONS & ELASTICITY)
+    // CALCULATIONS — PRICES
     // ═══════════════════════════
-    function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value||0) + d); calcAll(); }
-    
-    function calcSegments(changed) {
-      if(changed) {
-        let os=0; SEGS.forEach(s=>{if(s.id!==changed)os+=N('seg'+s.id)});
-        if(os+N('seg'+changed)>100) $('seg'+changed).value = Math.max(0,100-os);
-      }
-      SEGS.forEach(s => $("bar"+s.id).style.width = Math.min(N('seg'+s.id), 100)+"%");
-    }
-
     function calcPrices() {
       const lp = N("listPrice");
-      SEGS.forEach(s => $("net"+s.id).textContent = FMT2(lp*(1-(N("disc"+s.id)/100))));
+      SEGS.forEach(s => {
+        const disc = N("disc" + s.id) / 100;
+        $("net" + s.id).textContent = FMT2(lp * (1 - disc), 2);
+      });
       $("smallListDisplay").textContent = lp.toFixed(0);
       calcSmall();
     }
 
     function calcSmall() {
-      const dp = N("listPrice") * (1 - (N("distDisc")/100));
-      const m = dp * DIST_MARGIN; const p = dp * DIST_PASS;
-      $("distPrice").textContent = FMT2(dp); $("distMarginAmt").textContent = FMT2(m);
-      $("distPassAmt").textContent = FMT2(p); $("smallNetPrice").textContent = FMT2(dp+m+p);
+      const lp = N("listPrice");
+      const dDisc = N("distDisc") / 100;
+      const dP = lp * (1 - dDisc);
+      const mAmt = dP * DIST_MARGIN;
+      const pAmt = dP * DIST_PASS;
+
+      $("distPrice").textContent = FMT2(dP, 2);
+      $("distMarginAmt").textContent = FMT2(mAmt, 2);
+      $("distPassAmt").textContent = FMT2(pAmt, 2);
+      $("smallNetPrice").textContent = FMT2(dP + mAmt + pAmt, 2);
     }
 
-    // Calculadora de Elasticidad Inversa (Calcula Ed a partir de P y Q)
+    // ═══════════════════════════
+    // ELASTICIDAD INVERSA
+    // ═══════════════════════════
     function calcElasticity() {
       const p1 = N("simP1");
       const q1 = N("simQ1");
@@ -705,14 +2598,18 @@
 
       if (p1 === 0 || q1 === 0 || p1 === p2) {
         $("simEdVal").textContent = "—";
-        $("simEdType").textContent = "Faltan datos";
+        $("simEdType").textContent = "Sin cambio / Faltan datos";
         $("simEdType").style.color = "var(--muted)";
         $("simDeltaP").textContent = "0.0%";
         $("simDeltaQ").textContent = "0.0%";
+        $("simRev1").textContent = "$0";
+        $("simRev2").textContent = "$0";
+        $("simRevDiff").textContent = "$0";
+        $("simRevDiff").style.color = "var(--muted)";
         return;
       }
 
-      // Fórmula de Elasticidad Precio de la Demanda (Punto) = %ΔQ / %ΔP
+      // Fórmula de elasticidad arco / punto
       const pctDeltaP = (p2 - p1) / p1;
       const pctDeltaQ = (q2 - q1) / q1;
       const ed = pctDeltaQ / pctDeltaP;
@@ -721,296 +2618,469 @@
       const rev2 = p2 * q2;
       const revDiff = rev2 - rev1;
 
-      // Mostrar Variaciones
+      // Render Variaciones
       $("simDeltaP").textContent = (pctDeltaP > 0 ? "+" : "") + (pctDeltaP * 100).toFixed(1) + "%";
-      $("simDeltaQ").textContent = (pctDeltaQ > 0 ? "+" : "") + (pctDeltaQ * 100).toFixed(1) + "%";
-
-      // Mostrar Ed y Tipo
-      $("simEdVal").textContent = ed.toFixed(2);
+      $("simDeltaP").style.color = pctDeltaP > 0 ? "var(--text)" : "var(--text)";
       
+      $("simDeltaQ").textContent = (pctDeltaQ > 0 ? "+" : "") + (pctDeltaQ * 100).toFixed(1) + "%";
+      $("simDeltaQ").style.color = pctDeltaQ > 0 ? "var(--success)" : pctDeltaQ < 0 ? "var(--danger)" : "var(--text)";
+
+      // Render Coeficiente y Tipo
       const absEd = Math.abs(ed);
+      $("simEdVal").textContent = absEd.toFixed(2);
+
       if (absEd > 1.05) {
         $("simEdType").textContent = "Elástica (sensible)";
-        $("simEdType").style.color = "var(--danger)";
+        $("simEdType").style.color = "var(--danger)"; // Demanda reacciona fuerte
       } else if (absEd < 0.95) {
         $("simEdType").textContent = "Inelástica (poco sensible)";
-        $("simEdType").style.color = "var(--success)";
+        $("simEdType").style.color = "var(--success)"; // Demanda se mantiene
       } else {
         $("simEdType").textContent = "Unitaria";
         $("simEdType").style.color = "var(--warn)";
       }
 
-      // Mostrar Ingresos
+      // Render Impacto Neto
       $("simRev1").textContent = FMT(rev1);
       $("simRev2").textContent = FMT(rev2);
 
       const diffStr = (revDiff > 0 ? "+ " : "- ") + FMT(Math.abs(revDiff));
       $("simRevDiff").textContent = diffStr;
-      $("simRevDiff").style.color = revDiff > 0 ? "var(--success)" : revDiff < 0 ? "var(--danger)" : "var(--muted)";
+      $("simRevDiff").style.color = revDiff > 0 ? "var(--success)" : revDiff < 0 ? "var(--danger)" : "var(--text)";
+    }
+
+    function calcMarketing() {
+      const t = N("imc") + N("research") + N("social") + N("directComm");
+      $("totalMkt").textContent = FMT(t);
+      $("sumMkt").textContent = FMT(t);
+      updateStrip();
+    }
+
+    function calcProduct() {
+      const t = N("battery") + N("mfgEff") + N("sensorSize") + N("latency");
+      $("totalProd").textContent = FMT(t);
+      $("sumProd").textContent = FMT(t);
+      updateStrip();
+    }
+
+    // ═══════════════════════════
+    // BUDGET STRIP
+    // ═══════════════════════════
+    function updateStrip() {
+      const budget = N("totalBudget");
+      const used = (getSP() * COST_PER_SP) +
+        (N("imc") + N("research") + N("social") + N("directComm")) +
+        (N("battery") + N("mfgEff") + N("sensorSize") + N("latency"));
+      const remain = budget - used;
+      const pct = budget > 0 ? Math.min(used / budget * 100, 100) : 0;
+
+      $("usedLbl").textContent = FMT(used);
+      $("remainLbl").textContent = FMT(remain);
+      $("sumBudget").textContent = FMT(budget);
+      $("sumRemain").textContent = FMT(remain);
+      $("pctLblBar").textContent = Math.round(pct) + "% utilizado";
+      $("remainLblBar").textContent = FMT(remain) + " restante";
+
+      const cls = remain < 0 ? "over" : pct > 94 ? "warn" : "ok";
+      $("remainLbl").className = "bsi-val " + cls;
+      $("usedLbl").className = "bsi-val " + (used > budget ? "over" : "ok");
+      $("sumRemain").style.color = remain < 0 ? "var(--danger)" : remain === 0 ? "var(--success)" : "var(--text)";
+
+      const bar = $("bBar");
+      bar.style.width = pct + "%";
+      bar.style.background = used > budget ? "var(--danger)" : pct > 90 ? "var(--warn)" : "var(--text)";
     }
 
     function calcAll() {
-      calcSegments(); calcPrices(); calcElasticity();
-      const n = parseInt($("numSP").value||0);
-      
-      const sales = n * COST_PER_SP;
-      $("spTotal").textContent = FMT(sales);
-      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
-      
-      const mkt = N("imc")+N("research")+N("social")+N("directComm");
-      const prod = N("battery")+N("mfgEff")+N("sensorSize")+N("latency");
-      
-      const budget = N("totalBudget");
-      const used = sales + mkt + prod;
-      const remain = budget - used;
-      const pct = budget>0 ? Math.min((used/budget)*100, 100) : 0;
-      
-      $("usedLbl").textContent = FMT(used); $("remainLbl").textContent = FMT(remain);
-      $("usedLbl").className = "bsi-val " + (used>budget?"over":"ok");
-      $("remainLbl").className = "bsi-val " + (remain<0?"over":pct>94?"warn":"ok");
-      $("bBar").style.width = pct+"%";
-      $("bBar").style.background = used>budget?"var(--danger)":pct>90?"var(--warn)":"var(--text)";
-      $("pctLblBar").textContent = Math.round(pct)+"%";
-      $("remainLblBar").textContent = FMT(remain)+" restante";
-
-      $("sumSales").textContent = FMT(sales);
-      $("sumMkt").textContent = FMT(mkt);
-      $("sumProd").textContent = FMT(prod);
-      $("sumBudget").textContent = FMT(budget);
-      $("sumRemain").textContent = FMT(remain);
-      $("sumRemain").style.color = remain < 0 ? "var(--danger)" : "var(--success)";
+      calcSales();
+      calcSegments();
+      calcPrices();
+      calcMarketing();
+      calcProduct();
+      calcElasticity();
     }
 
     // ═══════════════════════════
-    // DATA MANAGEMENT
+    // DECISIONS — SAVE / LOAD
     // ═══════════════════════════
     function gatherData() {
-      const sp = parseInt($("numSP").value||0);
-      
-      const satComments = {
-        L_A: $("satCmt_L_A").value, L_B: $("satCmt_L_B").value, 
-        L_C: $("satCmt_L_C").value, L_D: $("satCmt_L_D").value, 
-        S_ALL: $("satCmt_S_ALL").value
-      };
-
+      const sp = getSP();
+      const sales = sp * COST_PER_SP;
+      const mkt = N("imc") + N("research") + N("social") + N("directComm");
+      const prod = N("battery") + N("mfgEff") + N("sensorSize") + N("latency");
       return {
-        id: Date.now(), period: $("selYear").value + " " + $("selQ").value, name: $("decisionName").value.trim(),
-        
-        // Decisiones
-        budget: N("totalBudget"), numSP: sp, salesB: sp*COST_PER_SP,
-        segA:N("segA"), segB:N("segB"), segC:N("segC"), segD:N("segD"),
-        listPrice:N("listPrice"), discA:N("discA"), discB:N("discB"), discC:N("discC"), discD:N("discD"), distDisc:N("distDisc"),
-        imc:N("imc"), research:N("research"), social:N("social"), directComm:N("directComm"),
-        battery:N("battery"), mfgEff:N("mfgEff"), sensorSize:N("sensorSize"), latency:N("latency"),
-        notes: $("notes").value,
-        
-        // Elasticidad
+        id: Date.now(),
+        period: $("selYear").value + " " + $("selQ").value,
+        name: $("decisionName").value.trim() || "—",
+        savedAt: new Date().toLocaleString("es-CO"),
+        numSP: sp, sales,
+        pctSmall: N("pctSmall"), pctRetain: N("pctRetain"),
+        segA: N("segA"), segB: N("segB"), segC: N("segC"), segD: N("segD"),
+        listPrice: N("listPrice"),
+        discA: N("discA"), discB: N("discB"), discC: N("discC"), discD: N("discD"),
+        distDisc: N("distDisc"),
         simP1: N("simP1"), simQ1: N("simQ1"), simP2: N("simP2"), simQ2: N("simQ2"),
-
-        // Análisis
-        revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
-        msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
-        sqVals: JSON.parse(JSON.stringify(sqVals)),
-        sat: JSON.parse(JSON.stringify(satData)), satComments: satComments,
-        
-        // Rondas y Noticias
-        roundStatus: currentRoundStatus, rndObj: $("rndObj").value, rndRes: $("rndRes").value,
-        marketNews: $("marketNews").value
+        imc: N("imc"), research: N("research"), social: N("social"), directComm: N("directComm"), mkt,
+        battery: N("battery"), mfgEff: N("mfgEff"), sensorSize: N("sensorSize"), latency: N("latency"), prod,
+        budget: N("totalBudget"), used: sales + mkt + prod,
+        notes: $("notes").value,
       };
     }
 
-    function saveData() {
-      const d = gatherData(); 
-      DB = DB.filter(x => x.period !== d.period);
-      DB.push(d);
-      DB.sort((a,b) => a.period.localeCompare(b.period));
-      
-      localStorage.setItem("mktDSS_G5", JSON.stringify(DB));
-      buildHistoricalComments(); showToast("Período Guardado Exitosamente");
-      renderDashboard(); 
+    function saveDecision() {
+      decisions.push(gatherData());
+      localStorage.setItem("mktSim_v9", JSON.stringify(decisions));
+      renderHistory();
+      showToast("Decision guardada", "ok");
     }
 
-    function loadPeriodData() {
-      const pid = $("selYear").value + " " + $("selQ").value;
-      const d = DB.find(x => x.period === pid);
-      if(!d) {
-        $("decisionName").value=""; $("notes").value="";
-        
-        // Default elasticity inputs
-        $("simP1").value="100"; $("simQ1").value="1000"; $("simP2").value="110"; $("simQ2").value="850";
-        
-        $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
-        $("msL_A").value=0; $("msL_B").value=0; $("msL_C").value=0; $("msL_D").value=0; $("msS").value=0;
-        
-        sqVals = { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
-        satData = {L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
-        
-        setRoundStatus("pending"); $("rndObj").value=""; $("rndRes").value="";
-        $("marketNews").value="";
-        calcAll();
-        showToast("Período Nuevo");
-      } else {
-        $("decisionName").value=d.name||""; $("notes").value=d.notes||"";
-        
-        $("totalBudget").value=d.budget||800000; $("numSP").value=d.numSP||11;
-        $("segA").value=d.segA; $("segB").value=d.segB; $("segC").value=d.segC; $("segD").value=d.segD;
-        $("listPrice").value=d.listPrice; $("discA").value=d.discA; $("discB").value=d.discB; $("discC").value=d.discC; $("discD").value=d.discD; $("distDisc").value=d.distDisc;
-        $("imc").value=d.imc; $("research").value=d.research; $("social").value=d.social; $("directComm").value=d.directComm;
-        $("battery").value=d.battery; $("mfgEff").value=d.mfgEff; $("sensorSize").value=d.sensorSize; $("latency").value=d.latency;
-        
-        $("simP1").value=d.simP1||"100"; $("simQ1").value=d.simQ1||"1000"; $("simP2").value=d.simP2||"110"; $("simQ2").value=d.simQ2||"850";
+    function loadDecision(id) {
+      const d = decisions.find(x => x.id === id);
+      if (!d) return;
+      $("selYear").value = d.period.split(" ")[0] || "Y3";
+      $("selQ").value = d.period.split(" ")[1] || "Q1";
+      $("decisionName").value = d.name !== "—" ? d.name : "";
+      $("numSP").value = d.numSP;
 
-        $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
-        $("msL_A").value=d.msL_A||0; $("msL_B").value=d.msL_B||0; $("msL_C").value=d.msL_C||0; $("msL_D").value=d.msL_D||0; $("msS").value=d.msS||0;
-        
-        sqVals = d.sqVals || { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
-        satData = d.sat || {L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
-        
-        if(d.satComments) {
-          $("satCmt_L_A").value = d.satComments.L_A || ""; $("satCmt_L_B").value = d.satComments.L_B || "";
-          $("satCmt_L_C").value = d.satComments.L_C || ""; $("satCmt_L_D").value = d.satComments.L_D || "";
-          $("satCmt_S_ALL").value = d.satComments.S_ALL || "";
-        }
+      ["pctSmall", "pctRetain", "segA", "segB", "segC", "segD", "listPrice", "discA", "discB", "discC", "discD",
+        "distDisc", "simP1", "simQ1", "simP2", "simQ2", "imc", "research", "social", "directComm", "battery", "mfgEff",
+        "sensorSize", "latency", "totalBudget"].forEach(k => {
+          if (d[k] !== undefined) $(k).value = d[k];
+        });
+      $("notes").value = d.notes;
+      calcAll();
+      showToast("Decision cargada", "ok");
+    }
 
-        setRoundStatus(d.roundStatus||"pending"); $("rndObj").value=d.rndObj||""; $("rndRes").value=d.rndRes||"";
-        $("marketNews").value=d.marketNews||"";
-        calcAll();
-        showToast("Datos Cargados");
+    function deleteDecision(id) {
+      decisions = decisions.filter(d => d.id !== id);
+      localStorage.setItem("mktSim_v9", JSON.stringify(decisions));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      $("histCount").textContent = decisions.length + " guardadas";
+      const body = $("histBody");
+      if (!decisions.length) {
+        body.innerHTML = '<tr><td colspan="15" style="text-align:center;color:var(--muted);padding:1.5rem;">Sin decisiones guardadas.</td></tr>';
+        return;
       }
-      buildHistoricalComments();
+      body.innerHTML = decisions.map((d, i) => `<tr>
+    <td style="color:var(--muted)">${i + 1}</td>
+    <td style="color:var(--text);font-weight:600">${d.period}</td>
+    <td>${d.name}</td>
+    <td>${d.segA}%</td><td>${d.segB}%</td><td>${d.segC}%</td><td>${d.segD}%</td>
+    <td>${d.numSP}</td><td>$${d.listPrice}</td>
+    <td>${FMT(d.sales)}</td><td>${FMT(d.mkt)}</td><td>${FMT(d.prod)}</td>
+    <td style="color:var(--text);font-weight:600">${FMT(d.used)}</td>
+    <td><button class="lbtn" onclick="loadDecision(${d.id})">Cargar</button></td>
+    <td><button class="dbtn" onclick="deleteDecision(${d.id})">✕</button></td>
+  </tr>`).join("");
+    }
+
+    function toggleHistory() { $("histPanel").classList.toggle("open"); }
+
+    // ═══════════════════════════
+    // ANALYSIS — MARKET SHARE
+    // ═══════════════════════════
+    function buildMarketShare() {
+      $("ms-large-body").innerHTML = SEGS.map(s => `
+    <div class="ms-row">
+      <span class="ms-seg-lbl" style="color:${s.color}">${s.name}</span>
+      <div class="ms-pct-iw">
+        <input type="number" id="msL${s.id}" value="${msLarge[s.id].pct}" min="0" max="100" step="0.01" placeholder="0"
+          oninput="msLarge['${s.id}'].pct=parseFloat(this.value)||0;saveAnalysis();">
+        <span class="ms-pct-suf">%</span>
+      </div>
+      <div class="ms-delta">
+        <div class="ms-delta-iw">
+          <input type="number" id="msDL${s.id}" value="${msLarge[s.id].delta}" step="0.01" placeholder="Δ"
+            oninput="msLarge['${s.id}'].delta=parseFloat(this.value)||0;saveAnalysis();">
+        </div>
+        <span class="ms-delta-lbl">Δ%</span>
+      </div>
+    </div>`).join("");
+
+      $("ms-small-body").innerHTML = `
+    <div class="ms-row">
+      <span class="ms-seg-lbl" style="color:var(--text)">Pequeños</span>
+      <div class="ms-pct-iw">
+        <input type="number" id="msSS" value="${msSmall.pct}" min="0" max="100" step="0.01" placeholder="0"
+          oninput="msSmall.pct=parseFloat(this.value)||0;saveAnalysis();">
+        <span class="ms-pct-suf">%</span>
+      </div>
+      <div class="ms-delta">
+        <div class="ms-delta-iw">
+          <input type="number" id="msDSS" value="${msSmall.delta}" step="0.01" placeholder="Δ"
+            oninput="msSmall.delta=parseFloat(this.value)||0;saveAnalysis();">
+        </div>
+        <span class="ms-delta-lbl">Δ%</span>
+      </div>
+    </div>`;
+
+      $("revLarge").value = revLargeVal;
+      $("revSmall").value = revSmallVal;
+      updateRevBars();
+    }
+
+    function updateRevBars() {
+      revLargeVal = parseFloat($("revLarge").value) || 0;
+      revSmallVal = parseFloat($("revSmall").value) || 0;
+      const mx = Math.max(revLargeVal, revSmallVal, 1);
+      $("rev-large-bar").style.width = (revLargeVal / mx * 100) + "%";
+      $("rev-small-bar").style.width = (revSmallVal / mx * 100) + "%";
+      saveAnalysis();
     }
 
     // ═══════════════════════════
-    // DASHBOARD & CHARTS
+    // ANALYSIS — SATISFACTION
     // ═══════════════════════════
-    function getDashboardData() {
-      let res=[]; let accProfit=0;
-      for(let d of DB) {
-        let rev=(d.revL||0)+(d.revS||0); let prof=d.profit||0; accProfit+=prof;
-        let sArr=Object.values(d.sat||{}); let avgSat=sArr.length ? sArr.reduce((a,b)=>a+b,0)/sArr.length : 0;
-        res.push({ period:d.period, rev, profit:prof, accProfit, unitsTotal:(d.unitsL||0)+(d.unitsS||0), unitsL:d.unitsL||0, unitsS:d.unitsS||0, msL_A:d.msL_A||0, msL_B:d.msL_B||0, msL_C:d.msL_C||0, msL_D:d.msL_D||0, msS:d.msS||0, avgSat });
-      }
-      return res;
+    function buildStars(grp, seg, filled) {
+      return [1, 2, 3, 4, 5].map(n =>
+        `<span class="star${n <= filled ? " on" : ""}" onclick="setStar('${grp}','${seg}',${n})" title="${SAT_NAMES[n - 1]}">★</span>`
+      ).join("");
     }
 
-    function renderDashboard() {
-      const data=getDashboardData(); 
-      if(!data.length) return;
-      
-      const last=data[data.length-1];
-      $("kpiRev").textContent=FMT(last.rev); $("kpiProfit").textContent=FMT(last.profit); $("kpiUnits").textContent=last.unitsTotal.toLocaleString(); $("kpiAccProfit").textContent=FMT(last.accProfit); $("kpiSat").textContent=last.avgSat.toFixed(1)+" ★";
+    function buildSatisfaction() {
+      $("sat-large-body").innerHTML = SEGS.map(s => {
+        const st = satLarge[s.id];
+        return `<div class="sat-row">
+      <div class="sat-name" style="color:${s.color}">${s.name}</div>
+      <div class="stars" id="starsL${s.id}">${buildStars("L", s.id, st.stars || 0)}</div>
+      <div class="sat-rating-lbl" id="satLblL${s.id}">
+        ${st.stars ? SAT_NAMES[(st.stars || 1) - 1] : "Sin calificar"}
+      </div>
+      <textarea class="sat-cmt" id="satCmtL${s.id}" placeholder="Comentario..."
+        oninput="satLarge['${s.id}'].comment=this.value;saveAnalysis();">${st.comment || ""}</textarea>
+    </div>`;
+      }).join("");
 
-      const labels=data.map(x=>x.period); 
-      const isDark=document.documentElement.getAttribute("data-theme")==="dark";
-      const tc=isDark?"#e2e2e4":"#0f172a"; const gridC=isDark?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.05)";
-      
-      Chart.defaults.color=isDark?"#8b8b99":"#64748b"; Chart.defaults.font.family="'Inter', sans-serif";
-      const commonOps={responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}},plugins:{legend:{labels:{color:tc}}}};
+      const ss = satSmall;
+      $("sat-small-body").innerHTML = `
+    <div class="sat-row">
+      <div class="sat-name" style="color:var(--text)">Pequeños Clientes</div>
+      <div class="stars" id="starsSALL">${buildStars("S", "ALL", ss.stars || 0)}</div>
+      <div class="sat-rating-lbl" id="satLblSALL">
+        ${ss.stars ? SAT_NAMES[(ss.stars || 1) - 1] : "Sin calificar"}
+      </div>
+      <textarea class="sat-cmt" id="satCmtSALL" placeholder="Comentario..."
+        oninput="satSmall.comment=this.value;saveAnalysis();">${ss.comment || ""}</textarea>
+    </div>`;
+    }
 
-      if(charts.fin) charts.fin.destroy(); 
-      charts.fin=new Chart($("chartFin"), { 
-        type:'bar', 
-        data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb', borderRadius: 4 }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981', tension:0.3, borderWidth:2 }]}, 
-        options:commonOps 
-      });
-      
-      if(charts.msL) charts.msL.destroy(); 
-      charts.msL=new Chart($("chartMSL"), { 
-        type:'line', 
-        data:{ labels, datasets:[
-          { label:'Seg A', data:data.map(x=>x.msL_A), borderColor:SEGS[0].c, tension:0.3 }, 
-          { label:'Seg B', data:data.map(x=>x.msL_B), borderColor:SEGS[1].c, tension:0.3 }, 
-          { label:'Seg C', data:data.map(x=>x.msL_C), borderColor:SEGS[2].c, tension:0.3 }, 
-          { label:'Seg D', data:data.map(x=>x.msL_D), borderColor:SEGS[3].c, tension:0.3 },
-          { label:'Pequeños', data:data.map(x=>x.msS), borderColor:'#8b8b99', borderDash:[5,5], tension:0.3 }
-        ]}, 
-        options:commonOps 
-      });
-      
-      if(charts.unitsSep) charts.unitsSep.destroy(); 
-      charts.unitsSep=new Chart($("chartUnitsSep"), { 
-        type:'bar', 
-        data:{ labels, datasets:[{ label:'Grandes Clientes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840', borderRadius:4 }, { label:'Pequeños Clientes', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096', borderRadius:4 }]}, 
-        options:{...commonOps, scales:{x:{grid:{color:gridC}, stacked:true},y:{grid:{color:gridC}, stacked:true}}, plugins:{legend:{labels:{color:tc}}, tooltip:{mode:'index'}}} 
-      });
-      
-      if(charts.sat) charts.sat.destroy(); 
-      charts.sat=new Chart($("chartSat"), { 
-        type:'line', 
-        data:{ labels, datasets:[{ label:'Sat Promedio', data:data.map(x=>x.avgSat), borderColor:'#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.2)', fill:true, tension: 0.3 }]}, 
-        options:{...commonOps, scales:{y:{min:0,max:5,grid:{color:gridC}}}} 
-      });
+    function setStar(grp, seg, stars) {
+      if (grp === "L") satLarge[seg].stars = stars;
+      else satSmall.stars = stars;
+      saveAnalysis();
+      $("stars" + grp + seg).innerHTML = buildStars(grp, seg, stars);
+      $("satLbl" + grp + seg).textContent = SAT_NAMES[stars - 1];
     }
 
     // ═══════════════════════════
-    // EXPORTS
+    // ANALYSIS — SALES QUALITY
+    // ═══════════════════════════
+    function buildSalesQuality() {
+      $("sq-body").innerHTML = SEGS.map(s => {
+        const v = sqVals[s.id] || 0;
+        return `<div class="sq-row">
+      <span class="sq-name" style="color:${s.color}">${s.name}</span>
+      <div class="sq-track-wrap">
+        <div class="sq-track-labels"><span>POBRE</span><span>JUSTO</span><span>BUENO</span><span>EXCELENTE</span></div>
+        <div class="sq-blocks" id="sqB${s.id}">
+          ${SQ_LEVELS.map((lv, i) =>
+          `<div class="sq-block${i === v ? " on" : ""}" onclick="setSQ('${s.id}',${i})" title="${lv}"></div>`
+        ).join("")}
+        </div>
+      </div>
+      <span class="sq-badge" id="sqBadge${s.id}">${SQ_LEVELS[v]}</span>
+    </div>`;
+      }).join("");
+    }
+
+    function setSQ(seg, level) {
+      sqVals[seg] = level;
+      saveAnalysis();
+      $("sqB" + seg).innerHTML = SQ_LEVELS.map((lv, i) =>
+        `<div class="sq-block${i === level ? " on" : ""}" onclick="setSQ('${seg}',${i})" title="${lv}"></div>`
+      ).join("");
+      $("sqBadge" + seg).textContent = SQ_LEVELS[level];
+    }
+
+    // ═══════════════════════════
+    // ROUNDS
+    // ═══════════════════════════
+    function buildRounds() {
+      $("roundsRow").innerHTML = rounds.map((r, i) => `
+    <div class="round-pill${i === selectedRound ? " selected" : ""}" onclick="selectRound(${i})">
+      <span class="round-num">${r.round}</span>
+      <span class="round-period-lbl">${r.period || "Sin período"}</span>
+      <span class="round-status-dot ${r.status}"></span>
+    </div>`).join("");
+      renderRoundSummary();
+    }
+
+    function selectRound(idx) {
+      selectedRound = idx;
+      const r = rounds[idx];
+      $("roundDetailTitle").textContent = "Ronda " + r.round + (r.period ? " — " + r.period : "");
+      $("rndPeriod").value = r.period || "";
+      $("rndObjectives").value = r.objectives || "";
+      $("rndResults").value = r.results || "";
+      const ST_CLS = { pending: "ap", current: "ac", done: "ad" };
+      ["pending", "current", "done"].forEach(s => {
+        const cap = s.charAt(0).toUpperCase() + s.slice(1);
+        $("stBtn" + cap).className = "st-btn" + (r.status === s ? " " + ST_CLS[s] : "");
+      });
+      document.querySelectorAll(".round-pill").forEach((p, i) => {
+        p.classList.toggle("selected", i === idx);
+      });
+    }
+
+    function setRoundStatus(status) {
+      rounds[selectedRound].status = status;
+      saveRoundsLS();
+      buildRounds();
+      selectRound(selectedRound);
+    }
+
+    function saveRound() {
+      rounds[selectedRound].period = $("rndPeriod").value;
+      rounds[selectedRound].objectives = $("rndObjectives").value;
+      rounds[selectedRound].results = $("rndResults").value;
+      saveRoundsLS();
+      buildRounds();
+      $("roundDetailTitle").textContent = "Ronda " + rounds[selectedRound].round + ($("rndPeriod").value ? " — " + $("rndPeriod").value : "");
+    }
+
+    function renderRoundSummary() {
+      const LB = { pending: "Pendiente", current: "En curso", done: "Completada" };
+      $("roundSummaryBody").innerHTML = rounds.map(r => `<tr>
+    <td style="font-family:var(--mono);font-weight:600;color:var(--text)">${r.round}</td>
+    <td>${r.period || "—"}</td>
+    <td>${LB[r.status]}</td>
+    <td style="max-width:200px;white-space:normal;font-size:0.75rem">${r.objectives || "—"}</td>
+    <td style="max-width:200px;white-space:normal;font-size:0.75rem">${r.results || "—"}</td>
+  </tr>`).join("");
+    }
+
+    // ═══════════════════════════
+    // TOAST
+    // ═══════════════════════════
+    function showToast(msg, type = "ok") {
+      const t = $("toast");
+      t.textContent = msg;
+      t.className = "toast " + type + " show";
+      setTimeout(() => t.classList.remove("show"), 2800);
+    }
+
+    // ═══════════════════════════
+    // EXPORT EXCEL
     // ═══════════════════════════
     function exportExcel() {
-      if(!DB.length){ showToast("No hay datos guardados"); return;}
-      const wb=XLSX.utils.book_new();
-      const h=["Período","Nombre","Presupuesto","IngGrandes","IngPequeños","Beneficio","UnitsG","UnitsP","MS_A","MS_B","MS_C","MS_D","MS_S", "Cmt_A", "Cmt_B", "Cmt_C", "Cmt_D", "Cmt_S", "Notas","RndObj","RndRes","Noticias"];
-      const ws=XLSX.utils.aoa_to_sheet([h,...DB.map(d=>[
-        d.period,d.name,d.budget,d.revL,d.revS,d.profit,d.unitsL,d.unitsS,
-        d.msL_A,d.msL_B,d.msL_C,d.msL_D,d.msS,
-        d.satComments?.L_A, d.satComments?.L_B, d.satComments?.L_C, d.satComments?.L_D, d.satComments?.S_ALL,
-        d.notes, d.rndObj, d.rndRes, d.marketNews
-      ])]);
-      XLSX.utils.book_append_sheet(wb, ws, "Sim_DSS_G5");
-      XLSX.writeFile(wb, "Simulacion_Mkt_G5.xlsx");
+      if (!decisions.length) { showToast("Sin decisiones guardadas", "err"); return; }
+      const wb = XLSX.utils.book_new();
+      const h = ["#", "Período", "Nombre", "Guardado", "Vendedores", "P.Lista",
+        "DiscA%", "DiscB%", "DiscC%", "DiscD%", "DiscDist%",
+        "SegA%", "SegB%", "SegC%", "SegD%",
+        "IMC", "Investigación", "Redes", "Com.Dir",
+        "Batería", "Mfg", "Sensor", "Latencia",
+        "Presupuesto", "Ventas", "Marketing", "Producto", "Total", "Restante", "Notas"];
+      const ws1 = XLSX.utils.aoa_to_sheet([h, ...decisions.map((d, i) => [
+        i + 1, d.period, d.name, d.savedAt, d.numSP, d.listPrice,
+        d.discA, d.discB, d.discC, d.discD, d.distDisc,
+        d.segA, d.segB, d.segC, d.segD,
+        d.imc, d.research, d.social, d.directComm,
+        d.battery, d.mfgEff, d.sensorSize, d.latency,
+        d.budget, d.sales, d.mkt, d.prod, d.used, d.budget - d.used, d.notes])]);
+      ws1["!cols"] = Array(30).fill({ wch: 14 });
+      XLSX.utils.book_append_sheet(wb, ws1, "Decisiones");
+      const ws2 = XLSX.utils.aoa_to_sheet([
+        ["Ronda", "Período", "Estado", "Objetivos", "Resultados"],
+        ...rounds.map(r => [r.round, r.period, r.status, r.objectives, r.results])]);
+      ws2["!cols"] = [{ wch: 8 }, { wch: 14 }, { wch: 14 }, { wch: 40 }, { wch: 40 }];
+      XLSX.utils.book_append_sheet(wb, ws2, "Rondas");
+      XLSX.writeFile(wb, "simulacion-marketing.xlsx");
+      showToast("Excel exportado", "ok");
     }
 
+    // ═══════════════════════════
+    // EXPORT PDF
+    // ═══════════════════════════
     function exportPDF() {
-      const d=gatherData(); const {jsPDF}=window.jspdf;
-      const doc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
-      doc.setFillColor(15,23,42); doc.rect(0,0,297,16,"F");
-      doc.setFont("helvetica","bold").setFontSize(10).setTextColor(255).text("DSS Grupo 5 - "+d.period, 10, 10);
-      
-      let y=26; doc.setFontSize(8).setTextColor(0);
-      
-      // Finanzas y Units
-      doc.setFont("helvetica","bold"); doc.text("Resultados Financieros y Unidades:", 10, y); y+=5; 
-      doc.setFont("helvetica","normal");
-      doc.text(`Ingresos Totales: ${FMT(d.revL+d.revS)} (Grandes: ${FMT(d.revL)} | Pequeños: ${FMT(d.revS)})`, 15, y); y+=5; 
-      doc.text(`Beneficio Neto: ${FMT(d.profit)}`, 15, y); y+=5;
-      doc.text(`Ventas Unitarias: Grandes ${d.unitsL} uds | Pequeños ${d.unitsS} uds`, 15, y); y+=10;
-      
-      // Cuota Mercado
-      doc.setFont("helvetica","bold"); doc.text("Cuota de Mercado (%):", 10, y); y+=5; 
-      doc.setFont("helvetica","normal");
-      doc.text(`A: ${d.msL_A}% | B: ${d.msL_B}% | C: ${d.msL_C}% | D: ${d.msL_D}% | Pequeños: ${d.msS}%`, 15, y); y+=10;
-      
-      // Calidad de Ventas
-      doc.setFont("helvetica","bold"); doc.text("Calidad de Ventas:", 10, y); y+=5; 
-      doc.setFont("helvetica","normal");
-      doc.text(`A: ${SQ_LEVELS[d.sqVals.A]} | B: ${SQ_LEVELS[d.sqVals.B]} | C: ${SQ_LEVELS[d.sqVals.C]} | D: ${SQ_LEVELS[d.sqVals.D]}`, 15, y); y+=10;
-
-      // Comentarios de Satisfaccion
-      doc.setFont("helvetica","bold"); doc.text("Feedback y Satisfacción:", 10, y); y+=5; 
-      doc.setFont("helvetica","normal");
-      if(d.satComments) {
-        if(d.satComments.L_A) { doc.text("Seg A: " + d.satComments.L_A, 15, y); y+=5; }
-        if(d.satComments.L_B) { doc.text("Seg B: " + d.satComments.L_B, 15, y); y+=5; }
-        if(d.satComments.L_C) { doc.text("Seg C: " + d.satComments.L_C, 15, y); y+=5; }
-        if(d.satComments.L_D) { doc.text("Seg D: " + d.satComments.L_D, 15, y); y+=5; }
-        if(d.satComments.S_ALL) { doc.text("Pequeños: " + d.satComments.S_ALL, 15, y); y+=5; }
+      const d = gatherData();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+      const W = 297;
+      doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
+      doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
+      doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+      doc.text("Simulación de Marketing — Grupo 5", 10, 10);
+      doc.setFontSize(8); doc.setTextColor(150, 150, 160);
+      doc.text(d.period + " · " + d.name + " · " + d.savedAt, W - 10, 10, { align: "right" });
+      const C = [10, 80, 150, 220]; let y = 26;
+      function sec(t, x) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text(t.toUpperCase(), x, y); return y + 6; }
+      function row(l, v, x, yy, vc) {
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(l, x, yy);
+        doc.setFont("helvetica", "bold"); doc.setTextColor(...(vc || [15, 23, 42])); doc.text(String(v), x + 62, yy, { align: "right" }); return yy + 5;
       }
-      y+=5;
-      
-      // Textos largos
-      if(d.notes) { doc.setFont("helvetica","bold"); doc.text("Notas/Estrategia:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.notes, 270), 15, y); y+=15; }
-      
-      if(y > 160) { doc.addPage(); y=20; }
-      if(d.rndObj) { doc.setFont("helvetica","bold"); doc.text("Objetivos Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndObj, 270), 15, y); y+=20; }
-      if(d.rndRes) { doc.setFont("helvetica","bold"); doc.text("Resultados Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndRes, 270), 15, y); y+=20; }
-      
-      if(y > 150 && d.marketNews) { doc.addPage(); y=20; }
-      if(d.marketNews) { doc.setFont("helvetica","bold"); doc.text("Noticias del Mercado:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.marketNews, 270), 15, y); }
-      
-      doc.save("DSS-G5-"+d.period+".pdf");
+      let y1 = sec("Ventas", C[0]);
+      y1 = row("Vendedores", d.numSP + " × $50k", C[0], y1);
+      y1 = row("Total Ventas", FMT(d.sales), C[0], y1);
+      y1 += 3; y1 = sec("Segmentos", C[0]);
+      SEGS.forEach(s => { y1 = row("Seg " + s.id, d["seg" + s.id] + "%", C[0], y1); });
+      let y2 = sec("Precios Grandes", C[1]);
+      y2 = row("P.Lista", FMT2(d.listPrice, 0), C[1], y2);
+      SEGS.forEach(s => { y2 = row("Desc " + s.id, d["disc" + s.id] + "%", C[1], y2); });
+      y2 += 3; y2 = sec("Precios Pequeños", C[1]);
+      y2 = row("Desc.Dist.", d.distDisc + "%", C[1], y2);
+      const dp = d.listPrice * (1 - d.distDisc / 100);
+      y2 = row("Neto Final", FMT2(dp * (1 + DIST_MARGIN) * (1 + DIST_PASS), 2), C[1], y2);
+      let y3 = sec("Marketing", C[2]);
+      y3 = row("IMC", FMT(d.imc), C[2], y3); y3 = row("Investigación", FMT(d.research), C[2], y3);
+      y3 = row("Redes", FMT(d.social), C[2], y3); y3 = row("Com.Dir", FMT(d.directComm), C[2], y3);
+      y3 = row("Total", FMT(d.mkt), C[2], y3);
+      y3 += 3; y3 = sec("Producto", C[2]);
+      y3 = row("Batería", FMT(d.battery), C[2], y3); y3 = row("Mfg", FMT(d.mfgEff), C[2], y3);
+      y3 = row("Sensor", FMT(d.sensorSize), C[2], y3); y3 = row("Latencia", FMT(d.latency), C[2], y3);
+      y3 = row("Total", FMT(d.prod), C[2], y3);
+      let y4 = sec("Resumen", C[3]);
+      y4 = row("Presupuesto", FMT(d.budget), C[3], y4);
+      y4 = row("Ventas", FMT(d.sales), C[3], y4); y4 = row("Mkt", FMT(d.mkt), C[3], y4); y4 = row("Prod", FMT(d.prod), C[3], y4);
+      doc.setDrawColor(226, 232, 240); doc.line(C[3], y4, C[3] + 68, y4); y4 += 3;
+      y4 = row("Usado", FMT(d.used), C[3], y4);
+      const rem = d.budget - d.used;
+      y4 = row("Restante", FMT(rem), C[3], y4, rem < 0 ? [239, 68, 68] : [16, 185, 129]);
+      const yn = Math.max(y1, y2, y3, y4) + 8;
+      if (d.notes && yn < 195) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("ESTRATEGIA & NOTAS", C[0], yn); doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(doc.splitTextToSize(d.notes, 260), C[0], yn + 5); }
+      if (rounds.some(r => r.period || r.objectives || r.results)) {
+        doc.addPage(); doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
+        doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+        doc.text("Seguimiento de Rondas", 10, 10); let ry = 26;
+        rounds.forEach(r => {
+          if (ry > 196) return;
+          doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
+          doc.text(`Ronda ${r.round}${r.period ? " — " + r.period : ""} [${r.status}]`, 10, ry); ry += 6;
+          if (r.objectives) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("Objetivos:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(71, 85, 105); const ol = doc.splitTextToSize(r.objectives, 260); doc.text(ol, 12, ry); ry += ol.length * 4 + 2; }
+          if (r.results) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("Resultados:", 12, ry); ry += 4; doc.setFont("helvetica", "normal"); doc.setTextColor(71, 85, 105); const rl = doc.splitTextToSize(r.results, 260); doc.text(rl, 12, ry); ry += rl.length * 4 + 4; }
+          doc.setDrawColor(226, 232, 240); doc.line(10, ry, W - 10, ry); ry += 5;
+        });
+      }
+      doc.save("sim-marketing-" + d.period.replace(" ", "-") + ".pdf");
+      showToast("PDF exportado", "ok");
     }
 
+    // ═══════════════════════════
     // INIT
-    buildSalesQuality(); buildSatisfactionStars(); loadPeriodData(); renderDashboard();
+    // ═══════════════════════════
+    calcAll();
+    renderHistory();
+    buildMarketShare();
+    buildSatisfaction();
+    buildSalesQuality();
+    buildRounds();
+    selectRound(0);
   </script>
 </body>
+
 </html>
