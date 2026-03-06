@@ -2872,52 +2872,88 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
       const W = 297;
+      
       doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
       doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
       doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
       doc.text("Simulación de Marketing — Grupo 5", 10, 10);
       doc.setFontSize(8); doc.setTextColor(150, 150, 160);
       doc.text(d.period + " · " + d.name + " · " + d.savedAt, W - 10, 10, { align: "right" });
-      const C = [10, 80, 150, 220]; let y = 26;
-      function sec(t, x) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text(t.toUpperCase(), x, y); return y + 6; }
+      
+      const C = [10, 80, 150, 220]; 
+      const startY = 26;
+      
+      // SOLUCIÓN: Agregamos el parámetro 'yy' para que la Y sea dinámica y no sobreescriba.
+      function sec(t, x, yy) { 
+        doc.setFont("helvetica", "bold"); 
+        doc.setFontSize(7.5); 
+        doc.setTextColor(100, 116, 139); 
+        doc.text(t.toUpperCase(), x, yy); 
+        return yy + 6; 
+      }
+      
       function row(l, v, x, yy, vc) {
         doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(l, x, yy);
         doc.setFont("helvetica", "bold"); doc.setTextColor(...(vc || [15, 23, 42])); doc.text(String(v), x + 62, yy, { align: "right" }); return yy + 5;
       }
-      let y1 = sec("Ventas", C[0]);
+      
+      // Inicializamos las coordenadas Y para cada una de las 4 columnas
+      let y1 = startY, y2 = startY, y3 = startY, y4 = startY;
+      
+      // COLUMNA 1
+      y1 = sec("Ventas", C[0], y1);
       y1 = row("Vendedores", d.numSP + " × $50k", C[0], y1);
       y1 = row("Total Ventas", FMT(d.sales), C[0], y1);
-      y1 += 3; y1 = sec("Segmentos", C[0]);
+      y1 += 3; 
+      y1 = sec("Segmentos", C[0], y1);
       SEGS.forEach(s => { y1 = row("Seg " + s.id, d["seg" + s.id] + "%", C[0], y1); });
-      let y2 = sec("Precios Grandes", C[1]);
+      
+      // COLUMNA 2
+      y2 = sec("Precios Grandes", C[1], y2);
       y2 = row("P.Lista", FMT2(d.listPrice, 0), C[1], y2);
       SEGS.forEach(s => { y2 = row("Desc " + s.id, d["disc" + s.id] + "%", C[1], y2); });
-      y2 += 3; y2 = sec("Precios Pequeños", C[1]);
+      y2 += 3; 
+      y2 = sec("Precios Pequeños", C[1], y2);
       y2 = row("Desc.Dist.", d.distDisc + "%", C[1], y2);
       const dp = d.listPrice * (1 - d.distDisc / 100);
       y2 = row("Neto Final", FMT2(dp * (1 + DIST_MARGIN) * (1 + DIST_PASS), 2), C[1], y2);
-      let y3 = sec("Marketing", C[2]);
+      
+      // COLUMNA 3
+      y3 = sec("Marketing", C[2], y3);
       y3 = row("IMC", FMT(d.imc), C[2], y3); y3 = row("Investigación", FMT(d.research), C[2], y3);
       y3 = row("Redes", FMT(d.social), C[2], y3); y3 = row("Com.Dir", FMT(d.directComm), C[2], y3);
       y3 = row("Total", FMT(d.mkt), C[2], y3);
-      y3 += 3; y3 = sec("Producto", C[2]);
+      y3 += 3; 
+      y3 = sec("Producto", C[2], y3);
       y3 = row("Batería", FMT(d.battery), C[2], y3); y3 = row("Mfg", FMT(d.mfgEff), C[2], y3);
       y3 = row("Sensor", FMT(d.sensorSize), C[2], y3); y3 = row("Latencia", FMT(d.latency), C[2], y3);
       y3 = row("Total", FMT(d.prod), C[2], y3);
-      let y4 = sec("Resumen", C[3]);
+      
+      // COLUMNA 4
+      y4 = sec("Resumen", C[3], y4);
       y4 = row("Presupuesto", FMT(d.budget), C[3], y4);
       y4 = row("Ventas", FMT(d.sales), C[3], y4); y4 = row("Mkt", FMT(d.mkt), C[3], y4); y4 = row("Prod", FMT(d.prod), C[3], y4);
       doc.setDrawColor(226, 232, 240); doc.line(C[3], y4, C[3] + 68, y4); y4 += 3;
       y4 = row("Usado", FMT(d.used), C[3], y4);
       const rem = d.budget - d.used;
       y4 = row("Restante", FMT(rem), C[3], y4, rem < 0 ? [239, 68, 68] : [16, 185, 129]);
+      
+      // Notas y Rondas
       const yn = Math.max(y1, y2, y3, y4) + 8;
-      if (d.notes && yn < 195) { doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); doc.text("ESTRATEGIA & NOTAS", C[0], yn); doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(doc.splitTextToSize(d.notes, 260), C[0], yn + 5); }
+      
+      if (d.notes && yn < 195) { 
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(100, 116, 139); 
+        doc.text("ESTRATEGIA & NOTAS", C[0], yn); 
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); 
+        doc.text(doc.splitTextToSize(d.notes, 260), C[0], yn + 5); 
+      }
+      
       if (rounds.some(r => r.period || r.objectives || r.results)) {
         doc.addPage(); doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 210, "F");
         doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 16, "F");
         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
-        doc.text("Seguimiento de Rondas", 10, 10); let ry = 26;
+        doc.text("Seguimiento de Rondas", 10, 10); 
+        let ry = 26;
         rounds.forEach(r => {
           if (ry > 196) return;
           doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
@@ -2927,6 +2963,7 @@
           doc.setDrawColor(226, 232, 240); doc.line(10, ry, W - 10, ry); ry += 5;
         });
       }
+      
       doc.save("sim-marketing-" + d.period.replace(" ", "-") + ".pdf");
       showToast("PDF exportado", "ok");
     }
