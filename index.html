@@ -316,13 +316,6 @@
             margin-bottom: 1.5rem;
         }
 
-        .g3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
         .col-flex {
             display: flex;
             flex-direction: column;
@@ -872,7 +865,7 @@
             font-weight: 600;
         }
 
-        /* ═══ SATISFACTION & SALES QUALITY ═══ */
+        /* ═══ SATISFACTION COMMENTS ═══ */
         .stars {
             display: flex;
             gap: 0.2rem;
@@ -952,6 +945,7 @@
             color: var(--text);
         }
 
+        /* ═══ SALES QUALITY ═══ */
         .sq-row {
             display: flex;
             align-items: center;
@@ -1179,8 +1173,7 @@
         @media(max-width: 768px) {
 
             .g2,
-            .chart-grid,
-            .g3 {
+            .chart-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1535,13 +1528,11 @@
                                             style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
                                             <span style="color:var(--muted)">Var. Precio (ΔP):</span><span
                                                 id="simDeltaP"
-                                                style="font-family:var(--mono); font-weight:600;">+10.0%</span>
-                                        </div>
+                                                style="font-family:var(--mono); font-weight:600;">+10.0%</span></div>
                                         <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
                                             <span style="color:var(--muted)">Var. Demanda (ΔQ):</span><span
                                                 id="simDeltaQ"
-                                                style="font-family:var(--mono); font-weight:600;">-15.0%</span>
-                                        </div>
+                                                style="font-family:var(--mono); font-weight:600;">-15.0%</span></div>
                                     </div>
                                     <div
                                         style="text-align:center; padding:0 1rem; border-left:1px solid var(--border); border-right:1px solid var(--border);">
@@ -1732,7 +1723,7 @@
                             <div class="card-title">Resultados Reales (Inputs para Dashboard)</div>
                         </div>
                         <div class="card-body">
-                            <div class="g3">
+                            <div class="g2">
                                 <div class="field"><label>Ingresos Grandes</label>
                                     <div class="iw"><span class="iw-pre">$</span><input type="number" id="revLarge"
                                             value="0"></div>
@@ -1741,12 +1732,12 @@
                                     <div class="iw"><span class="iw-pre">$</span><input type="number" id="revSmall"
                                             value="0"></div>
                                 </div>
-                                <div class="field"><label>Beneficio Neto</label>
-                                    <div class="iw"><span class="iw-pre">$</span><input type="number" id="netProfit"
-                                            value="0"></div>
-                                </div>
                             </div>
-                            <div class="g2" style="margin-top:1rem;">
+                            <div class="field" style="margin-bottom:1rem;"><label>Beneficio Neto</label>
+                                <div class="iw"><span class="iw-pre">$</span><input type="number" id="netProfit"
+                                        value="0"></div>
+                            </div>
+                            <div class="g2" style="margin-top:0;">
                                 <div class="field"><label>Ventas Unitarias (Grandes)</label>
                                     <div class="iw"><input type="number" id="unitsL" value="0"><span
                                             class="iw-suf">uds</span></div>
@@ -1815,9 +1806,68 @@
                 </div>
 
                 <div class="col-flex">
+
                     <div class="card">
                         <div class="card-head">
-                            <div class="card-title">Satisfacción del Cliente y Comentarios por Segmento</div>
+                            <div class="card-title">Métricas de Cliente (CAC y CLV)</div>
+                        </div>
+                        <div class="card-body">
+                            <div
+                                style="font-size:0.75rem; font-weight:600; color:var(--muted); margin-bottom:1rem; text-transform:uppercase;">
+                                Costo de Adquisición (CAC)</div>
+                            <div class="g2">
+                                <div class="field"><label>Gasto de Adquisición</label>
+                                    <div class="iw"><span class="iw-pre">$</span><input type="number" id="acqCost"
+                                            value="0" oninput="calcCACCLV()"></div>
+                                </div>
+                                <div class="field"><label>Nuevos Clientes</label>
+                                    <div class="iw"><input type="number" id="newCustomers" value="0"
+                                            oninput="calcCACCLV()"></div>
+                                </div>
+                            </div>
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--border2);">
+                                <span style="font-size:0.8rem; font-weight:500;">CAC Calculado:</span>
+                                <span id="cacResult"
+                                    style="font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--danger);">$0.00</span>
+                            </div>
+
+                            <div
+                                style="font-size:0.75rem; font-weight:600; color:var(--muted); margin-bottom:1rem; text-transform:uppercase;">
+                                Customer Lifetime Value (CLV)</div>
+                            <div class="g2">
+                                <div class="field"><label>Ticket Promedio ($)</label>
+                                    <div class="iw"><span class="iw-pre">$</span><input type="number" id="arpu"
+                                            value="0" oninput="calcCACCLV()"></div>
+                                </div>
+                                <div class="field"><label>Margen Bruto</label>
+                                    <div class="iw"><input type="number" id="marginCLV" value="0"
+                                            oninput="calcCACCLV()"><span class="iw-suf">%</span></div>
+                                </div>
+                            </div>
+                            <div class="field" style="margin-bottom:1rem;"><label>Vida Útil estimada (Años)</label>
+                                <div class="iw"><input type="number" id="lifespan" value="0" oninput="calcCACCLV()">
+                                </div>
+                            </div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-size:0.8rem; font-weight:500;">CLV Calculado:</span>
+                                <span id="clvResult"
+                                    style="font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--success);">$0.00</span>
+                            </div>
+
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border2);">
+                                <span style="font-size:0.8rem; font-weight:600;">Relación LTV:CAC:</span>
+                                <span id="ltvCacRatio"
+                                    style="font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--text);">0.0x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-title">Satisfacción del Cliente y Comentarios</div>
                         </div>
                         <div class="card-body">
                             <div id="satStarsBody"></div>
@@ -2112,10 +2162,10 @@
 
             const options = `
         <option value="">-- Ignorar fila --</option>
-        <option value="msL_A">Segmento A (%)</option>
-        <option value="msL_B">Segmento B (%)</option>
-        <option value="msL_C">Segmento C (%)</option>
-        <option value="msL_D">Segmento D (%)</option>
+        <option value="msL_A">Grandes - Seg A (%)</option>
+        <option value="msL_B">Grandes - Seg B (%)</option>
+        <option value="msL_C">Grandes - Seg C (%)</option>
+        <option value="msL_D">Grandes - Seg D (%)</option>
         <option value="msS">Pequeños Clientes (%)</option>
         <option value="msL_Total">Total Grandes Clientes (%)</option>
         <option value="revLarge">Ingresos Grandes ($)</option>
@@ -2123,6 +2173,11 @@
         <option value="netProfit">Beneficio Neto ($)</option>
         <option value="unitsL">Ventas Grandes (uds)</option>
         <option value="unitsS">Ventas Pequeñas (uds)</option>
+        <option value="acqCost">Gasto Adquisición ($)</option>
+        <option value="newCustomers">Nuevos Clientes (uds)</option>
+        <option value="arpu">Ticket Promedio ($)</option>
+        <option value="marginCLV">Margen Bruto (%)</option>
+        <option value="lifespan">Vida Útil (años)</option>
       `;
 
             for (let i = 1; i < lines.length; i++) {
@@ -2205,7 +2260,7 @@
         }
 
         // ═══════════════════════════
-        // CALCULATORS (DECISIONS & ELASTICITY)
+        // CALCULATORS
         // ═══════════════════════════
         function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value || 0) + d); calcAll(); }
 
@@ -2266,8 +2321,27 @@
             $("simRevDiff").style.color = revDiff > 0 ? "var(--success)" : revDiff < 0 ? "var(--danger)" : "var(--muted)";
         }
 
+        function calcCACCLV() {
+            const acqCost = N("acqCost");
+            const newCust = N("newCustomers");
+            const cac = newCust > 0 ? acqCost / newCust : 0;
+
+            $("cacResult").textContent = FMT2(cac);
+
+            const arpu = N("arpu");
+            const margin = N("marginCLV") / 100;
+            const life = N("lifespan");
+            const clv = arpu * margin * life;
+
+            $("clvResult").textContent = FMT2(clv);
+
+            const ratio = cac > 0 ? clv / cac : 0;
+            $("ltvCacRatio").textContent = ratio.toFixed(1) + "x";
+            $("ltvCacRatio").style.color = ratio >= 3 ? "var(--success)" : ratio >= 1 ? "var(--warn)" : "var(--danger)";
+        }
+
         function calcAll() {
-            calcSegments(); calcPrices(); calcElasticity();
+            calcSegments(); calcPrices(); calcElasticity(); calcCACCLV();
             const n = parseInt($("numSP").value || 0);
 
             const sales = n * COST_PER_SP;
@@ -2321,6 +2395,7 @@
                 simP1: N("simP1"), simQ1: N("simQ1"), simP2: N("simP2"), simQ2: N("simQ2"),
                 revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
                 msL_Total: N("msL_Total"), msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
+                acqCost: N("acqCost"), newCustomers: N("newCustomers"), arpu: N("arpu"), marginCLV: N("marginCLV"), lifespan: N("lifespan"),
                 sqVals: JSON.parse(JSON.stringify(sqVals)),
                 sat: JSON.parse(JSON.stringify(satData)), satComments: satComments,
                 roundStatus: currentRoundStatus, rndObj: $("rndObj").value, rndRes: $("rndRes").value,
@@ -2350,6 +2425,7 @@
                 $("simP1").value = "100"; $("simQ1").value = "1000"; $("simP2").value = "110"; $("simQ2").value = "850";
                 $("revLarge").value = 0; $("revSmall").value = 0; $("netProfit").value = 0; $("unitsL").value = 0; $("unitsS").value = 0;
                 $("msL_Total").value = 0; $("msL_A").value = 0; $("msL_B").value = 0; $("msL_C").value = 0; $("msL_D").value = 0; $("msS").value = 0;
+                $("acqCost").value = 0; $("newCustomers").value = 0; $("arpu").value = 0; $("marginCLV").value = 0; $("lifespan").value = 0;
                 sqVals = { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
                 satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 }; buildSatisfactionStars();
                 setRoundStatus("pending"); $("rndObj").value = ""; $("rndRes").value = ""; $("marketNews").value = "";
@@ -2365,6 +2441,7 @@
                 $("simP1").value = d.simP1 || "100"; $("simQ1").value = d.simQ1 || "1000"; $("simP2").value = d.simP2 || "110"; $("simQ2").value = d.simQ2 || "850";
                 $("revLarge").value = d.revL || 0; $("revSmall").value = d.revS || 0; $("netProfit").value = d.profit || 0; $("unitsL").value = d.unitsL || 0; $("unitsS").value = d.unitsS || 0;
                 $("msL_Total").value = d.msL_Total || 0; $("msL_A").value = d.msL_A || 0; $("msL_B").value = d.msL_B || 0; $("msL_C").value = d.msL_C || 0; $("msL_D").value = d.msL_D || 0; $("msS").value = d.msS || 0;
+                $("acqCost").value = d.acqCost || 0; $("newCustomers").value = d.newCustomers || 0; $("arpu").value = d.arpu || 0; $("marginCLV").value = d.marginCLV || 0; $("lifespan").value = d.lifespan || 0;
 
                 sqVals = d.sqVals || { A: 0, B: 0, C: 0, D: 0 }; buildSalesQuality();
                 satData = d.sat || { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 }; buildSatisfactionStars();
@@ -2499,12 +2576,13 @@
         // EXPORTS
         // ═══════════════════════════
         function exportExcel() {
-            if (!DB.length) { showToast("No hay datos guardados"); return; }
+            if (!DB.length) { showToast("No hay datos guardados", "err"); return; }
             const wb = XLSX.utils.book_new();
-            const h = ["Período", "Nombre", "Presupuesto", "IngGrandes", "IngPequeños", "Beneficio", "UnitsG", "UnitsP", "Total_MS_L", "MS_A", "MS_B", "MS_C", "MS_D", "MS_S", "Cmt_A", "Cmt_B", "Cmt_C", "Cmt_D", "Cmt_S", "Notas", "RndObj", "RndRes", "Noticias"];
+            const h = ["Período", "Nombre", "Presupuesto", "IngGrandes", "IngPequeños", "Beneficio", "UnitsG", "UnitsP", "Total_MS_L", "MS_A", "MS_B", "MS_C", "MS_D", "MS_S", "CAC", "CLV", "Cmt_A", "Cmt_B", "Cmt_C", "Cmt_D", "Cmt_S", "Notas", "RndObj", "RndRes", "Noticias"];
             const ws = XLSX.utils.aoa_to_sheet([h, ...DB.map(d => [
                 d.period, d.name, d.budget, d.revL, d.revS, d.profit, d.unitsL, d.unitsS,
                 d.msL_Total, d.msL_A, d.msL_B, d.msL_C, d.msL_D, d.msS,
+                (d.newCustomers > 0 ? d.acqCost / d.newCustomers : 0), (d.arpu * (d.marginCLV / 100) * d.lifespan),
                 d.satComments?.L_A, d.satComments?.L_B, d.satComments?.L_C, d.satComments?.L_D, d.satComments?.S_ALL,
                 d.notes, d.rndObj, d.rndRes, d.marketNews
             ])]);
@@ -2520,26 +2598,28 @@
 
             let y = 26; doc.setFontSize(8).setTextColor(0);
 
-            // Finanzas y Units
             doc.setFont("helvetica", "bold"); doc.text("Resultados Financieros y Unidades:", 10, y); y += 5;
             doc.setFont("helvetica", "normal");
             doc.text(`Ingresos Totales: ${FMT(d.revL + d.revS)} (Grandes: ${FMT(d.revL)} | Pequeños: ${FMT(d.revS)})`, 15, y); y += 5;
             doc.text(`Beneficio Neto: ${FMT(d.profit)}`, 15, y); y += 5;
             doc.text(`Ventas Unitarias: Grandes ${d.unitsL} uds | Pequeños ${d.unitsS} uds`, 15, y); y += 10;
 
-            // Cuota Mercado
+            doc.setFont("helvetica", "bold"); doc.text("Métricas de Cliente (CAC y CLV):", 10, y); y += 5;
+            doc.setFont("helvetica", "normal");
+            const cac = d.newCustomers > 0 ? d.acqCost / d.newCustomers : 0;
+            const clv = d.arpu * (d.marginCLV / 100) * d.lifespan;
+            doc.text(`CAC: ${FMT2(cac)} | CLV: ${FMT2(clv)}`, 15, y); y += 10;
+
             doc.setFont("helvetica", "bold"); doc.text("Cuota de Mercado (%):", 10, y); y += 5;
             doc.setFont("helvetica", "normal");
             doc.text(`Total Grandes Clientes: ${d.msL_Total}%`, 15, y); y += 5;
             doc.text(`Desglose Grandes -> A: ${d.msL_A}% | B: ${d.msL_B}% | C: ${d.msL_C}% | D: ${d.msL_D}%`, 15, y); y += 5;
             doc.text(`Pequeños Clientes: ${d.msS}%`, 15, y); y += 10;
 
-            // Calidad de Ventas
             doc.setFont("helvetica", "bold"); doc.text("Calidad de Ventas:", 10, y); y += 5;
             doc.setFont("helvetica", "normal");
             doc.text(`A: ${SQ_LEVELS[d.sqVals.A]} | B: ${SQ_LEVELS[d.sqVals.B]} | C: ${SQ_LEVELS[d.sqVals.C]} | D: ${SQ_LEVELS[d.sqVals.D]}`, 15, y); y += 10;
 
-            // Comentarios de Satisfaccion
             doc.setFont("helvetica", "bold"); doc.text("Feedback y Satisfacción:", 10, y); y += 5;
             doc.setFont("helvetica", "normal");
             if (d.satComments) {
@@ -2551,7 +2631,6 @@
             }
             y += 5;
 
-            // Textos largos
             if (d.notes) { doc.setFont("helvetica", "bold"); doc.text("Notas/Estrategia:", 10, y); y += 5; doc.setFont("helvetica", "normal"); doc.text(doc.splitTextToSize(d.notes, 270), 15, y); y += 15; }
 
             if (y > 160) { doc.addPage(); y = 20; }
