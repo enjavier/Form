@@ -132,7 +132,7 @@
     .bs-bar-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
     .bs-bar-labels span { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
-    /* ═══ BUDGET SUMMARY CARD (RESTORED) ═══ */
+    /* ═══ BUDGET SUMMARY CARD ═══ */
     .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); margin-top: 1.5rem; }
     .sum-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
     .sum-cell { padding: 1.5rem; border-right: 1px solid var(--border); }
@@ -181,7 +181,7 @@
     .hc-text { font-size: 0.8rem; color: var(--text); margin-bottom: 0.4rem; padding-left: 0.5rem; border-left: 2px solid var(--border); }
     .hc-seg-label { font-weight: 600; font-size: 0.75rem; color: var(--text); }
 
-    /* ═══ SALES QUALITY (RESTORED) ═══ */
+    /* ═══ SALES QUALITY ═══ */
     .sq-row { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
     .sq-row:last-child { border-bottom: none; padding-bottom: 0; }
     .sq-name { font-weight: 500; font-size: 0.85rem; width: 90px; flex-shrink: 0; color: var(--text); }
@@ -336,6 +336,57 @@
             </div>
           </div>
 
+          <div class="card">
+            <div class="card-head"><div class="card-title">Simulador de Elasticidad de Demanda</div></div>
+            <div class="card-body">
+              <p style="font-size:0.75rem; color:var(--muted); margin-bottom:1rem; line-height:1.4;">Calcula el impacto en el volumen de ventas e ingresos al variar el precio en base a un coeficiente de elasticidad (Ed).</p>
+              
+              <div class="g2" style="gap:1rem;">
+                <div class="field">
+                  <label>Elasticidad Estimada (Ed)</label>
+                  <div class="iw"><input type="number" id="simEd" value="-1.5" step="0.1" oninput="calcElasticity()"></div>
+                </div>
+                <div class="field">
+                  <label>Ventas Base (unidades)</label>
+                  <div class="iw"><input type="number" id="simQ1" value="1000" oninput="calcElasticity()"></div>
+                </div>
+              </div>
+
+              <div class="g2" style="gap:1rem;">
+                <div class="field">
+                  <label>Precio Base Actual ($)</label>
+                  <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP1" value="100" oninput="calcElasticity()"></div>
+                </div>
+                <div class="field">
+                  <label>Precio Simulado ($)</label>
+                  <div class="iw"><span class="iw-pre">$</span><input type="number" id="simP2" value="110" oninput="calcElasticity()"></div>
+                </div>
+              </div>
+
+              <div style="background:var(--card2); border:1px solid var(--border); border-radius:6px; padding:1.2rem; margin-top:0.5rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
+                  <span style="color:var(--muted)">Variación de Precio:</span>
+                  <span id="simDeltaP" style="font-family:var(--mono); font-weight:600;">+10.0%</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.8rem; font-size:0.8rem;">
+                  <span style="color:var(--muted)">Variación de Demanda:</span>
+                  <span id="simDeltaQ" style="font-family:var(--mono); font-weight:600;">-15.0%</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding-top:0.8rem; border-top:1px solid var(--border2); margin-bottom:0.8rem;">
+                  <span style="font-weight:500; font-size:0.85rem; color:var(--text);">Cantidad Proyectada:</span>
+                  <span id="simQ2" style="font-family:var(--mono); font-weight:600; color:var(--text);">850 uds</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="font-weight:500; font-size:0.85rem; color:var(--text);">Ingreso Proyectado:</span>
+                  <div style="text-align:right;">
+                    <div id="simRev2" style="font-family:var(--mono); font-weight:700; font-size:1.1rem; color:var(--text);">$93,500</div>
+                    <div id="simRevDiff" style="font-size:0.75rem; font-weight:600; margin-top:0.1rem;">(-$6,500)</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
           <div class="card">
             <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
             <div class="card-body"><textarea id="notes" style="width:100%; min-height:150px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text); outline:none; resize:vertical;" placeholder="Justificación de la decisión del trimestre..."></textarea></div>
@@ -507,7 +558,7 @@
     
     let currentRoundStatus = "pending";
     let satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 };
-    let sqVals = { A: 0, B: 0, C: 0, D: 0 }; // Restaurado: Calidad de ventas
+    let sqVals = { A: 0, B: 0, C: 0, D: 0 };
     let charts = {};
 
     // ═══════════════════════════
@@ -529,7 +580,7 @@
     // UI BUILDERS
     // ═══════════════════════════
     
-    // 1. Calidad de Ventas (Restaurado)
+    // 1. Calidad de Ventas
     function buildSalesQuality() {
       $("sq-body").innerHTML = SEGS.map(s => {
         const v = sqVals[s.id] || 0;
@@ -608,7 +659,7 @@
     }
 
     // ═══════════════════════════
-    // CALCULATORS
+    // CALCULATORS (DECISIONS & ELASTICITY)
     // ═══════════════════════════
     function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value||0) + d); calcAll(); }
     
@@ -634,8 +685,40 @@
       $("distPassAmt").textContent = FMT2(p); $("smallNetPrice").textContent = FMT2(dp+m+p);
     }
 
+    // Simulador de Elasticidad
+    function calcElasticity() {
+      const p1 = N("simP1");
+      const q1 = N("simQ1");
+      const p2 = N("simP2");
+      const ed = N("simEd");
+      
+      if (p1 === 0) return;
+      
+      const pctDeltaP = (p2 - p1) / p1;
+      const pctDeltaQ = pctDeltaP * ed;
+      const q2 = Math.max(0, q1 * (1 + pctDeltaQ)); 
+      
+      const rev1 = p1 * q1;
+      const rev2 = p2 * q2;
+      const revDiff = rev2 - rev1;
+      
+      $("simDeltaP").textContent = (pctDeltaP > 0 ? "+" : "") + (pctDeltaP * 100).toFixed(1) + "%";
+      $("simDeltaP").style.color = pctDeltaP > 0 ? "var(--text)" : "var(--text)"; 
+      
+      $("simDeltaQ").textContent = (pctDeltaQ > 0 ? "+" : "") + (pctDeltaQ * 100).toFixed(1) + "%";
+      $("simDeltaQ").style.color = pctDeltaQ > 0 ? "var(--success)" : pctDeltaQ < 0 ? "var(--danger)" : "var(--text)";
+      
+      $("simQ2").textContent = Math.round(q2).toLocaleString() + " uds";
+      
+      $("simRev2").textContent = FMT(rev2);
+      
+      const diffStr = (revDiff > 0 ? "+" : "") + FMT(revDiff);
+      $("simRevDiff").textContent = "(" + diffStr + ")";
+      $("simRevDiff").style.color = revDiff > 0 ? "var(--success)" : revDiff < 0 ? "var(--danger)" : "var(--muted)";
+    }
+
     function calcAll() {
-      calcSegments(); calcPrices();
+      calcSegments(); calcPrices(); calcElasticity();
       const n = parseInt($("numSP").value||0);
       
       const sales = n * COST_PER_SP;
@@ -650,7 +733,6 @@
       const remain = budget - used;
       const pct = budget>0 ? Math.min((used/budget)*100, 100) : 0;
       
-      // Top Strip
       $("usedLbl").textContent = FMT(used); $("remainLbl").textContent = FMT(remain);
       $("usedLbl").className = "bsi-val " + (used>budget?"over":"ok");
       $("remainLbl").className = "bsi-val " + (remain<0?"over":pct>94?"warn":"ok");
@@ -659,7 +741,6 @@
       $("pctLblBar").textContent = Math.round(pct)+"%";
       $("remainLblBar").textContent = FMT(remain)+" restante";
 
-      // Bottom Summary Card (Restaurada)
       $("sumSales").textContent = FMT(sales);
       $("sumMkt").textContent = FMT(mkt);
       $("sumProd").textContent = FMT(prod);
@@ -690,11 +771,14 @@
         imc:N("imc"), research:N("research"), social:N("social"), directComm:N("directComm"),
         battery:N("battery"), mfgEff:N("mfgEff"), sensorSize:N("sensorSize"), latency:N("latency"),
         notes: $("notes").value,
+        
+        // Elasticidad
+        simEd: N("simEd"), simP1: N("simP1"), simQ1: N("simQ1"), simP2: N("simP2"),
 
         // Análisis
         revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
         msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
-        sqVals: JSON.parse(JSON.stringify(sqVals)), // Se guarda calidad de ventas
+        sqVals: JSON.parse(JSON.stringify(sqVals)),
         sat: JSON.parse(JSON.stringify(satData)), satComments: satComments,
         
         // Rondas y Noticias
@@ -711,7 +795,7 @@
       
       localStorage.setItem("mktDSS_G5", JSON.stringify(DB));
       buildHistoricalComments(); showToast("Período Guardado Exitosamente");
-      renderDashboard(); // Update dashboard with new data
+      renderDashboard(); 
     }
 
     function loadPeriodData() {
@@ -719,6 +803,7 @@
       const d = DB.find(x => x.period === pid);
       if(!d) {
         $("decisionName").value=""; $("notes").value="";
+        $("simEd").value="-1.5"; $("simP1").value="100"; $("simQ1").value="1000"; $("simP2").value="110";
         $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
         $("msL_A").value=0; $("msL_B").value=0; $("msL_C").value=0; $("msL_D").value=0; $("msS").value=0;
         
@@ -737,6 +822,8 @@
         $("listPrice").value=d.listPrice; $("discA").value=d.discA; $("discB").value=d.discB; $("discC").value=d.discC; $("discD").value=d.discD; $("distDisc").value=d.distDisc;
         $("imc").value=d.imc; $("research").value=d.research; $("social").value=d.social; $("directComm").value=d.directComm;
         $("battery").value=d.battery; $("mfgEff").value=d.mfgEff; $("sensorSize").value=d.sensorSize; $("latency").value=d.latency;
+        
+        $("simEd").value=d.simEd||"-1.5"; $("simP1").value=d.simP1||"100"; $("simQ1").value=d.simQ1||"1000"; $("simP2").value=d.simP2||"110";
 
         $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
         $("msL_A").value=d.msL_A||0; $("msL_B").value=d.msL_B||0; $("msL_C").value=d.msL_C||0; $("msL_D").value=d.msL_D||0; $("msS").value=d.msS||0;
@@ -857,7 +944,7 @@
       doc.setFont("helvetica","normal");
       doc.text(`A: ${d.msL_A}% | B: ${d.msL_B}% | C: ${d.msL_C}% | D: ${d.msL_D}% | Pequeños: ${d.msS}%`, 15, y); y+=10;
       
-      // Calidad de Ventas (Restaurada para el PDF)
+      // Calidad de Ventas
       doc.setFont("helvetica","bold"); doc.text("Calidad de Ventas:", 10, y); y+=5; 
       doc.setFont("helvetica","normal");
       doc.text(`A: ${SQ_LEVELS[d.sqVals.A]} | B: ${SQ_LEVELS[d.sqVals.B]} | C: ${SQ_LEVELS[d.sqVals.C]} | D: ${SQ_LEVELS[d.sqVals.D]}`, 15, y); y+=10;
