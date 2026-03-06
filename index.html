@@ -11,7 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
-    /* ═══ TOKENS (Preserved from original) ═══ */
+    /* ═══ TOKENS ═══ */
     :root {
       --fnt: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
@@ -40,7 +40,7 @@
       --sh-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
-    /* ═══ GLOBAL (Preserved from original) ═══ */
+    /* ═══ GLOBAL ═══ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: var(--fnt); font-size: 14px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
@@ -51,7 +51,7 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
 
-    /* ═══ HEADER & NAV (Updated tabs) ═══ */
+    /* ═══ HEADER & NAV ═══ */
     header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.6rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: var(--sh-sm); }
     .logo-wrap { display: flex; align-items: center; gap: 1rem; }
     .logo-badge { width: 44px; height: 44px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
@@ -71,12 +71,12 @@
     .btn-save { background: var(--text); color: var(--bg); border-color: var(--text); }
     .btn-save:hover { opacity: 0.9; background: var(--text); color: var(--bg); }
 
-    .tab-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.6rem; display: flex; gap: 1.5rem; position: sticky; top: 77px; z-index: 190; }
+    .tab-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.6rem; display: flex; gap: 1.5rem; position: sticky; top: 77px; z-index: 190; flex-wrap: wrap; }
     .tab-btn { padding: 1rem 0; border: none; background: transparent; color: var(--muted); font-weight: 500; font-size: 0.85rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
 
-    /* ═══ LAYOUT (Preserved) ═══ */
+    /* ═══ LAYOUT ═══ */
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.4rem 5rem; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
@@ -86,50 +86,98 @@
     .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
     .col-flex { display: flex; flex-direction: column; gap: 1.5rem; }
 
-    /* ═══ CARDS (Preserved) ═══ */
+    /* ═══ CARDS ═══ */
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); }
     .card-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border2); background: var(--card2); }
     .card-title { font-weight: 600; font-size: 0.85rem; }
     .card-body { padding: 1.2rem; }
 
-    /* ═══ GLOBAL PERIOD BAR (Preserved) ═══ */
-    .global-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: var(--sh); }
+    /* ═══ GLOBAL PERIOD BAR ═══ */
+    .global-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: var(--sh); flex-wrap: wrap;}
     .gb-lbl { font-weight: 600; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
     .pgrp { display: flex; flex-direction: column; gap: 0.3rem; }
     .pgrp label { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
     .pgrp select, .pgrp input { background: var(--inp); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; font-size: 0.85rem; }
     .pgrp input { width: 250px; }
 
-    /* ═══ DASHBOARD (Preserved) ═══ */
+    /* ═══ DASHBOARD ═══ */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: var(--sh-sm); }
     .kpi-lbl { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
     .kpi-val { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--text); }
-    .kpi-trend { font-size: 0.75rem; font-weight: 500; }
     
     .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-    .chart-container { position: relative; height: 250px; width: 100%; }
+    .chart-container { position: relative; height: 260px; width: 100%; }
 
-    /* ═══ INPUTS (Preserved) ═══ */
+    /* ═══ INPUTS ═══ */
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
     .field > label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-bottom: 0.4rem; }
     .iw { display: flex; align-items: stretch; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .iw-pre, .iw-suf { padding: 0 0.8rem; background: var(--card2); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; }
     .iw input { flex: 1; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0.6rem; min-width: 0; }
+    .iw input[type=number]::-webkit-inner-spin-button, .iw input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .iw-locked { display: flex; align-items: stretch; background: var(--locked); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .iw-locked .iw-pre { background: transparent; border-color: var(--border); color: var(--muted); }
+    .lock-val { flex: 1; padding: 0.5rem 0.6rem; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; color: var(--muted); display: flex; align-items: center; justify-content: space-between; }
     
-    /* ═══ HISTORICAL COMMENTS (NEW) ═══ */
-    .hist-comments-list { margin-top: 1.5rem; border-top: 1px solid var(--border2); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; max-height: 250px; overflow-y: auto; }
-    .hist-comment-item { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; }
-    .hc-meta { font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-bottom: 0.3rem; text-transform: uppercase; }
-    .hc-text { font-size: 0.8rem; color: var(--text); }
+    /* ═══ BUDGET STRIP ═══ */
+    .bstrip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: var(--sh); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+    .bsi { display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0; }
+    .bsi-label { font-size: 0.7rem; font-weight: 500; color: var(--muted); text-transform: uppercase; }
+    .bsi-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; }
+    .bsi-val.ok { color: var(--text); } .bsi-val.warn { color: var(--warn); } .bsi-val.over { color: var(--danger); }
+    .bstrip-bar-wrap { flex: 1; min-width: 200px; }
+    .bs-bar { background: var(--border2); border-radius: 4px; height: 8px; overflow: hidden; width: 100%; }
+    .bs-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease, background 0.4s; }
+    .bs-bar-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
+    .bs-bar-labels span { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 
-    /* ═══ OTHER WIDGETS (Preserved) ═══ */
+    /* ═══ SPECIFIC WIDGETS ═══ */
+    .sp-widget { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .sp-counter { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
+    .sp-btn { width: 36px; height: 36px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .sp-btn:hover { background: var(--card2); color: var(--text); }
+    .sp-num { width: 50px; text-align: center; background: transparent; border: none; font-family: var(--mono); font-size: 1rem; font-weight: 500; border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; outline: none; }
+
+    .seg-wrap { display: flex; flex-direction: column; gap: 1rem; }
+    .seg-item { display: flex; align-items: center; gap: 1rem; }
+    .seg-label { width: 80px; font-size: 0.8rem; font-weight: 500; color: var(--text); }
+    .seg-bar-track { flex: 1; height: 8px; background: var(--border2); border-radius: 4px; position: relative; overflow: hidden; }
+    .seg-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; position: absolute; left: 0; top: 0; }
+    .seg-inp-wrap { display: flex; align-items: center; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; width: 70px; }
+    .seg-inp-wrap input { width: 100%; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; text-align: right; padding: 0.3rem 0; outline: none; }
+    .seg-inp-wrap span { padding: 0 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+
+    .net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
+    .net-chip { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .net-chip-lbl { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+    .net-chip-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; }
+
+    .dist-chain { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .dc-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); }
+    .dc-val { font-family: var(--mono); font-weight: 500; color: var(--text); }
+    .dc-hl { padding-top: 0.8rem; margin-top: 0.2rem; border-top: 1px solid var(--border); font-weight: 600;}
+
+    /* ═══ SATISFACTION COMMENTS ═══ */
     .stars { display: flex; gap: 0.2rem; font-size: 1.2rem; cursor: pointer; user-select: none;}
     .star { color: var(--border); transition: transform 0.1s; }
     .star.on { color: var(--warn); }
     .sat-row { display: flex; flex-direction: column; gap: 0.6rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
-    .bstrip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: var(--sh); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+    .sat-cmt-input { width: 100%; min-height: 60px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; background: var(--inp); color: var(--text); font-size: 0.8rem; resize: vertical; margin-top: 0.5rem;}
+    .hist-comments-list { margin-top: 1.5rem; border-top: 1px solid var(--border2); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; max-height: 350px; overflow-y: auto; }
+    .hist-comment-item { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; }
+    .hc-meta { font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
+    .hc-text { font-size: 0.8rem; color: var(--text); margin-bottom: 0.4rem; padding-left: 0.5rem; border-left: 2px solid var(--border); }
+    .hc-seg-label { font-weight: 600; font-size: 0.75rem; color: var(--text); }
+
+    /* ═══ ROUND STATUS ═══ */
+    .status-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .st-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.75rem; cursor: pointer; }
+    .st-btn.ap.active { border-color: var(--muted2); color: var(--text); background: var(--card2); }
+    .st-btn.ac.active { border-color: var(--warn); color: var(--warn); background: rgba(245, 158, 11, 0.1); }
+    .st-btn.ad.active { border-color: var(--success); color: var(--success); background: rgba(16, 185, 129, 0.1); }
+
     .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; z-index: 999; border: 1px solid var(--border); }
     .toast.ok { background: var(--text); color: var(--bg); }
     .toast.show { opacity: 1; transform: translateY(0); }
@@ -198,17 +246,119 @@
         <div class="kpi-card"><span class="kpi-lbl">Satisfacción Promedio</span><span class="kpi-val" id="kpiSat">0.0 ★</span></div>
       </div>
       <div class="chart-grid">
-        <div class="card"><div class="card-head"><div class="card-title">Evolución Finanzas</div></div><div class="card-body"><div class="chart-container"><canvas id="chartFin"></canvas></div></div></div>
-        <div class="card"><div class="card-head"><div class="card-title">Cuota de Mercado Grandes (%)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartMSL"></canvas></div></div></div>
-        <div class="card"><div class="card-head"><div class="card-title">Ventas Unitarias Separadas</div></div><div class="card-body"><div class="chart-container"><canvas id="chartUnitsSep"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Evolución Financiera Histórica</div></div><div class="card-body"><div class="chart-container"><canvas id="chartFin"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Evolución Cuota de Mercado (%)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartMSL"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Evolución Ventas Unitarias</div></div><div class="card-body"><div class="chart-container"><canvas id="chartUnitsSep"></canvas></div></div></div>
         <div class="card"><div class="card-head"><div class="card-title">Evolución Satisfacción (★)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartSat"></canvas></div></div></div>
       </div>
     </div>
 
     <div class="tab-pane" id="tab-decisions">
-      <div class="card">
-        <div class="card-head"><div class="card-title">Estrategia & Presupuesto (placeholder)</div></div>
-        <div class="card-body">Los datos de decisiones se gestionan aquí.</div>
+      
+      <div class="bstrip">
+        <div class="bsi"><span class="bsi-label">Presupuesto</span>
+          <div class="iw"><span class="iw-pre">$</span><input type="number" id="totalBudget" value="800000" oninput="calcAll()"></div>
+        </div>
+        <div class="bstrip-bar-wrap">
+          <div class="bs-bar"><div class="bs-bar-fill" id="bBar"></div></div>
+          <div class="bs-bar-labels"><span id="pctLblBar">0%</span><span id="remainLblBar">$0 restante</span></div>
+        </div>
+        <div class="bsi"><span class="bsi-label">Usado</span><span class="bsi-val ok" id="usedLbl">$0</span></div>
+        <div class="bsi"><span class="bsi-label">Restante</span><span class="bsi-val ok" id="remainLbl">$0</span></div>
+      </div>
+
+      <div class="g2">
+        <div class="col-flex">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Precios — Grandes Clientes</div></div>
+            <div class="card-body">
+              <div class="field"><label>Precio de Lista</label>
+                <div class="iw"><span class="iw-pre">$</span><input type="number" id="listPrice" value="142" oninput="calcPrices()"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="field"><label>Desc. Seg A</label><div class="iw"><input type="number" id="discA" value="12" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Desc. Seg B</label><div class="iw"><input type="number" id="discB" value="10" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Desc. Seg C</label><div class="iw"><input type="number" id="discC" value="4" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Desc. Seg D</label><div class="iw"><input type="number" id="discD" value="18" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
+              </div>
+              <div class="net-grid">
+                <div class="net-chip"><span class="net-chip-lbl">Neto A</span><span class="net-chip-val" id="netA">$0</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto B</span><span class="net-chip-val" id="netB">$0</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto C</span><span class="net-chip-val" id="netC">$0</span></div>
+                <div class="net-chip"><span class="net-chip-lbl">Neto D</span><span class="net-chip-val" id="netD">$0</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Precios — Pequeños Clientes</div></div>
+            <div class="card-body">
+              <div class="field"><label>Precio de Lista (espejo grandes)</label>
+                <div class="iw-locked"><span class="iw-pre">$</span><div class="lock-val"><span id="smallListDisplay">142</span><span>🔒</span></div></div>
+              </div>
+              <div class="field"><label>Descuento Distribuidores</label>
+                <div class="iw"><input type="number" id="distDisc" value="15" oninput="calcSmall()"><span class="iw-suf">%</span></div>
+              </div>
+              <div class="dist-chain">
+                <div class="dc-row"><span>Precio al Distribuidor</span><span class="dc-val" id="distPrice">$0</span></div>
+                <div class="dc-row"><span>Margen Dist. (10%)</span><span class="dc-val" id="distMarginAmt">$0</span></div>
+                <div class="dc-row"><span>Paso a Través (5%)</span><span class="dc-val" id="distPassAmt">$0</span></div>
+                <div class="dc-row dc-hl"><span>Precio Neto Final</span><span class="dc-val" id="smallNetPrice">$0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-flex">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Asignación por Segmento (Fuerza de Ventas)</div></div>
+            <div class="card-body">
+              <div class="seg-wrap">
+                <div class="seg-item"><span class="seg-label" style="color:var(--seg-a)">Seg A</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barA" style="background:var(--seg-a)"></div></div><div class="seg-inp-wrap"><input type="number" id="segA" value="35" oninput="calcSegments('A')"><span>%</span></div></div>
+                <div class="seg-item"><span class="seg-label" style="color:var(--seg-b)">Seg B</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barB" style="background:var(--seg-b)"></div></div><div class="seg-inp-wrap"><input type="number" id="segB" value="15" oninput="calcSegments('B')"><span>%</span></div></div>
+                <div class="seg-item"><span class="seg-label" style="color:var(--seg-c)">Seg C</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barC" style="background:var(--seg-c)"></div></div><div class="seg-inp-wrap"><input type="number" id="segC" value="35" oninput="calcSegments('C')"><span>%</span></div></div>
+                <div class="seg-item"><span class="seg-label" style="color:var(--seg-d)">Seg D</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barD" style="background:var(--seg-d)"></div></div><div class="seg-inp-wrap"><input type="number" id="segD" value="15" oninput="calcSegments('D')"><span>%</span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Presupuesto de Ventas</div></div>
+            <div class="card-body">
+              <div class="sp-widget">
+                <div><div style="font-weight:600;font-size:0.8rem">Fuerza de ventas</div><div style="font-size:0.7rem;color:var(--muted)" id="spDetail">11 × $50,000</div></div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                  <div class="sp-counter"><button class="sp-btn" onclick="changeSP(-1)">−</button><input type="number" class="sp-num" id="numSP" value="11" oninput="calcSales()"><button class="sp-btn" onclick="changeSP(1)">+</button></div>
+                  <span style="font-weight:600;font-family:var(--mono)" id="spTotal">$550,000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Presupuesto de Marketing & Producto</div></div>
+            <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
+              <div>
+                <div class="field"><label>Com. Integrada</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" oninput="calcAll()"></div></div>
+                <div class="field"><label>Inv. Mercados</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" oninput="calcAll()"></div></div>
+                <div class="field"><label>Redes Sociales</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" oninput="calcAll()"></div></div>
+                <div class="field"><label>Com. Directa</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" oninput="calcAll()"></div></div>
+              </div>
+              <div>
+                <div class="field"><label>Duración Batería</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" oninput="calcAll()"></div></div>
+                <div class="field"><label>Eficiencia Mfg</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" oninput="calcAll()"></div></div>
+                <div class="field"><label>Tamaño Sensor</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" oninput="calcAll()"></div></div>
+                <div class="field"><label>Latencia</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" oninput="calcAll()"></div></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
+            <div class="card-body"><textarea id="notes" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text)" placeholder="Justificación de la decisión del trimestre..."></textarea></div>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -216,7 +366,7 @@
       <div class="g2">
         <div class="col-flex">
           <div class="card">
-            <div class="card-head"><div class="card-title">Resultados Reales (Inputs)</div></div>
+            <div class="card-head"><div class="card-title">Resultados Reales (Inputs para Dashboard)</div></div>
             <div class="card-body">
               <div class="g3">
                 <div class="field"><label>Ingresos Grandes</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revLarge" value="0"></div></div>
@@ -243,10 +393,10 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios</div></div>
+          <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios por Segmento</div></div>
           <div class="card-body">
             <div id="satStarsBody"></div>
-            <div class="field" style="margin-top:1.5rem;"><label>Comentarios del Trimestre Actual (YQ)</label><textarea id="satComments" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text)" placeholder="Escribe aquí los comentarios de este período..."></textarea></div>
+            
             <div class="hist-comments-list" id="satHistCommentsList"></div>
           </div>
         </div>
@@ -256,7 +406,25 @@
     <div class="tab-pane" id="tab-rounds">
       <div class="card">
         <div class="card-head"><div class="card-title">Gestión de Ronda Actual</div></div>
-        <div class="card-body"><textarea id="rndObj" style="width:100%;min-height:200px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="Objetivos y Resultados de la ronda..."></textarea></div>
+        <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
+          <div>
+            <div class="field"><label>Estado de la Ronda</label>
+              <div class="status-btns">
+                <button class="st-btn ap active" id="stPending" onclick="setRoundStatus('pending')">Pendiente</button>
+                <button class="st-btn ac" id="stCurrent" onclick="setRoundStatus('current')">En Curso</button>
+                <button class="st-btn ad" id="stDone" onclick="setRoundStatus('done')">Completada</button>
+              </div>
+            </div>
+            <div class="field"><label>Objetivos del Trimestre</label>
+              <textarea id="rndObj" style="width:100%;min-height:150px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué metas quieren lograr en este YQ?"></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="field"><label>Resultados y Aprendizajes</label>
+              <textarea id="rndRes" style="width:100%;min-height:215px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué ocurrió en este período? ¿Qué aprendieron?"></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -264,7 +432,7 @@
       <div class="card">
         <div class="card-head"><div class="card-title">Noticias del Mercado (Editable por YQ)</div></div>
         <div class="card-body">
-          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem;" placeholder="Escribe aquí las noticias del mercado para el Año y Trimestre seleccionado..."></textarea>
+          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem;" placeholder="Escribe aquí las noticias relevantes del mercado para el Año y Trimestre seleccionado..."></textarea>
         </div>
       </div>
     </div>
@@ -274,19 +442,23 @@
 
   <script>
     // ═══════════════════════════
-    // STATE & CONSTANTS (Preserved)
+    // STATE & CONSTANTS
     // ═══════════════════════════
-    const SEGS = [{id:"A",c:"var(--seg-a)"},{id:"B",c:"var(--seg-b)"},{id:"C",c:"var(--seg-c)"},{id:"D",c:"var(--seg-d)"}];
+    const COST_PER_SP = 50000; const DIST_MARGIN = 0.10; const DIST_PASS = 0.05;
+    const SEGS = [{id:"A",c:"var(--seg-a)",n:"Segmento A"},{id:"B",c:"var(--seg-b)",n:"Segmento B"},{id:"C",c:"var(--seg-c)",n:"Segmento C"},{id:"D",c:"var(--seg-d)",n:"Segmento D"}];
     let DB = []; try { DB = JSON.parse(localStorage.getItem("mktDSS_G5") || "[]"); } catch(e){}
+    
+    let currentRoundStatus = "pending";
     let satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 };
     let charts = {};
 
     // ═══════════════════════════
-    // UTILS (Preserved)
+    // UTILS
     // ═══════════════════════════
     const $ = id => document.getElementById(id);
     const N = id => parseFloat($(id).value) || 0;
     const FMT = n => "$" + Math.round(n).toLocaleString("es-CO");
+    const FMT2 = n => "$" + n.toFixed(2);
     const showToast = (msg) => { let t = $("toast"); t.textContent = msg; t.className = "toast show"; setTimeout(()=>t.classList.remove("show"), 2800); }
     function toggleTheme() { const h = document.documentElement; h.setAttribute("data-theme", h.getAttribute("data-theme") === "dark" ? "light" : "dark"); if(charts.fin) renderDashboard(); }
     function switchTab(name, btn) {
@@ -299,8 +471,23 @@
     // UI BUILDERS
     // ═══════════════════════════
     function buildSatisfactionStars() {
-      let html = SEGS.map(s => `<div class="sat-row"><div style="font-weight:500;font-size:0.85rem;color:${s.c}">Grandes - Seg ${s.id}</div><div class="stars" id="starsL_${s.id}">${buildStars("L_"+s.id, satData["L_"+s.id])}</div></div>`).join("");
-      html += `<div class="sat-row"><div style="font-weight:500;font-size:0.85rem">Pequeños Clientes</div><div class="stars" id="starsS_ALL">${buildStars("S_ALL", satData["S_ALL"])}</div></div>`;
+      // Estrellas y comentarios POR SEGMENTO
+      let html = SEGS.map(s => `
+        <div class="sat-row">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:600;color:${s.c}">Grandes - ${s.n}</div>
+            <div class="stars" id="starsL_${s.id}">${buildStars("L_"+s.id, satData["L_"+s.id])}</div>
+          </div>
+          <textarea id="satCmt_L_${s.id}" class="sat-cmt-input" placeholder="Comentarios y feedback del ${s.n}..."></textarea>
+        </div>`).join("");
+      html += `
+        <div class="sat-row" style="border-bottom:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:600;">Pequeños Clientes</div>
+            <div class="stars" id="starsS_ALL">${buildStars("S_ALL", satData["S_ALL"])}</div>
+          </div>
+          <textarea id="satCmt_S_ALL" class="sat-cmt-input" placeholder="Comentarios y feedback de Pequeños Clientes..."></textarea>
+        </div>`;
       $("satStarsBody").innerHTML = html;
     }
     function buildStars(key, val) { return [1,2,3,4,5].map(n => `<span class="star${n<=val?" on":""}" onclick="setStar('${key}',${n})">★</span>`).join(""); }
@@ -308,57 +495,204 @@
 
     function buildHistoricalComments() {
       const currentPeriod = $("selYear").value + " " + $("selQ").value;
-      const list = DB.filter(d => d.period !== currentPeriod && d.satComments && d.satComments.trim() !== "");
-      $("satHistCommentsList").innerHTML = list.length ? list.map(d => `<div class="hist-comment-item"><div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div><div class="hc-text">${d.satComments.replace(/\n/g, '<br>')}</div></div>`).join("") : '<div style="color:var(--muted2); font-size:0.8rem; text-align:center;">Sin comentarios históricos</div>';
+      const pastRecords = DB.filter(d => d.period !== currentPeriod && d.satComments);
+      
+      let html = "";
+      if (pastRecords.length === 0) {
+        html = '<div style="color:var(--muted2); font-size:0.8rem; text-align:center;">Sin historial de comentarios anteriores</div>';
+      } else {
+        // Ordenamos del más reciente al más antiguo
+        [...pastRecords].reverse().forEach(d => {
+          let cmtBlocks = "";
+          // Revisamos cada segmento para ver si tiene comentarios en ese periodo
+          const keys = [
+            {k:"L_A", n:"Seg A"}, {k:"L_B", n:"Seg B"}, {k:"L_C", n:"Seg C"}, 
+            {k:"L_D", n:"Seg D"}, {k:"S_ALL", n:"Pequeños"}
+          ];
+          keys.forEach(obj => {
+            if(d.satComments[obj.k] && d.satComments[obj.k].trim() !== "") {
+              cmtBlocks += `
+                <div style="margin-bottom:0.5rem;">
+                  <span class="hc-seg-label">${obj.n}:</span> 
+                  <div class="hc-text">${d.satComments[obj.k].replace(/\n/g, '<br>')}</div>
+                </div>`;
+            }
+          });
+          
+          if(cmtBlocks !== "") {
+            html += `
+              <div class="hist-comment-item">
+                <div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div>
+                ${cmtBlocks}
+              </div>`;
+          }
+        });
+      }
+      $("satHistCommentsList").innerHTML = html;
+    }
+
+    function setRoundStatus(s) {
+      currentRoundStatus = s;
+      ["pending","current","done"].forEach(id => {
+        let btn = $("st" + id.charAt(0).toUpperCase() + id.slice(1));
+        if(id===s) btn.classList.add("active"); else btn.classList.remove("active");
+      });
+    }
+
+    // ═══════════════════════════
+    // CALCULATORS (DECISIONS)
+    // ═══════════════════════════
+    function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value||0) + d); calcAll(); }
+    
+    function calcSegments(changed) {
+      if(changed) {
+        let os=0; SEGS.forEach(s=>{if(s.id!==changed)os+=N('seg'+s.id)});
+        if(os+N('seg'+changed)>100) $('seg'+changed).value = Math.max(0,100-os);
+      }
+      SEGS.forEach(s => $("bar"+s.id).style.width = Math.min(N('seg'+s.id), 100)+"%");
+    }
+
+    function calcPrices() {
+      const lp = N("listPrice");
+      SEGS.forEach(s => $("net"+s.id).textContent = FMT2(lp*(1-(N("disc"+s.id)/100))));
+      $("smallListDisplay").textContent = lp.toFixed(0);
+      calcSmall();
+    }
+
+    function calcSmall() {
+      const dp = N("listPrice") * (1 - (N("distDisc")/100));
+      const m = dp * DIST_MARGIN; const p = dp * DIST_PASS;
+      $("distPrice").textContent = FMT2(dp); $("distMarginAmt").textContent = FMT2(m);
+      $("distPassAmt").textContent = FMT2(p); $("smallNetPrice").textContent = FMT2(dp+m+p);
+    }
+
+    function calcAll() {
+      calcSegments(); calcPrices();
+      const n = parseInt($("numSP").value||0);
+      $("spTotal").textContent = FMT(n * COST_PER_SP);
+      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
+      
+      const sales = n * COST_PER_SP;
+      const mkt = N("imc")+N("research")+N("social")+N("directComm");
+      const prod = N("battery")+N("mfgEff")+N("sensorSize")+N("latency");
+      const used = sales + mkt + prod;
+      const budget = N("totalBudget");
+      const remain = budget - used;
+      const pct = budget>0 ? Math.min((used/budget)*100, 100) : 0;
+      
+      $("usedLbl").textContent = FMT(used); $("remainLbl").textContent = FMT(remain);
+      $("usedLbl").className = "bsi-val " + (used>budget?"over":"ok");
+      $("remainLbl").className = "bsi-val " + (remain<0?"over":pct>94?"warn":"ok");
+      
+      $("bBar").style.width = pct+"%";
+      $("bBar").style.background = used>budget?"var(--danger)":pct>90?"var(--warn)":"var(--text)";
+      $("pctLblBar").textContent = Math.round(pct)+"%";
+      $("remainLblBar").textContent = FMT(remain)+" restante";
     }
 
     // ═══════════════════════════
     // DATA MANAGEMENT
     // ═══════════════════════════
     function gatherData() {
+      const sp = parseInt($("numSP").value||0);
+      
+      // Capturar comentarios por segmento
+      const satComments = {
+        L_A: $("satCmt_L_A").value, L_B: $("satCmt_L_B").value, 
+        L_C: $("satCmt_L_C").value, L_D: $("satCmt_L_D").value, 
+        S_ALL: $("satCmt_S_ALL").value
+      };
+
       return {
         id: Date.now(), period: $("selYear").value + " " + $("selQ").value, name: $("decisionName").value.trim(),
+        
+        // Decisiones
+        budget: N("totalBudget"), numSP: sp, salesB: sp*COST_PER_SP,
+        segA:N("segA"), segB:N("segB"), segC:N("segC"), segD:N("segD"),
+        listPrice:N("listPrice"), discA:N("discA"), discB:N("discB"), discC:N("discC"), discD:N("discD"), distDisc:N("distDisc"),
+        imc:N("imc"), research:N("research"), social:N("social"), directComm:N("directComm"),
+        battery:N("battery"), mfgEff:N("mfgEff"), sensorSize:N("sensorSize"), latency:N("latency"),
+        notes: $("notes").value,
+
+        // Análisis
         revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
         msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
-        sat: JSON.parse(JSON.stringify(satData)), satComments: $("satComments").value,
-        marketNews: $("marketNews").value, rndObj: $("rndObj").value
+        sat: JSON.parse(JSON.stringify(satData)), satComments: satComments,
+        
+        // Rondas y Noticias
+        roundStatus: currentRoundStatus, rndObj: $("rndObj").value, rndRes: $("rndRes").value,
+        marketNews: $("marketNews").value
       };
     }
 
     function saveData() {
-      const d = gatherData(); DB.push(d);
+      const d = gatherData(); 
+      // Si ya existe el periodo, lo reemplazamos
+      DB = DB.filter(x => x.period !== d.period);
+      DB.push(d);
+      
+      // Ordenar por Periodo (Y1 Q1, Y1 Q2...)
+      DB.sort((a,b) => a.period.localeCompare(b.period));
+      
       localStorage.setItem("mktDSS_G5", JSON.stringify(DB));
-      buildHistoricalComments(); showToast("Período Guardado");
+      buildHistoricalComments(); showToast("Período Guardado Exitosamente");
     }
 
     function loadPeriodData() {
       const pid = $("selYear").value + " " + $("selQ").value;
-      const d = [...DB].reverse().find(x => x.period === pid);
+      const d = DB.find(x => x.period === pid);
       if(!d) {
-        $("decisionName").value=""; $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
+        // Limpiar para nuevo periodo
+        $("decisionName").value=""; $("notes").value="";
+        $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
         $("msL_A").value=0; $("msL_B").value=0; $("msL_C").value=0; $("msL_D").value=0; $("msS").value=0;
-        satData={L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); $("satComments").value="";
-        $("marketNews").value=""; $("rndObj").value="";
+        
+        satData={L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
+        
+        setRoundStatus("pending"); $("rndObj").value=""; $("rndRes").value="";
+        $("marketNews").value="";
+        calcAll();
         showToast("Período Nuevo");
       } else {
-        $("decisionName").value=d.name||""; $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
+        // Cargar datos existentes
+        $("decisionName").value=d.name||""; $("notes").value=d.notes||"";
+        
+        $("totalBudget").value=d.budget||800000; $("numSP").value=d.numSP||11;
+        $("segA").value=d.segA; $("segB").value=d.segB; $("segC").value=d.segC; $("segD").value=d.segD;
+        $("listPrice").value=d.listPrice; $("discA").value=d.discA; $("discB").value=d.discB; $("discC").value=d.discC; $("discD").value=d.discD; $("distDisc").value=d.distDisc;
+        $("imc").value=d.imc; $("research").value=d.research; $("social").value=d.social; $("directComm").value=d.directComm;
+        $("battery").value=d.battery; $("mfgEff").value=d.mfgEff; $("sensorSize").value=d.sensorSize; $("latency").value=d.latency;
+
+        $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
         $("msL_A").value=d.msL_A||0; $("msL_B").value=d.msL_B||0; $("msL_C").value=d.msL_C||0; $("msL_D").value=d.msL_D||0; $("msS").value=d.msS||0;
-        satData=d.sat||{L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); $("satComments").value=d.satComments||"";
-        $("marketNews").value=d.marketNews||""; $("rndObj").value=d.rndObj||"";
+        
+        satData=d.sat||{L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); 
+        
+        // Cargar comentarios en los textareas generados por buildSatisfactionStars
+        if(d.satComments) {
+          $("satCmt_L_A").value = d.satComments.L_A || "";
+          $("satCmt_L_B").value = d.satComments.L_B || "";
+          $("satCmt_L_C").value = d.satComments.L_C || "";
+          $("satCmt_L_D").value = d.satComments.L_D || "";
+          $("satCmt_S_ALL").value = d.satComments.S_ALL || "";
+        }
+
+        setRoundStatus(d.roundStatus||"pending"); $("rndObj").value=d.rndObj||""; $("rndRes").value=d.rndRes||"";
+        $("marketNews").value=d.marketNews||"";
+        calcAll();
         showToast("Datos Cargados");
       }
       buildHistoricalComments();
     }
 
     // ═══════════════════════════
-    // DASHBOARD & CHARTS
+    // DASHBOARD & CHARTS (ALL EVOLUTIONARY)
     // ═══════════════════════════
     function getDashboardData() {
-      let map=new Map(); DB.forEach(d=>map.set(d.period, d));
-      let sortedKeys=Array.from(map.keys()).sort();
+      // Usamos todo el DB (que ya debe estar ordenado por YQ)
       let res=[]; let accProfit=0;
-      for(let k of sortedKeys) {
-        let d=map.get(k); let rev=(d.revL||0)+(d.revS||0); let prof=d.profit||0; accProfit+=prof;
+      for(let d of DB) {
+        let rev=(d.revL||0)+(d.revS||0); let prof=d.profit||0; accProfit+=prof;
         let sArr=Object.values(d.sat||{}); let avgSat=sArr.length ? sArr.reduce((a,b)=>a+b,0)/sArr.length : 0;
         res.push({ period:d.period, rev, profit:prof, accProfit, unitsTotal:(d.unitsL||0)+(d.unitsS||0), unitsL:d.unitsL||0, unitsS:d.unitsS||0, msL_A:d.msL_A||0, msL_B:d.msL_B||0, msL_C:d.msL_C||0, msL_D:d.msL_D||0, msS:d.msS||0, avgSat });
       }
@@ -366,45 +700,117 @@
     }
 
     function renderDashboard() {
-      const data=getDashboardData(); if(!data.length) return;
+      const data=getDashboardData(); 
+      if(!data.length) return; // Si no hay datos guardados, no dibuja nada.
+      
       const last=data[data.length-1];
       $("kpiRev").textContent=FMT(last.rev); $("kpiProfit").textContent=FMT(last.profit); $("kpiUnits").textContent=last.unitsTotal.toLocaleString(); $("kpiAccProfit").textContent=FMT(last.accProfit); $("kpiSat").textContent=last.avgSat.toFixed(1)+" ★";
 
-      const labels=data.map(x=>x.period); const isDark=document.documentElement.getAttribute("data-theme")==="dark";
+      const labels=data.map(x=>x.period); 
+      const isDark=document.documentElement.getAttribute("data-theme")==="dark";
       const tc=isDark?"#e2e2e4":"#0f172a"; const gridC=isDark?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.05)";
+      
       Chart.defaults.color=isDark?"#8b8b99":"#64748b"; Chart.defaults.font.family="'Inter', sans-serif";
       const commonOps={responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}},plugins:{legend:{labels:{color:tc}}}};
 
-      if(charts.fin) charts.fin.destroy(); charts.fin=new Chart($("chartFin"), { type:'bar', data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb' }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981' }]}, options:commonOps });
-      if(charts.msL) charts.msL.destroy(); charts.msL=new Chart($("chartMSL"), { type:'line', data:{ labels, datasets:[{ label:'Seg A', data:data.map(x=>x.msL_A), borderColor:SEGS[0].c }, { label:'Seg B', data:data.map(x=>x.msL_B), borderColor:SEGS[1].c }, { label:'Seg C', data:data.map(x=>x.msL_C), borderColor:SEGS[2].c }, { label:'Seg D', data:data.map(x=>x.msL_D), borderColor:SEGS[3].c }]}, options:commonOps });
-      if(charts.unitsSep) charts.unitsSep.destroy(); charts.unitsSep=new Chart($("chartUnitsSep"), { type:'bar', data:{ labels, datasets:[{ label:'Grandes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840' }, { label:'Pequeños', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096' }]}, options:{...commonOps, scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}, ...commonOps.scales, y:{...commonOps.scales.y, stacked:true}}, plugins:{legend:{labels:{color:tc}}, stacked:true}} });
-      if(charts.sat) charts.sat.destroy(); charts.sat=new Chart($("chartSat"), { type:'line', data:{ labels, datasets:[{ label:'Sat Promedio', data:data.map(x=>x.avgSat), borderColor:'#f59e0b' }]}, options:{...commonOps, scales:{y:{min:0,max:5,grid:{color:gridC}}}} });
+      // 1. Chart Finanzas Histórica
+      if(charts.fin) charts.fin.destroy(); 
+      charts.fin=new Chart($("chartFin"), { 
+        type:'bar', 
+        data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb' }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981' }]}, 
+        options:commonOps 
+      });
+      
+      // 2. Chart Evolución Cuota de Mercado (Todos los segmentos en líneas)
+      if(charts.msL) charts.msL.destroy(); 
+      charts.msL=new Chart($("chartMSL"), { 
+        type:'line', 
+        data:{ labels, datasets:[
+          { label:'Seg A', data:data.map(x=>x.msL_A), borderColor:SEGS[0].c, tension:0.3 }, 
+          { label:'Seg B', data:data.map(x=>x.msL_B), borderColor:SEGS[1].c, tension:0.3 }, 
+          { label:'Seg C', data:data.map(x=>x.msL_C), borderColor:SEGS[2].c, tension:0.3 }, 
+          { label:'Seg D', data:data.map(x=>x.msL_D), borderColor:SEGS[3].c, tension:0.3 },
+          { label:'Pequeños', data:data.map(x=>x.msS), borderColor:'#8b8b99', borderDash:[5,5], tension:0.3 }
+        ]}, 
+        options:commonOps 
+      });
+      
+      // 3. Chart Evolución Ventas Unitarias
+      if(charts.unitsSep) charts.unitsSep.destroy(); 
+      charts.unitsSep=new Chart($("chartUnitsSep"), { 
+        type:'bar', 
+        data:{ labels, datasets:[{ label:'Grandes Clientes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840' }, { label:'Pequeños Clientes', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096' }]}, 
+        options:{...commonOps, scales:{x:{grid:{color:gridC}, stacked:true},y:{grid:{color:gridC}, stacked:true}}, plugins:{legend:{labels:{color:tc}}, tooltip:{mode:'index'}}} 
+      });
+      
+      // 4. Chart Evolución Satisfacción
+      if(charts.sat) charts.sat.destroy(); 
+      charts.sat=new Chart($("chartSat"), { 
+        type:'line', 
+        data:{ labels, datasets:[{ label:'Sat Promedio', data:data.map(x=>x.avgSat), borderColor:'#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.2)', fill:true, tension: 0.3 }]}, 
+        options:{...commonOps, scales:{y:{min:0,max:5,grid:{color:gridC}}}} 
+      });
     }
 
     // ═══════════════════════════
     // EXPORTS
     // ═══════════════════════════
     function exportExcel() {
-      if(!DB.length){ showToast("No hay datos"); return;}
+      if(!DB.length){ showToast("No hay datos guardados"); return;}
       const wb=XLSX.utils.book_new();
-      const h=["Período","Nombre","IngGrandes","IngPequeños","Beneficio","UnitsG","UnitsP","MSL_A","MSL_B","MSL_C","MSL_D","MS_S","Comments","News"];
-      const ws=XLSX.utils.aoa_to_sheet([h,...DB.map(d=>[d.period,d.name,d.revL,d.revS,d.profit,d.unitsL,d.unitsS,d.msL_A,d.msL_B,d.msL_C,d.msL_D,d.msS,d.satComments,d.marketNews])]);
-      XLSX.utils.book_append_sheet(wb, ws, "Sim DSS G5");
-      XLSX.writeFile(wb, "Simulacion_G5.xlsx");
+      const h=["Período","Nombre","Presupuesto","IngGrandes","IngPequeños","Beneficio","UnitsG","UnitsP","MS_A","MS_B","MS_C","MS_D","MS_S", "Cmt_A", "Cmt_B", "Cmt_C", "Cmt_D", "Cmt_S", "Notas","RndObj","RndRes","Noticias"];
+      const ws=XLSX.utils.aoa_to_sheet([h,...DB.map(d=>[
+        d.period,d.name,d.budget,d.revL,d.revS,d.profit,d.unitsL,d.unitsS,
+        d.msL_A,d.msL_B,d.msL_C,d.msL_D,d.msS,
+        d.satComments?.L_A, d.satComments?.L_B, d.satComments?.L_C, d.satComments?.L_D, d.satComments?.S_ALL,
+        d.notes, d.rndObj, d.rndRes, d.marketNews
+      ])]);
+      XLSX.utils.book_append_sheet(wb, ws, "Sim_DSS_G5");
+      XLSX.writeFile(wb, "Simulacion_Mkt_G5.xlsx");
     }
 
     function exportPDF() {
       const d=gatherData(); const {jsPDF}=window.jspdf;
       const doc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
       doc.setFillColor(15,23,42); doc.rect(0,0,297,16,"F");
-      doc.setFont("helvetica","bold").setFontSize(10).setTextColor(255).text("G5 Simulador - "+d.period, 10, 10);
+      doc.setFont("helvetica","bold").setFontSize(10).setTextColor(255).text("DSS Grupo 5 - "+d.period, 10, 10);
+      
       let y=26; doc.setFontSize(8).setTextColor(0);
-      doc.text("Resultados Financieros:", 10, y); y+=5; doc.text(`Ingresos: ${FMT(d.revL+d.revS)} (G:${FMT(d.revL)}/P:${FMT(d.revS)})`, 15, y); y+=5; doc.text(`Beneficio: ${FMT(d.profit)}`, 15, y); y+=10;
-      doc.text("Ventas Unitarias:", 10, y); y+=5; doc.text(`Grandes: ${d.unitsL} uds`, 15, y); y+=5; doc.text(`Pequeños: ${d.unitsS} uds`, 15, y); y+=10;
-      doc.text("Cuota de Mercado Grandes:", 10, y); y+=5; doc.text(`Seg A: ${d.msL_A}%`, 15, y); y+=5; doc.text(`Seg B: ${d.msL_B}%`, 15, y); y+=5; doc.text(`Seg C: ${d.msL_C}%`, 15, y); y+=5; doc.text(`Seg D: ${d.msL_D}%`, 15, y); y+=10;
-      doc.text(`Cuota Mercado Pequeños: ${d.msS}%`, 10, y); y+=10;
-      if(d.satComments) { doc.text("Comentarios Satisfacción:", 10, y); y+=5; doc.text(doc.splitTextToSize(d.satComments, 270), 15, y); y+=20; }
-      if(d.marketNews) { doc.addPage(); doc.text("Noticias del Mercado:", 10, 26); doc.text(doc.splitTextToSize(d.marketNews, 270), 15, 31); }
+      
+      // Finanzas y Units
+      doc.setFont("helvetica","bold"); doc.text("Resultados Financieros y Unidades:", 10, y); y+=5; 
+      doc.setFont("helvetica","normal");
+      doc.text(`Ingresos Totales: ${FMT(d.revL+d.revS)} (Grandes: ${FMT(d.revL)} | Pequeños: ${FMT(d.revS)})`, 15, y); y+=5; 
+      doc.text(`Beneficio Neto: ${FMT(d.profit)}`, 15, y); y+=5;
+      doc.text(`Ventas Unitarias: Grandes ${d.unitsL} uds | Pequeños ${d.unitsS} uds`, 15, y); y+=10;
+      
+      // Cuota Mercado
+      doc.setFont("helvetica","bold"); doc.text("Cuota de Mercado (%):", 10, y); y+=5; 
+      doc.setFont("helvetica","normal");
+      doc.text(`A: ${d.msL_A}% | B: ${d.msL_B}% | C: ${d.msL_C}% | D: ${d.msL_D}% | Pequeños: ${d.msS}%`, 15, y); y+=10;
+      
+      // Comentarios de Satisfaccion
+      doc.setFont("helvetica","bold"); doc.text("Feedback y Satisfacción:", 10, y); y+=5; 
+      doc.setFont("helvetica","normal");
+      if(d.satComments) {
+        if(d.satComments.L_A) { doc.text("Seg A: " + d.satComments.L_A, 15, y); y+=5; }
+        if(d.satComments.L_B) { doc.text("Seg B: " + d.satComments.L_B, 15, y); y+=5; }
+        if(d.satComments.L_C) { doc.text("Seg C: " + d.satComments.L_C, 15, y); y+=5; }
+        if(d.satComments.L_D) { doc.text("Seg D: " + d.satComments.L_D, 15, y); y+=5; }
+        if(d.satComments.S_ALL) { doc.text("Pequeños: " + d.satComments.S_ALL, 15, y); y+=5; }
+      }
+      y+=5;
+      
+      // Textos largos (Notas, Rondas, Noticias)
+      if(d.notes) { doc.setFont("helvetica","bold"); doc.text("Notas/Estrategia:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.notes, 270), 15, y); y+=15; }
+      
+      if(y > 170) { doc.addPage(); y=20; }
+      if(d.rndObj) { doc.setFont("helvetica","bold"); doc.text("Objetivos Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndObj, 270), 15, y); y+=15; }
+      if(d.rndRes) { doc.setFont("helvetica","bold"); doc.text("Resultados Ronda:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.rndRes, 270), 15, y); y+=15; }
+      
+      if(y > 150 && d.marketNews) { doc.addPage(); y=20; }
+      if(d.marketNews) { doc.setFont("helvetica","bold"); doc.text("Noticias del Mercado:", 10, y); y+=5; doc.setFont("helvetica","normal"); doc.text(doc.splitTextToSize(d.marketNews, 270), 15, y); }
+      
       doc.save("DSS-G5-"+d.period+".pdf");
     }
 
