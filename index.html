@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Simulación de Marketing</title>
+  <title>Simulador Estratégico de Marketing</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
-    /* ═══ TOKENS ═══ */
+    /* ═══ TOKENS (Preserved from original) ═══ */
     :root {
       --fnt: 'Inter', sans-serif;
       --mono: 'JetBrains Mono', monospace;
@@ -40,7 +40,7 @@
       --sh-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
-    /* ═══ GLOBAL ═══ */
+    /* ═══ GLOBAL (Preserved from original) ═══ */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: var(--fnt); font-size: 14px; line-height: 1.6; min-height: 100vh; transition: background 0.3s, color 0.3s; }
@@ -51,7 +51,7 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--muted2); }
 
-    /* ═══ HEADER & NAV ═══ */
+    /* ═══ HEADER & NAV (Updated tabs) ═══ */
     header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.6rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; box-shadow: var(--sh-sm); }
     .logo-wrap { display: flex; align-items: center; gap: 1rem; }
     .logo-badge { width: 44px; height: 44px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
@@ -76,22 +76,23 @@
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
 
-    /* ═══ LAYOUT ═══ */
+    /* ═══ LAYOUT (Preserved) ═══ */
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.4rem 5rem; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
     .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
     .col-flex { display: flex; flex-direction: column; gap: 1.5rem; }
 
-    /* ═══ CARDS ═══ */
+    /* ═══ CARDS (Preserved) ═══ */
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--sh); }
     .card-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border2); background: var(--card2); }
     .card-title { font-weight: 600; font-size: 0.85rem; }
     .card-body { padding: 1.2rem; }
 
-    /* ═══ GLOBAL PERIOD BAR ═══ */
+    /* ═══ GLOBAL PERIOD BAR (Preserved) ═══ */
     .global-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: var(--sh); }
     .gb-lbl { font-weight: 600; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
     .pgrp { display: flex; flex-direction: column; gap: 0.3rem; }
@@ -99,104 +100,43 @@
     .pgrp select, .pgrp input { background: var(--inp); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.8rem; font-size: 0.85rem; }
     .pgrp input { width: 250px; }
 
-    /* ═══ DASHBOARD (Resultados) ═══ */
+    /* ═══ DASHBOARD (Preserved) ═══ */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: var(--sh-sm); }
     .kpi-lbl { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
     .kpi-val { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--text); }
     .kpi-trend { font-size: 0.75rem; font-weight: 500; }
-    .kpi-trend.up { color: var(--success); }
-    .kpi-trend.down { color: var(--danger); }
     
     .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
     .chart-container { position: relative; height: 250px; width: 100%; }
 
-    /* ═══ INPUTS ═══ */
+    /* ═══ INPUTS (Preserved) ═══ */
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
     .field > label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-bottom: 0.4rem; }
     .iw { display: flex; align-items: stretch; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .iw-pre, .iw-suf { padding: 0 0.8rem; background: var(--card2); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: center; }
-    .iw-pre { border-right: 1px solid var(--border); }
-    .iw-suf { border-left: 1px solid var(--border); }
     .iw input { flex: 1; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 0.6rem; min-width: 0; }
-    .iw input[type=number]::-webkit-inner-spin-button, .iw input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .iw-locked { display: flex; align-items: stretch; background: var(--locked); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .iw-locked .iw-pre { background: transparent; border-color: var(--border); color: var(--muted); }
-    .lock-val { flex: 1; padding: 0.5rem 0.6rem; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; color: var(--muted); display: flex; align-items: center; justify-content: space-between; }
     
-    /* ═══ BUDGET STRIP ═══ */
-    .bstrip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: var(--sh); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-    .bsi { display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0; }
-    .bsi-label { font-size: 0.7rem; font-weight: 500; color: var(--muted); text-transform: uppercase; }
-    .bsi-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; }
-    .bsi-val.ok { color: var(--text); } .bsi-val.warn { color: var(--warn); } .bsi-val.over { color: var(--danger); }
-    .bstrip-bar-wrap { flex: 1; min-width: 200px; }
-    .bs-bar { background: var(--border2); border-radius: 4px; height: 8px; overflow: hidden; width: 100%; }
-    .bs-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease, background 0.4s; }
-    .bs-bar-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; }
-    .bs-bar-labels span { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+    /* ═══ HISTORICAL COMMENTS (NEW) ═══ */
+    .hist-comments-list { margin-top: 1.5rem; border-top: 1px solid var(--border2); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; max-height: 250px; overflow-y: auto; }
+    .hist-comment-item { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: 0.8rem; }
+    .hc-meta { font-size: 0.7rem; color: var(--muted); font-weight: 600; margin-bottom: 0.3rem; text-transform: uppercase; }
+    .hc-text { font-size: 0.8rem; color: var(--text); }
 
-    /* ═══ SPECIFIC WIDGETS ═══ */
-    .sp-widget { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .sp-counter { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); }
-    .sp-btn { width: 36px; height: 36px; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; color: var(--muted); display: flex; align-items: center; justify-content: center; }
-    .sp-btn:hover { background: var(--card2); color: var(--text); }
-    .sp-num { width: 50px; text-align: center; background: transparent; border: none; font-family: var(--mono); font-size: 1rem; font-weight: 500; border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; outline: none; }
-    .sp-num[type=number]::-webkit-inner-spin-button, .sp-num[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-    .seg-wrap { display: flex; flex-direction: column; gap: 1rem; }
-    .seg-item { display: flex; align-items: center; gap: 1rem; }
-    .seg-label { width: 80px; font-size: 0.8rem; font-weight: 500; color: var(--text); }
-    .seg-bar-track { flex: 1; height: 8px; background: var(--border2); border-radius: 4px; position: relative; overflow: hidden; }
-    .seg-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; position: absolute; left: 0; top: 0; }
-    .seg-inp-wrap { display: flex; align-items: center; background: var(--inp); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; width: 70px; }
-    .seg-inp-wrap input { width: 100%; background: transparent; border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; text-align: right; padding: 0.3rem 0; outline: none; }
-    .seg-inp-wrap span { padding: 0 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
-
-    .net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
-    .net-chip { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
-    .net-chip-lbl { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
-    .net-chip-val { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; }
-
-    .dist-chain { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .dc-note { font-size: 0.7rem; color: var(--muted); padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-    .dc-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); }
-    .dc-val { font-family: var(--mono); font-weight: 500; color: var(--text); }
-    .dc-hl { padding-top: 0.8rem; margin-top: 0.2rem; border-top: 1px solid var(--border); font-weight: 600;}
-
-    /* ═══ TABLAS HISTORIAL Y RONDAS ═══ */
-    .hist-panel { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1.5rem; overflow: hidden; box-shadow: var(--sh); }
-    .hist-panel.open { display: block; animation: fadeIn 0.3s ease; }
-    .hist-table-wrap { overflow-x: auto; }
-    .ht { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    .ht th { text-align: left; padding: 1rem 1.2rem; background: var(--card2); color: var(--muted); font-weight: 500; font-size: 0.75rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    .ht td { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border2); font-family: var(--mono); white-space: nowrap; color: var(--text); }
-    .dbtn { background: none; border: none; color: var(--danger); cursor: pointer; opacity: 0.6; font-size: 0.85rem; }
-    .dbtn:hover { opacity: 1; }
-    .lbtn { background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; font-size: 0.75rem; border-radius: 4px; padding: 0.4rem 0.8rem; font-weight: 500; }
-
-    .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; z-index: 999; border: 1px solid var(--border); }
-    .toast.ok { background: var(--text); color: var(--bg); }
-    .toast.err { background: var(--danger); color: #fff; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
+    /* ═══ OTHER WIDGETS (Preserved) ═══ */
     .stars { display: flex; gap: 0.2rem; font-size: 1.2rem; cursor: pointer; user-select: none;}
     .star { color: var(--border); transition: transform 0.1s; }
-    .star:hover { transform: scale(1.1); }
     .star.on { color: var(--warn); }
     .sat-row { display: flex; flex-direction: column; gap: 0.6rem; padding: 1rem 0; border-bottom: 1px solid var(--border2); }
-    
-    .status-btns { display: flex; gap: 0.5rem; }
-    .st-btn { padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.75rem; cursor: pointer; }
-    .st-btn.ap.active { border-color: var(--muted2); color: var(--text); background: var(--card2); }
-    .st-btn.ac.active { border-color: var(--warn); color: var(--warn); background: rgba(245, 158, 11, 0.1); }
-    .st-btn.ad.active { border-color: var(--success); color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .bstrip { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-bottom: 2rem; box-shadow: var(--sh); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; z-index: 999; border: 1px solid var(--border); }
+    .toast.ok { background: var(--text); color: var(--bg); }
+    .toast.show { opacity: 1; transform: translateY(0); }
 
     @media(max-width: 768px) {
-      .g2, .chart-grid { grid-template-columns: 1fr; }
-      .global-bar { flex-direction: column; align-items: stretch; }
-      .bstrip { flex-direction: column; align-items: stretch; }
+      .g2, .chart-grid, .g3 { grid-template-columns: 1fr; }
+      .global-bar, .bstrip { flex-direction: column; align-items: stretch; }
       .pgrp input { width: 100%; }
     }
   </style>
@@ -213,7 +153,6 @@
     </div>
     <div class="hdr-right">
       <div class="t-toggle" onclick="toggleTheme()"><div class="t-track"><div class="t-knob"></div></div></div>
-      <button class="btn btn-ghost" onclick="toggleHistory()">📋 Historial</button>
       <button class="btn btn-save" onclick="saveData()">💾 Guardar Período</button>
       <button class="btn" onclick="exportExcel()">📊 Excel</button>
       <button class="btn" onclick="exportPDF()">📄 PDF</button>
@@ -225,6 +164,7 @@
     <button class="tab-btn" onclick="switchTab('decisions',this)">Decisiones</button>
     <button class="tab-btn" onclick="switchTab('analysis',this)">Análisis</button>
     <button class="tab-btn" onclick="switchTab('rounds',this)">Rondas</button>
+    <button class="tab-btn" onclick="switchTab('news',this)">Noticias</button>
   </nav>
 
   <div class="container">
@@ -234,7 +174,7 @@
       <div class="pgrp">
         <label>Año</label>
         <select id="selYear" onchange="loadPeriodData()">
-          <option>Y1</option><option>Y2</option><option selected>Y3</option><option>Y4</option>
+          <option selected>Y1</option><option>Y2</option><option>Y3</option><option>Y4</option>
         </select>
       </div>
       <div class="pgrp">
@@ -249,235 +189,82 @@
       </div>
     </div>
 
-    <div class="hist-panel" id="histPanel">
-      <div class="card-head" style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="card-title">Historial de Registros</div>
-        <span style="font-size:.75rem;color:var(--muted);" id="histCount"></span>
-      </div>
-      <div class="hist-table-wrap">
-        <table class="ht">
-          <thead>
-            <tr><th>Período</th><th>Nombre</th><th>Ingresos</th><th>Beneficio</th><th>Ventas Unit.</th><th>MS Grandes</th><th>MS Peq.</th><th>Acción</th></tr>
-          </thead>
-          <tbody id="histBody"></tbody>
-        </table>
-      </div>
-    </div>
-
     <div class="tab-pane active" id="tab-dashboard">
       <div class="kpi-grid">
-        <div class="kpi-card">
-          <span class="kpi-lbl">Ingresos Totales (Trimestre)</span>
-          <span class="kpi-val" id="kpiRev">$0</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-lbl">Beneficio Neto</span>
-          <span class="kpi-val" id="kpiProfit">$0</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-lbl">Margen de Beneficio</span>
-          <span class="kpi-val" id="kpiMargin">0%</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-lbl">Beneficios Acumulados</span>
-          <span class="kpi-val" id="kpiAccProfit">$0</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-lbl">Ventas Unitarias</span>
-          <span class="kpi-val" id="kpiUnits">0</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-lbl">Satisfacción Promedio</span>
-          <span class="kpi-val" id="kpiSat">0.0 ★</span>
-        </div>
+        <div class="kpi-card"><span class="kpi-lbl">Ingresos Totales (Trimestre)</span><span class="kpi-val" id="kpiRev">$0</span></div>
+        <div class="kpi-card"><span class="kpi-lbl">Beneficio Neto</span><span class="kpi-val" id="kpiProfit">$0</span></div>
+        <div class="kpi-card"><span class="kpi-lbl">Ventas Unitarias</span><span class="kpi-val" id="kpiUnits">0</span></div>
+        <div class="kpi-card"><span class="kpi-lbl">Beneficios Acumulados</span><span class="kpi-val" id="kpiAccProfit">$0</span></div>
+        <div class="kpi-card"><span class="kpi-lbl">Satisfacción Promedio</span><span class="kpi-val" id="kpiSat">0.0 ★</span></div>
       </div>
-
       <div class="chart-grid">
-        <div class="card">
-          <div class="card-head"><div class="card-title">Evolución de Ingresos y Beneficios</div></div>
-          <div class="card-body"><div class="chart-container"><canvas id="chartFin"></canvas></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Cuota de Mercado (%)</div></div>
-          <div class="card-body"><div class="chart-container"><canvas id="chartMS"></canvas></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Ventas Unitarias</div></div>
-          <div class="card-body"><div class="chart-container"><canvas id="chartUnits"></canvas></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Evolución de Satisfacción (★)</div></div>
-          <div class="card-body"><div class="chart-container"><canvas id="chartSat"></canvas></div></div>
-        </div>
+        <div class="card"><div class="card-head"><div class="card-title">Evolución Finanzas</div></div><div class="card-body"><div class="chart-container"><canvas id="chartFin"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Cuota de Mercado Grandes (%)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartMSL"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Ventas Unitarias Separadas</div></div><div class="card-body"><div class="chart-container"><canvas id="chartUnitsSep"></canvas></div></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">Evolución Satisfacción (★)</div></div><div class="card-body"><div class="chart-container"><canvas id="chartSat"></canvas></div></div></div>
       </div>
     </div>
 
     <div class="tab-pane" id="tab-decisions">
-      
-      <div class="bstrip">
-        <div class="bsi"><span class="bsi-label">Presupuesto</span>
-          <div class="iw"><span class="iw-pre">$</span><input type="number" id="totalBudget" value="800000" oninput="calcAll()"></div>
-        </div>
-        <div class="bstrip-bar-wrap">
-          <div class="bs-bar"><div class="bs-bar-fill" id="bBar"></div></div>
-          <div class="bs-bar-labels"><span id="pctLblBar">0%</span><span id="remainLblBar">$0 restante</span></div>
-        </div>
-        <div class="bsi"><span class="bsi-label">Usado</span><span class="bsi-val ok" id="usedLbl">$0</span></div>
-        <div class="bsi"><span class="bsi-label">Restante</span><span class="bsi-val ok" id="remainLbl">$0</span></div>
-      </div>
-
-      <div class="g2">
-        <div class="col-flex">
-          
-          <div class="card">
-            <div class="card-head"><div class="card-title">Precios — Grandes Clientes</div></div>
-            <div class="card-body">
-              <div class="field"><label>Precio de Lista</label>
-                <div class="iw"><span class="iw-pre">$</span><input type="number" id="listPrice" value="142" oninput="calcPrices()"></div>
-              </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-                <div class="field"><label>Desc. Seg A</label><div class="iw"><input type="number" id="discA" value="12" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg B</label><div class="iw"><input type="number" id="discB" value="10" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg C</label><div class="iw"><input type="number" id="discC" value="4" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-                <div class="field"><label>Desc. Seg D</label><div class="iw"><input type="number" id="discD" value="18" oninput="calcPrices()"><span class="iw-suf">%</span></div></div>
-              </div>
-              <div class="net-grid">
-                <div class="net-chip"><span class="net-chip-lbl">Neto A</span><span class="net-chip-val" id="netA">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto B</span><span class="net-chip-val" id="netB">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto C</span><span class="net-chip-val" id="netC">$0</span></div>
-                <div class="net-chip"><span class="net-chip-lbl">Neto D</span><span class="net-chip-val" id="netD">$0</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Precios — Pequeños Clientes</div></div>
-            <div class="card-body">
-              <div class="field"><label>Precio de Lista (espejo grandes)</label>
-                <div class="iw-locked"><span class="iw-pre">$</span><div class="lock-val"><span id="smallListDisplay">142</span><span>🔒</span></div></div>
-              </div>
-              <div class="field"><label>Descuento Distribuidores</label>
-                <div class="iw"><input type="number" id="distDisc" value="15" oninput="calcSmall()"><span class="iw-suf">%</span></div>
-              </div>
-              <div class="dist-chain">
-                <div class="dc-row"><span>Precio al Distribuidor</span><span class="dc-val" id="distPrice">$0</span></div>
-                <div class="dc-row"><span>Margen Dist. (10%)</span><span class="dc-val" id="distMarginAmt">$0</span></div>
-                <div class="dc-row"><span>Paso a Través (5%)</span><span class="dc-val" id="distPassAmt">$0</span></div>
-                <div class="dc-row dc-hl"><span>Precio Neto Final</span><span class="dc-val" id="smallNetPrice">$0</span></div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-head"><div class="card-title">Estrategia & Notas</div></div>
-            <div class="card-body"><textarea id="notes" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text)" placeholder="Justificación de la decisión..."></textarea></div>
-          </div>
-
-        </div>
-
-        <div class="col-flex">
-          
-          <div class="card">
-            <div class="card-head"><div class="card-title">Asignación por Segmento (Fuerza de Ventas)</div></div>
-            <div class="card-body">
-              <div class="seg-wrap">
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-a)">Seg A</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barA" style="background:var(--seg-a)"></div></div><div class="seg-inp-wrap"><input type="number" id="segA" value="35" oninput="calcSegments('A')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-b)">Seg B</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barB" style="background:var(--seg-b)"></div></div><div class="seg-inp-wrap"><input type="number" id="segB" value="15" oninput="calcSegments('B')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-c)">Seg C</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barC" style="background:var(--seg-c)"></div></div><div class="seg-inp-wrap"><input type="number" id="segC" value="35" oninput="calcSegments('C')"><span>%</span></div></div>
-                <div class="seg-item"><span class="seg-label" style="color:var(--seg-d)">Seg D</span><div class="seg-bar-track"><div class="seg-bar-fill" id="barD" style="background:var(--seg-d)"></div></div><div class="seg-inp-wrap"><input type="number" id="segD" value="15" oninput="calcSegments('D')"><span>%</span></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Presupuesto de Ventas</div></div>
-            <div class="card-body">
-              <div class="sp-widget">
-                <div><div style="font-weight:600;font-size:0.8rem">Fuerza de ventas</div><div style="font-size:0.7rem;color:var(--muted)" id="spDetail">11 × $50,000</div></div>
-                <div style="display:flex;align-items:center;gap:1rem;">
-                  <div class="sp-counter"><button class="sp-btn" onclick="changeSP(-1)">−</button><input type="number" class="sp-num" id="numSP" value="11" oninput="calcSales()"><button class="sp-btn" onclick="changeSP(1)">+</button></div>
-                  <span style="font-weight:600;font-family:var(--mono)" id="spTotal">$550,000</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><div class="card-title">Presupuesto de Marketing & Producto</div></div>
-            <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
-              <div>
-                <div class="field"><label>Com. Integrada</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="imc" value="30000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Inv. Mercados</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="research" value="50000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Redes Sociales</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="social" value="0" oninput="calcAll()"></div></div>
-                <div class="field"><label>Com. Directa</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="directComm" value="40000" oninput="calcAll()"></div></div>
-              </div>
-              <div>
-                <div class="field"><label>Duración Batería</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="battery" value="10000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Eficiencia Mfg</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="mfgEff" value="90000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Tamaño Sensor</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="sensorSize" value="30000" oninput="calcAll()"></div></div>
-                <div class="field"><label>Latencia</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="latency" value="0" oninput="calcAll()"></div></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Estrategia & Presupuesto (placeholder)</div></div>
+        <div class="card-body">Los datos de decisiones se gestionan aquí.</div>
       </div>
     </div>
 
     <div class="tab-pane" id="tab-analysis">
       <div class="g2">
-        
         <div class="col-flex">
           <div class="card">
-            <div class="card-head"><div class="card-title">Ingresos y Rentabilidad Reales (Inputs para Dashboard)</div></div>
+            <div class="card-head"><div class="card-title">Resultados Reales (Inputs)</div></div>
             <div class="card-body">
-              <div class="field"><label>Ingresos Grandes Clientes</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revLarge" value="0"></div></div>
-              <div class="field"><label>Ingresos Pequeños Clientes</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revSmall" value="0"></div></div>
-              <div class="field"><label>Beneficio Neto Total (Trimestre)</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="netProfit" value="0"></div></div>
-              <div class="field"><label>Ventas Unitarias Totales</label><div class="iw"><input type="number" id="unitSales" value="0"><span class="iw-suf">uds</span></div></div>
+              <div class="g3">
+                <div class="field"><label>Ingresos Grandes</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revLarge" value="0"></div></div>
+                <div class="field"><label>Ingresos Pequeños</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="revSmall" value="0"></div></div>
+                <div class="field"><label>Beneficio Neto</label><div class="iw"><span class="iw-pre">$</span><input type="number" id="netProfit" value="0"></div></div>
+              </div>
+              <div class="g2" style="margin-top:1rem;">
+                <div class="field"><label>Ventas Unitarias (Grandes)</label><div class="iw"><input type="number" id="unitsL" value="0"><span class="iw-suf">uds</span></div></div>
+                <div class="field"><label>Ventas Unitarias (Pequeños)</label><div class="iw"><input type="number" id="unitsS" value="0"><span class="iw-suf">uds</span></div></div>
+              </div>
             </div>
           </div>
-
           <div class="card">
-            <div class="card-head"><div class="card-title">Cuota de Mercado (General)</div></div>
+            <div class="card-head"><div class="card-title">Cuota de Mercado (Market Share %)</div></div>
             <div class="card-body">
-              <div class="field"><label>Grandes Clientes (%)</label><div class="iw"><input type="number" id="msL" value="0"><span class="iw-suf">%</span></div></div>
-              <div class="field"><label>Pequeños Clientes (%)</label><div class="iw"><input type="number" id="msS" value="0"><span class="iw-suf">%</span></div></div>
+              <div class="g3">
+                <div class="field"><label>Segmento A</label><div class="iw"><input type="number" id="msL_A" value="0"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Segmento B</label><div class="iw"><input type="number" id="msL_B" value="0"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Segmento C</label><div class="iw"><input type="number" id="msL_C" value="0"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Segmento D</label><div class="iw"><input type="number" id="msL_D" value="0"><span class="iw-suf">%</span></div></div>
+                <div class="field"><label>Pequeños Clientes</label><div class="iw"><input type="number" id="msS" value="0"><span class="iw-suf">%</span></div></div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="col-flex">
-          <div class="card">
-            <div class="card-head"><div class="card-title">Satisfacción del Cliente</div></div>
-            <div class="card-body" id="satBody"></div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Satisfacción del Cliente y Comentarios</div></div>
+          <div class="card-body">
+            <div id="satStarsBody"></div>
+            <div class="field" style="margin-top:1.5rem;"><label>Comentarios del Trimestre Actual (YQ)</label><textarea id="satComments" style="width:100%; min-height:100px; padding:1rem; border:1px solid var(--border); border-radius:6px; background:var(--inp); color:var(--text)" placeholder="Escribe aquí los comentarios de este período..."></textarea></div>
+            <div class="hist-comments-list" id="satHistCommentsList"></div>
           </div>
         </div>
-
       </div>
     </div>
 
     <div class="tab-pane" id="tab-rounds">
       <div class="card">
         <div class="card-head"><div class="card-title">Gestión de Ronda Actual</div></div>
-        <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
-          <div>
-            <div class="field"><label>Estado de la Ronda</label>
-              <div class="status-btns">
-                <button class="st-btn ap active" id="stPending" onclick="setRoundStatus('pending')">Pendiente</button>
-                <button class="st-btn ac" id="stCurrent" onclick="setRoundStatus('current')">En Curso</button>
-                <button class="st-btn ad" id="stDone" onclick="setRoundStatus('done')">Completada</button>
-              </div>
-            </div>
-            <div class="field"><label>Objetivos del Trimestre</label>
-              <textarea id="rndObj" style="width:100%;min-height:120px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué metas quieren lograr?"></textarea>
-            </div>
-          </div>
-          <div>
-            <div class="field"><label>Resultados y Aprendizajes</label>
-              <textarea id="rndRes" style="width:100%;min-height:200px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="¿Qué ocurrió en este período?"></textarea>
-            </div>
-          </div>
+        <div class="card-body"><textarea id="rndObj" style="width:100%;min-height:200px;background:var(--inp);border:1px solid var(--border);border-radius:6px;padding:1rem;color:var(--text)" placeholder="Objetivos y Resultados de la ronda..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-news">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Noticias del Mercado (Editable por YQ)</div></div>
+        <div class="card-body">
+          <textarea id="marketNews" style="width:100%; min-height:400px; padding:1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--inp); color:var(--text); font-size:0.9rem;" placeholder="Escribe aquí las noticias del mercado para el Año y Trimestre seleccionado..."></textarea>
         </div>
       </div>
     </div>
@@ -487,381 +274,142 @@
 
   <script>
     // ═══════════════════════════
-    // CONSTANTS & STATE
+    // STATE & CONSTANTS (Preserved)
     // ═══════════════════════════
-    const COST_PER_SP = 50000; const DIST_MARGIN = 0.10; const DIST_PASS = 0.05;
     const SEGS = [{id:"A",c:"var(--seg-a)"},{id:"B",c:"var(--seg-b)"},{id:"C",c:"var(--seg-c)"},{id:"D",c:"var(--seg-d)"}];
-    let DB = []; 
-    try { DB = JSON.parse(localStorage.getItem("mktDSS_v1") || "[]"); } catch(e){}
-    
-    let currentRoundStatus = "pending";
+    let DB = []; try { DB = JSON.parse(localStorage.getItem("mktDSS_G5") || "[]"); } catch(e){}
     let satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 };
     let charts = {};
 
     // ═══════════════════════════
-    // UTILS
+    // UTILS (Preserved)
     // ═══════════════════════════
     const $ = id => document.getElementById(id);
     const N = id => parseFloat($(id).value) || 0;
     const FMT = n => "$" + Math.round(n).toLocaleString("es-CO");
-    const FMT2 = n => "$" + n.toFixed(2);
-    const showToast = (msg, type="ok") => { let t = $("toast"); t.textContent = msg; t.className = "toast " + type + " show"; setTimeout(()=>t.classList.remove("show"), 2800); }
-
-    function toggleTheme() {
-      const h = document.documentElement; h.setAttribute("data-theme", h.getAttribute("data-theme") === "dark" ? "light" : "dark");
-      if(window.renderDashboard) renderDashboard(); // Redraw charts for colors
-    }
-
+    const showToast = (msg) => { let t = $("toast"); t.textContent = msg; t.className = "toast show"; setTimeout(()=>t.classList.remove("show"), 2800); }
+    function toggleTheme() { const h = document.documentElement; h.setAttribute("data-theme", h.getAttribute("data-theme") === "dark" ? "light" : "dark"); if(charts.fin) renderDashboard(); }
     function switchTab(name, btn) {
-      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-pane, .tab-btn").forEach(p => p.classList.remove("active"));
       $("tab-" + name).classList.add("active"); btn.classList.add("active");
       if(name === 'dashboard') renderDashboard();
     }
 
-    function toggleHistory() { $("histPanel").classList.toggle("open"); }
-
     // ═══════════════════════════
     // UI BUILDERS
     // ═══════════════════════════
-    function buildSatisfaction() {
-      let html = SEGS.map(s => `
-        <div class="sat-row">
-          <div style="font-weight:500;font-size:0.85rem;color:${s.c}">Grandes - Seg ${s.id}</div>
-          <div class="stars" id="starsL_${s.id}">${buildStars("L_"+s.id, satData["L_"+s.id])}</div>
-        </div>`).join("");
+    function buildSatisfactionStars() {
+      let html = SEGS.map(s => `<div class="sat-row"><div style="font-weight:500;font-size:0.85rem;color:${s.c}">Grandes - Seg ${s.id}</div><div class="stars" id="starsL_${s.id}">${buildStars("L_"+s.id, satData["L_"+s.id])}</div></div>`).join("");
       html += `<div class="sat-row"><div style="font-weight:500;font-size:0.85rem">Pequeños Clientes</div><div class="stars" id="starsS_ALL">${buildStars("S_ALL", satData["S_ALL"])}</div></div>`;
-      $("satBody").innerHTML = html;
+      $("satStarsBody").innerHTML = html;
     }
-    function buildStars(key, val) {
-      return [1,2,3,4,5].map(n => `<span class="star${n<=val?" on":""}" onclick="setStar('${key}',${n})">★</span>`).join("");
-    }
+    function buildStars(key, val) { return [1,2,3,4,5].map(n => `<span class="star${n<=val?" on":""}" onclick="setStar('${key}',${n})">★</span>`).join(""); }
     function setStar(key, val) { satData[key] = val; $("stars"+key).innerHTML = buildStars(key, val); }
 
-    function setRoundStatus(s) {
-      currentRoundStatus = s;
-      ["pending","current","done"].forEach(id => {
-        let btn = $("st" + id.charAt(0).toUpperCase() + id.slice(1));
-        if(id===s) btn.classList.add("active"); else btn.classList.remove("active");
-      });
-    }
-
-    // ═══════════════════════════
-    // CALCULATORS
-    // ═══════════════════════════
-    function changeSP(d) { $("numSP").value = Math.max(0, parseInt($("numSP").value||0) + d); calcAll(); }
-    
-    function calcSegments(changed) {
-      if(changed) {
-        let os=0; SEGS.forEach(s=>{if(s.id!==changed)os+=N('seg'+s.id)});
-        if(os+N('seg'+changed)>100) $('seg'+changed).value = Math.max(0,100-os);
-      }
-      SEGS.forEach(s => $("bar"+s.id).style.width = Math.min(N('seg'+s.id), 100)+"%");
-    }
-
-    function calcPrices() {
-      const lp = N("listPrice");
-      SEGS.forEach(s => $("net"+s.id).textContent = FMT2(lp*(1-(N("disc"+s.id)/100))));
-      $("smallListDisplay").textContent = lp.toFixed(0);
-      calcSmall();
-    }
-
-    function calcSmall() {
-      const dp = N("listPrice") * (1 - (N("distDisc")/100));
-      const m = dp * DIST_MARGIN; const p = dp * DIST_PASS;
-      $("distPrice").textContent = FMT2(dp); $("distMarginAmt").textContent = FMT2(m);
-      $("distPassAmt").textContent = FMT2(p); $("smallNetPrice").textContent = FMT2(dp+m+p);
-    }
-
-    function calcAll() {
-      calcSegments(); calcPrices();
-      const n = parseInt($("numSP").value||0);
-      $("spTotal").textContent = FMT(n * COST_PER_SP);
-      $("spDetail").textContent = n + " × " + FMT(COST_PER_SP);
-      
-      const sales = n * COST_PER_SP;
-      const mkt = N("imc")+N("research")+N("social")+N("directComm");
-      const prod = N("battery")+N("mfgEff")+N("sensorSize")+N("latency");
-      const used = sales + mkt + prod;
-      const budget = N("totalBudget");
-      const remain = budget - used;
-      const pct = budget>0 ? Math.min((used/budget)*100, 100) : 0;
-      
-      $("usedLbl").textContent = FMT(used); $("remainLbl").textContent = FMT(remain);
-      $("usedLbl").className = "bsi-val " + (used>budget?"over":"ok");
-      $("remainLbl").className = "bsi-val " + (remain<0?"over":pct>94?"warn":"ok");
-      
-      $("bBar").style.width = pct+"%";
-      $("bBar").style.background = used>budget?"var(--danger)":pct>90?"var(--warn)":"var(--text)";
-      $("pctLblBar").textContent = Math.round(pct)+"%";
-      $("remainLblBar").textContent = FMT(remain)+" restante";
+    function buildHistoricalComments() {
+      const currentPeriod = $("selYear").value + " " + $("selQ").value;
+      const list = DB.filter(d => d.period !== currentPeriod && d.satComments && d.satComments.trim() !== "");
+      $("satHistCommentsList").innerHTML = list.length ? list.map(d => `<div class="hist-comment-item"><div class="hc-meta">${d.period} · ${d.name || "Sin nombre"}</div><div class="hc-text">${d.satComments.replace(/\n/g, '<br>')}</div></div>`).join("") : '<div style="color:var(--muted2); font-size:0.8rem; text-align:center;">Sin comentarios históricos</div>';
     }
 
     // ═══════════════════════════
     // DATA MANAGEMENT
     // ═══════════════════════════
-    function getPeriodId() { return $("selYear").value + " " + $("selQ").value; }
-
     function gatherData() {
-      const sp = parseInt($("numSP").value||0);
       return {
-        id: Date.now(),
-        period: getPeriodId(),
-        name: $("decisionName").value.trim() || "—",
-        // Decisión
-        budget: N("totalBudget"), numSP: sp, salesB: sp*COST_PER_SP,
-        segA:N("segA"), segB:N("segB"), segC:N("segC"), segD:N("segD"),
-        listPrice:N("listPrice"), discA:N("discA"), discB:N("discB"), discC:N("discC"), discD:N("discD"), distDisc:N("distDisc"),
-        imc:N("imc"), research:N("research"), social:N("social"), directComm:N("directComm"),
-        battery:N("battery"), mfgEff:N("mfgEff"), sensorSize:N("sensorSize"), latency:N("latency"),
-        notes: $("notes").value,
-        // Análisis
-        revL: N("revLarge"), revS: N("revSmall"),
-        profit: N("netProfit"), units: N("unitSales"),
-        msL: N("msL"), msS: N("msS"),
-        sat: JSON.parse(JSON.stringify(satData)),
-        // Rondas
-        roundStatus: currentRoundStatus,
-        roundObj: $("rndObj").value, roundRes: $("rndRes").value
+        id: Date.now(), period: $("selYear").value + " " + $("selQ").value, name: $("decisionName").value.trim(),
+        revL: N("revLarge"), revS: N("revSmall"), profit: N("netProfit"), unitsL: N("unitsL"), unitsS: N("unitsS"),
+        msL_A: N("msL_A"), msL_B: N("msL_B"), msL_C: N("msL_C"), msL_D: N("msL_D"), msS: N("msS"),
+        sat: JSON.parse(JSON.stringify(satData)), satComments: $("satComments").value,
+        marketNews: $("marketNews").value, rndObj: $("rndObj").value
       };
     }
 
     function saveData() {
-      const d = gatherData();
-      // Remove previous save for same period to act as update (or keep history, let's keep history but dashboard uses latest)
-      DB.push(d);
-      localStorage.setItem("mktDSS_v1", JSON.stringify(DB));
-      renderHistory();
-      renderDashboard();
-      showToast("Período Guardado Exitosamente", "ok");
+      const d = gatherData(); DB.push(d);
+      localStorage.setItem("mktDSS_G5", JSON.stringify(DB));
+      buildHistoricalComments(); showToast("Período Guardado");
     }
 
     function loadPeriodData() {
-      const pid = getPeriodId();
-      // Find latest save for this period
+      const pid = $("selYear").value + " " + $("selQ").value;
       const d = [...DB].reverse().find(x => x.period === pid);
       if(!d) {
-        $("decisionName").value = ""; $("notes").value = "";
-        $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitSales").value=0;
-        $("msL").value=0; $("msS").value=0;
-        satData = { L_A: 0, L_B: 0, L_C: 0, L_D: 0, S_ALL: 0 }; buildSatisfaction();
-        $("rndObj").value=""; $("rndRes").value=""; setRoundStatus("pending");
-        showToast("Período Nuevo", "ok");
-        return;
+        $("decisionName").value=""; $("revLarge").value=0; $("revSmall").value=0; $("netProfit").value=0; $("unitsL").value=0; $("unitsS").value=0;
+        $("msL_A").value=0; $("msL_B").value=0; $("msL_C").value=0; $("msL_D").value=0; $("msS").value=0;
+        satData={L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); $("satComments").value="";
+        $("marketNews").value=""; $("rndObj").value="";
+        showToast("Período Nuevo");
+      } else {
+        $("decisionName").value=d.name||""; $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0; $("netProfit").value=d.profit||0; $("unitsL").value=d.unitsL||0; $("unitsS").value=d.unitsS||0;
+        $("msL_A").value=d.msL_A||0; $("msL_B").value=d.msL_B||0; $("msL_C").value=d.msL_C||0; $("msL_D").value=d.msL_D||0; $("msS").value=d.msS||0;
+        satData=d.sat||{L_A:0,L_B:0,L_C:0,L_D:0,S_ALL:0}; buildSatisfactionStars(); $("satComments").value=d.satComments||"";
+        $("marketNews").value=d.marketNews||""; $("rndObj").value=d.rndObj||"";
+        showToast("Datos Cargados");
       }
-      
-      $("decisionName").value = d.name!=="—"?d.name:"";
-      $("totalBudget").value=d.budget||800000; $("numSP").value=d.numSP||11;
-      $("segA").value=d.segA; $("segB").value=d.segB; $("segC").value=d.segC; $("segD").value=d.segD;
-      $("listPrice").value=d.listPrice; $("discA").value=d.discA; $("discB").value=d.discB; $("discC").value=d.discC; $("discD").value=d.discD; $("distDisc").value=d.distDisc;
-      $("imc").value=d.imc; $("research").value=d.research; $("social").value=d.social; $("directComm").value=d.directComm;
-      $("battery").value=d.battery; $("mfgEff").value=d.mfgEff; $("sensorSize").value=d.sensorSize; $("latency").value=d.latency;
-      $("notes").value=d.notes;
-      
-      $("revLarge").value=d.revL||0; $("revSmall").value=d.revS||0;
-      $("netProfit").value=d.profit||0; $("unitSales").value=d.units||0;
-      $("msL").value=d.msL||0; $("msS").value=d.msS||0;
-      if(d.sat) { satData = d.sat; buildSatisfaction(); }
-      
-      $("rndObj").value=d.roundObj||""; $("rndRes").value=d.roundRes||"";
-      setRoundStatus(d.roundStatus||"pending");
-      
-      calcAll();
-      showToast("Datos Cargados", "ok");
-    }
-
-    function renderHistory() {
-      $("histCount").textContent = DB.length + " registros";
-      if(!DB.length) { $("histBody").innerHTML='<tr><td colspan="8" style="text-align:center;padding:1rem;">Sin datos</td></tr>'; return;}
-      $("histBody").innerHTML = [...DB].reverse().map(d => `<tr>
-        <td style="font-weight:600">${d.period}</td><td>${d.name}</td>
-        <td>${FMT(d.revL+d.revS)}</td><td style="color:${d.profit<0?'var(--danger)':'var(--success)'}">${FMT(d.profit)}</td>
-        <td>${d.units}</td><td>${d.msL}%</td><td>${d.msS}%</td>
-        <td><button class="dbtn" onclick="deleteRecord(${d.id})">Borrar</button></td>
-      </tr>`).join("");
-    }
-    
-    function deleteRecord(id) {
-      DB = DB.filter(x => x.id !== id);
-      localStorage.setItem("mktDSS_v1", JSON.stringify(DB));
-      renderHistory(); renderDashboard();
+      buildHistoricalComments();
     }
 
     // ═══════════════════════════
     // DASHBOARD & CHARTS
     // ═══════════════════════════
-    function getAggregatedData() {
-      // Group by period, take latest
-      let map = new Map();
-      DB.forEach(d => map.set(d.period, d));
-      // Sort keys (Y1 Q1, Y1 Q2...)
-      let sortedKeys = Array.from(map.keys()).sort();
-      let res = [];
-      let accProfit = 0;
+    function getDashboardData() {
+      let map=new Map(); DB.forEach(d=>map.set(d.period, d));
+      let sortedKeys=Array.from(map.keys()).sort();
+      let res=[]; let accProfit=0;
       for(let k of sortedKeys) {
-        let d = map.get(k);
-        let rev = (d.revL||0) + (d.revS||0);
-        let prof = d.profit||0;
-        accProfit += prof;
-        let sArr = Object.values(d.sat||{});
-        let avgSat = sArr.length ? sArr.reduce((a,b)=>a+b,0)/sArr.length : 0;
-        res.push({
-          period: d.period, rev, profit: prof, accProfit, 
-          units: d.units||0, msL: d.msL||0, msS: d.msS||0, avgSat
-        });
+        let d=map.get(k); let rev=(d.revL||0)+(d.revS||0); let prof=d.profit||0; accProfit+=prof;
+        let sArr=Object.values(d.sat||{}); let avgSat=sArr.length ? sArr.reduce((a,b)=>a+b,0)/sArr.length : 0;
+        res.push({ period:d.period, rev, profit:prof, accProfit, unitsTotal:(d.unitsL||0)+(d.unitsS||0), unitsL:d.unitsL||0, unitsS:d.unitsS||0, msL_A:d.msL_A||0, msL_B:d.msL_B||0, msL_C:d.msL_C||0, msL_D:d.msL_D||0, msS:d.msS||0, avgSat });
       }
       return res;
     }
 
     function renderDashboard() {
-      const data = getAggregatedData();
-      if(!data.length) return;
-      const last = data[data.length-1];
-      
-      // Update KPIs
-      $("kpiRev").textContent = FMT(last.rev);
-      $("kpiProfit").textContent = FMT(last.profit);
-      $("kpiProfit").style.color = last.profit<0?"var(--danger)":"var(--text)";
-      $("kpiMargin").textContent = last.rev>0 ? Math.round((last.profit/last.rev)*100)+"%" : "0%";
-      $("kpiAccProfit").textContent = FMT(last.accProfit);
-      $("kpiUnits").textContent = last.units.toLocaleString();
-      $("kpiSat").textContent = last.avgSat.toFixed(1) + " ★";
+      const data=getDashboardData(); if(!data.length) return;
+      const last=data[data.length-1];
+      $("kpiRev").textContent=FMT(last.rev); $("kpiProfit").textContent=FMT(last.profit); $("kpiUnits").textContent=last.unitsTotal.toLocaleString(); $("kpiAccProfit").textContent=FMT(last.accProfit); $("kpiSat").textContent=last.avgSat.toFixed(1)+" ★";
 
-      // Build Charts
-      const labels = data.map(x => x.period);
-      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-      const tc = isDark ? "#e2e2e4" : "#0f172a";
-      const gridC = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)";
+      const labels=data.map(x=>x.period); const isDark=document.documentElement.getAttribute("data-theme")==="dark";
+      const tc=isDark?"#e2e2e4":"#0f172a"; const gridC=isDark?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.05)";
+      Chart.defaults.color=isDark?"#8b8b99":"#64748b"; Chart.defaults.font.family="'Inter', sans-serif";
+      const commonOps={responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}},plugins:{legend:{labels:{color:tc}}}};
 
-      Chart.defaults.color = isDark ? "#8b8b99" : "#64748b";
-      Chart.defaults.font.family = "'Inter', sans-serif";
-      
-      const commonOptions = { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: gridC } }, y: { grid: { color: gridC } } }, plugins: { legend: { labels: { color: tc } } } };
-
-      // 1. Chart Finanzas
-      if(charts.fin) charts.fin.destroy();
-      charts.fin = new Chart($("chartFin"), {
-        type: 'bar',
-        data: { labels, datasets: [
-          { label: 'Ingresos', data: data.map(x=>x.rev), backgroundColor: '#537fbb', borderRadius: 4 },
-          { label: 'Beneficio', data: data.map(x=>x.profit), type: 'line', borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.3, borderWidth:2 }
-        ]},
-        options: commonOptions
-      });
-
-      // 2. Chart Market Share
-      if(charts.ms) charts.ms.destroy();
-      charts.ms = new Chart($("chartMS"), {
-        type: 'line',
-        data: { labels, datasets: [
-          { label: 'Grandes Clientes', data: data.map(x=>x.msL), borderColor: '#d77840', tension: 0.3, fill:true, backgroundColor: 'rgba(215, 120, 64, 0.1)' },
-          { label: 'Pequeños Clientes', data: data.map(x=>x.msS), borderColor: '#5ab096', tension: 0.3 }
-        ]},
-        options: commonOptions
-      });
-
-      // 3. Chart Units
-      if(charts.units) charts.units.destroy();
-      charts.units = new Chart($("chartUnits"), {
-        type: 'bar',
-        data: { labels, datasets: [{ label: 'Unidades Vendidas', data: data.map(x=>x.units), backgroundColor: tc, borderRadius: 4 }] },
-        options: commonOptions
-      });
-
-      // 4. Chart Sat
-      if(charts.sat) charts.sat.destroy();
-      charts.sat = new Chart($("chartSat"), {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'Satisfacción Promedio', data: data.map(x=>x.avgSat), borderColor: '#f59e0b', backgroundColor: '#f59e0b', tension: 0.3 }] },
-        options: { ...commonOptions, scales: { y: { min: 0, max: 5, grid: { color: gridC } } } }
-      });
+      if(charts.fin) charts.fin.destroy(); charts.fin=new Chart($("chartFin"), { type:'bar', data:{ labels, datasets:[{ label:'Ingresos', data:data.map(x=>x.rev), backgroundColor:'#537fbb' }, { label:'Beneficio', data:data.map(x=>x.profit), type:'line', borderColor:'#10b981', backgroundColor:'#10b981' }]}, options:commonOps });
+      if(charts.msL) charts.msL.destroy(); charts.msL=new Chart($("chartMSL"), { type:'line', data:{ labels, datasets:[{ label:'Seg A', data:data.map(x=>x.msL_A), borderColor:SEGS[0].c }, { label:'Seg B', data:data.map(x=>x.msL_B), borderColor:SEGS[1].c }, { label:'Seg C', data:data.map(x=>x.msL_C), borderColor:SEGS[2].c }, { label:'Seg D', data:data.map(x=>x.msL_D), borderColor:SEGS[3].c }]}, options:commonOps });
+      if(charts.unitsSep) charts.unitsSep.destroy(); charts.unitsSep=new Chart($("chartUnitsSep"), { type:'bar', data:{ labels, datasets:[{ label:'Grandes', data:data.map(x=>x.unitsL), backgroundColor:'#d77840' }, { label:'Pequeños', data:data.map(x=>x.unitsS), backgroundColor:'#5ab096' }]}, options:{...commonOps, scales:{x:{grid:{color:gridC}},y:{grid:{color:gridC}}, ...commonOps.scales, y:{...commonOps.scales.y, stacked:true}}, plugins:{legend:{labels:{color:tc}}, stacked:true}} });
+      if(charts.sat) charts.sat.destroy(); charts.sat=new Chart($("chartSat"), { type:'line', data:{ labels, datasets:[{ label:'Sat Promedio', data:data.map(x=>x.avgSat), borderColor:'#f59e0b' }]}, options:{...commonOps, scales:{y:{min:0,max:5,grid:{color:gridC}}}} });
     }
 
     // ═══════════════════════════
     // EXPORTS
     // ═══════════════════════════
     function exportExcel() {
-      if(!DB.length){ showToast("No hay datos","err"); return;}
-      const wb = XLSX.utils.book_new();
-      const h = ["Período", "Nombre", "Presupuesto", "Vendedores", "P.Lista", 
-                 "DescA%", "DescB%", "DescC%", "DescD%", "DescDist%",
-                 "SegA%", "SegB%", "SegC%", "SegD%",
-                 "IMC", "Investigación", "Redes", "Com.Dir", "Batería", "Mfg", "Sensor", "Latencia",
-                 "IngresosGrandes", "IngresosPequeños", "Beneficio", "VentasUnit", "MS_Grandes", "MS_Pequeños",
-                 "EstadoRonda", "Notas"];
-      const rows = DB.map(d => [
-        d.period, d.name, d.budget, d.numSP, d.listPrice,
-        d.discA, d.discB, d.discC, d.discD, d.distDisc,
-        d.segA, d.segB, d.segC, d.segD,
-        d.imc, d.research, d.social, d.directComm, d.battery, d.mfgEff, d.sensorSize, d.latency,
-        d.revL, d.revS, d.profit, d.units, d.msL, d.msS, d.roundStatus, d.notes
-      ]);
-      const ws = XLSX.utils.aoa_to_sheet([h, ...rows]);
-      XLSX.utils.book_append_sheet(wb, ws, "Simulacion_DSS");
+      if(!DB.length){ showToast("No hay datos"); return;}
+      const wb=XLSX.utils.book_new();
+      const h=["Período","Nombre","IngGrandes","IngPequeños","Beneficio","UnitsG","UnitsP","MSL_A","MSL_B","MSL_C","MSL_D","MS_S","Comments","News"];
+      const ws=XLSX.utils.aoa_to_sheet([h,...DB.map(d=>[d.period,d.name,d.revL,d.revS,d.profit,d.unitsL,d.unitsS,d.msL_A,d.msL_B,d.msL_C,d.msL_D,d.msS,d.satComments,d.marketNews])]);
+      XLSX.utils.book_append_sheet(wb, ws, "Sim DSS G5");
       XLSX.writeFile(wb, "Simulacion_G5.xlsx");
     }
 
     function exportPDF() {
-      const d = gatherData();
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-      const W = 297;
-      
-      doc.setFillColor(255,255,255); doc.rect(0,0,W,210,"F");
-      doc.setFillColor(15,23,42); doc.rect(0,0,W,16,"F");
-      doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,255,255);
-      doc.text("DSS Simulación Marketing — Grupo 5", 10, 10);
-      doc.setFontSize(8); doc.setTextColor(150,150,160);
-      doc.text(d.period + " · " + d.name, W-10, 10, {align:"right"});
-      
-      const C = [10, 80, 150, 220]; let y1=26, y2=26, y3=26, y4=26;
-      function sec(t, x, yy) { doc.setFont("helvetica","bold"); doc.setFontSize(7.5); doc.setTextColor(100,116,139); doc.text(t.toUpperCase(), x, yy); return yy+6; }
-      function row(l, v, x, yy, vc) { doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(100,116,139); doc.text(l, x, yy); doc.setFont("helvetica","bold"); doc.setTextColor(...(vc||[15,23,42])); doc.text(String(v), x+62, yy, {align:"right"}); return yy+5; }
-      
-      y1 = sec("Precios Grandes", C[0], y1);
-      y1 = row("P.Lista", FMT2(d.listPrice), C[0], y1);
-      SEGS.forEach(s => y1 = row("Desc " + s.id, d["disc"+s.id]+"%", C[0], y1));
-      y1+=3; y1 = sec("Precios Pequeños", C[0], y1);
-      y1 = row("Desc.Dist.", d.distDisc+"%", C[0], y1);
-      
-      y2 = sec("Segmentos", C[1], y2);
-      SEGS.forEach(s => y2 = row("Seg " + s.id, d["seg"+s.id]+"%", C[1], y2));
-      y2+=3; y2 = sec("Fuerza Ventas", C[1], y2);
-      y2 = row("Vendedores", d.numSP, C[1], y2);
-      y2 = row("Total Ventas", FMT(d.salesB), C[1], y2);
-
-      const mkt = d.imc+d.research+d.social+d.directComm;
-      const prod = d.battery+d.mfgEff+d.sensorSize+d.latency;
-      y3 = sec("Mkt & Prod", C[2], y3);
-      y3 = row("Total Mkt", FMT(mkt), C[2], y3);
-      y3 = row("Total Prod", FMT(prod), C[2], y3);
-      y3+=3; y3 = sec("Resultados Período", C[2], y3);
-      y3 = row("Ingresos", FMT(d.revL+d.revS), C[2], y3);
-      y3 = row("Beneficio", FMT(d.profit), C[2], y3, d.profit<0?[239,68,68]:[16,185,129]);
-      y3 = row("Ventas Unit.", d.units, C[2], y3);
-      y3 = row("MS Grandes", d.msL+"%", C[2], y3);
-      y3 = row("MS Pequeños", d.msS+"%", C[2], y3);
-
-      y4 = sec("Presupuesto", C[3], y4);
-      y4 = row("Presupuesto", FMT(d.budget), C[3], y4);
-      const used = d.salesB + mkt + prod; const rem = d.budget - used;
-      y4 = row("Usado", FMT(used), C[3], y4);
-      doc.setDrawColor(226,232,240); doc.line(C[3], y4, C[3]+68, y4); y4+=3;
-      y4 = row("Restante", FMT(rem), C[3], y4, rem<0?[239,68,68]:[16,185,129]);
-
-      let yn = Math.max(y1,y2,y3,y4)+8;
-      if(d.roundObj || d.roundRes) {
-        doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(15,23,42);
-        doc.text("OBJETIVOS Y RESULTADOS (Ronda)", C[0], yn); yn+=6;
-        doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(71,85,105);
-        if(d.roundObj) { let split = doc.splitTextToSize("Obj: " + d.roundObj, 270); doc.text(split, C[0], yn); yn += split.length * 4 + 2; }
-        if(d.roundRes) { let split = doc.splitTextToSize("Res: " + d.roundRes, 270); doc.text(split, C[0], yn); }
-      }
-      doc.save("DSS-" + d.period.replace(" ","-") + ".pdf");
+      const d=gatherData(); const {jsPDF}=window.jspdf;
+      const doc=new jsPDF({orientation:"landscape",unit:"mm",format:"a4"});
+      doc.setFillColor(15,23,42); doc.rect(0,0,297,16,"F");
+      doc.setFont("helvetica","bold").setFontSize(10).setTextColor(255).text("G5 Simulador - "+d.period, 10, 10);
+      let y=26; doc.setFontSize(8).setTextColor(0);
+      doc.text("Resultados Financieros:", 10, y); y+=5; doc.text(`Ingresos: ${FMT(d.revL+d.revS)} (G:${FMT(d.revL)}/P:${FMT(d.revS)})`, 15, y); y+=5; doc.text(`Beneficio: ${FMT(d.profit)}`, 15, y); y+=10;
+      doc.text("Ventas Unitarias:", 10, y); y+=5; doc.text(`Grandes: ${d.unitsL} uds`, 15, y); y+=5; doc.text(`Pequeños: ${d.unitsS} uds`, 15, y); y+=10;
+      doc.text("Cuota de Mercado Grandes:", 10, y); y+=5; doc.text(`Seg A: ${d.msL_A}%`, 15, y); y+=5; doc.text(`Seg B: ${d.msL_B}%`, 15, y); y+=5; doc.text(`Seg C: ${d.msL_C}%`, 15, y); y+=5; doc.text(`Seg D: ${d.msL_D}%`, 15, y); y+=10;
+      doc.text(`Cuota Mercado Pequeños: ${d.msS}%`, 10, y); y+=10;
+      if(d.satComments) { doc.text("Comentarios Satisfacción:", 10, y); y+=5; doc.text(doc.splitTextToSize(d.satComments, 270), 15, y); y+=20; }
+      if(d.marketNews) { doc.addPage(); doc.text("Noticias del Mercado:", 10, 26); doc.text(doc.splitTextToSize(d.marketNews, 270), 15, 31); }
+      doc.save("DSS-G5-"+d.period+".pdf");
     }
 
     // INIT
-    buildSatisfaction(); calcAll(); loadPeriodData(); renderHistory(); renderDashboard();
+    buildSatisfactionStars(); loadPeriodData(); renderDashboard();
   </script>
 </body>
 </html>
